@@ -1,0 +1,625 @@
+<div class="section-content">
+  <h2 class="h4 mb-3">Why Use Tool Configuration</h2>
+
+  <div class="card border-0 shadow-lg overflow-hidden">
+  <div class="card-body p-4">
+    <!-- Header with subtle accent -->
+    <div class="mb-4 pb-2 border-bottom">
+      <h5 class="fw-semibold mb-0 text-primary">Content Editor</h5>
+      <p class="small text-muted mb-0">Explain why users should use this tool</p>
+    </div>
+
+    <form class="needs-validation" novalidate>
+      <!-- Title/Subtitle Group (Improved spacing + floating labels) -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" 
+                   class="form-control" 
+                   id="content-title" 
+                   placeholder="Enter section title"
+                   required>
+            <label for="content-title" class="text-muted">Text</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" 
+                   class="form-control" 
+                   id="content-subtitle" 
+                   placeholder="Enter catchy subtitle">
+            <label for="content-subtitle" class="text-muted">Text</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Primary and Secondary Text -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <textarea class="form-control" 
+                      id="primary-text" 
+                      placeholder="Enter main content" 
+                      style="height: 60px"></textarea>
+            <label for="primary-text" class="text-muted">Text</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <textarea class="form-control" 
+                      id="secondary-text" 
+                      placeholder="Enter supporting content" 
+                      style="height: 60px"></textarea>
+            <label for="secondary-text" class="text-muted">Text</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Optional Field -->
+      <div class="mb-4">
+        <div class="form-floating">
+          <textarea class="form-control" 
+                    id="additional-notes" 
+                    placeholder="Enter any additional information" 
+                    style="height: 60px"></textarea>
+          <label for="additional-notes" class="text-muted">Text (Optional)</label>
+        </div>
+      </div>
+
+      <!-- Image Gallery (Modern masonry grid + hover effects) -->
+      <div class="mb-4">
+        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Gallery</label>
+        <div class="row g-3" id="image-preview-container">
+          <!-- Image Cards with hover zoom will be added here dynamically -->
+          
+          <!-- Add Image Card (Smaller and functional) -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="ratio ratio-1x1 rounded-3 bg-light border-2 border-dashed hover-shadow-lg cursor-pointer d-flex align-items-center justify-content-center transition-all" id="add-image-btn">
+              <div class="text-center p-2">
+                <i class="bi bi-plus-lg fs-5 text-primary"></i>
+                <p class="small text-muted mb-0">Add Media</p>
+              </div>
+              <input type="file" id="media-upload" accept="image/*,video/*" class="d-none">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="pt-4 mt-4 border-top">
+        <div class="d-flex justify-content-end gap-3">
+          <button type="button" class="btn btn-outline-secondary px-4 rounded-pill">Cancel</button>
+          <button type="submit" class="btn btn-primary px-4 rounded-pill shadow-sm">
+            <i class="bi bi-check-lg me-2"></i>Save Changes
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .compact-form .form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  .img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hover-zoom:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  .border-dashed {
+    border-style: dashed !important;
+  }
+  .transition-all {
+    transition: all 0.2s ease;
+  }
+  .hover-shadow-lg:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+  }
+
+  /* Override Bootstrap's ratio positioning for buttons */
+  .ratio .btn-remove-image,
+  .ratio .remove-media-btn {
+    position: absolute;
+    left: auto !important; 
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    z-index: 10;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Check if we're on the why-use-tool page
+    if (window.location.pathname.includes('why-use-tool')) {
+      // Get content ID and category from the URL
+      const urlParams = new URLSearchParams(window.location.search);
+      console.log('URL Search params:', window.location.search);
+      console.log('All params:', Object.fromEntries(urlParams.entries()));
+      
+      // Get content ID from the link that was clicked
+      const getContentId = () => {
+        console.log('Starting contentId detection process...');
+        
+        // Get from URL parameters
+        if (urlParams.has('id')) {
+          console.log('Found contentId in URL params:', urlParams.get('id'));
+          return urlParams.get('id');
+        }
+        
+        // Check for referrer with URL parameters
+        if (document.referrer.includes('/why-use-tool') || document.referrer.includes('/Why-Use-Tool')) {
+          console.log('Found /why-use-tool in referrer:', document.referrer);
+          const referrerUrl = new URL(document.referrer);
+          const referrerParams = new URLSearchParams(referrerUrl.search);
+          if (referrerParams.has('id')) {
+            console.log('Found contentId in referrer params:', referrerParams.get('id'));
+            return referrerParams.get('id');
+          }
+        }
+        
+        // Fallback: check for data-content-id attribute (case insensitive href match)
+        console.log('Searching for sidebar links with matching href...');
+        const sidebarLinks = document.querySelectorAll('a[href]');
+        for (let link of sidebarLinks) {
+          const href = link.getAttribute('href');
+          if (href && (href.toLowerCase() === '/why-use-tool')) {
+            console.log('Found matching sidebar link:', href);
+            if (link.getAttribute('data-content-id')) {
+              console.log('Found contentId in data attribute:', link.getAttribute('data-content-id'));
+              return link.getAttribute('data-content-id');
+            }
+          }
+        }
+        
+        // Last resort: look for specific contentId in the page
+        console.log('Attempting to get contentId from URL:', window.location.href);
+        const matches = window.location.href.match(/[?&]id=([^&]+)/);
+        if (matches && matches[1]) {
+          console.log('Extracted contentId from URL regex:', matches[1]);
+          return matches[1];
+        }
+        
+        console.log('No contentId found by any method');
+        return null;
+      };
+      
+      // Get content ID from route and URL params
+      const contentId = getContentId();
+      const category = urlParams.get('category');
+      
+      console.log('Final Content ID:', contentId);
+      console.log('Category:', category);
+      
+      if (!contentId) {
+        console.error('No content ID found. Adding a direct contentId for testing');
+        // Show warning to user
+        showAlert('Warning: No content ID found. Some functionality may be limited.', 'warning');
+      }
+      
+      // Form elements
+      const titleInput = document.getElementById('content-title');
+      const subtitleInput = document.getElementById('content-subtitle');
+      const primaryTextInput = document.getElementById('primary-text');
+      const secondaryTextInput = document.getElementById('secondary-text');
+      const additionalNotesInput = document.getElementById('additional-notes');
+      
+      // Current media content holder
+      let currentMedia = null;
+      
+      // Handle image upload functionality
+      const addImageBtn = document.getElementById('add-image-btn');
+      const mediaUpload = document.getElementById('media-upload');
+      
+      if (addImageBtn && mediaUpload) {
+        // Trigger file input when add image button is clicked
+        addImageBtn.addEventListener('click', function() {
+          mediaUpload.click();
+        });
+        
+        // Handle file selection
+        mediaUpload.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (!file) return;
+          
+          // Check if file is an image or video
+          const isImage = file.type.startsWith('image/');
+          const isVideo = file.type.startsWith('video/');
+          
+          if (isImage || isVideo) {
+            // Create object URL for preview
+            const objectUrl = URL.createObjectURL(file);
+            
+            // Prepare media object
+            currentMedia = {
+              type: isVideo ? 'video' : 'image',
+              file: file,
+              url: objectUrl
+            };
+            
+            // Update gallery with new media
+            updateGallery(currentMedia);
+            
+            // In a real application, you would upload the file to your server here
+            // For demo purposes, we're just displaying it locally
+            console.log('File selected:', file);
+            
+            // Optional: Upload file to server immediately
+            uploadMediaToServer(file, contentId).then(response => {
+              if (response && response.url) {
+                // Update the currentMedia with the server URL
+                currentMedia.serverUrl = response.url;
+                currentMedia.url = response.url; // Also update the main URL
+                console.log('Media uploaded to server:', response);
+              }
+            });
+          } else {
+            alert('Please select an image or video file.');
+          }
+        });
+      }
+      
+      // Fetch content data
+      const fetchContent = () => {
+        if (!contentId) {
+          console.log('No content ID available for fetch request');
+          return;
+        }
+        
+        fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok: ' + response.statusText);
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('API Response:', data);
+          
+          // Populate form fields with data
+          if (data.title) titleInput.value = data.title;
+          if (data.subtitle) subtitleInput.value = data.subtitle;
+          
+          // Check if fields array exists
+          if (data.fields && Array.isArray(data.fields) && data.fields.length >= 4) {
+            // Populate the four text fields from the fields array
+            titleInput.value = data.fields[0].value || '';
+            subtitleInput.value = data.fields[1].value || '';
+            primaryTextInput.value = data.fields[2].value || '';
+            secondaryTextInput.value = data.fields[3].value || '';
+            
+            // If there's a fifth field, use it for additional notes
+            if (data.fields.length >= 5) {
+              additionalNotesInput.value = data.fields[4].value || '';
+            }
+          } else {
+            // Fallback to legacy format
+            if (data.primaryText) primaryTextInput.value = data.primaryText;
+            if (data.secondaryText) secondaryTextInput.value = data.secondaryText;
+            if (data.additionalNotes) additionalNotesInput.value = data.additionalNotes;
+          }
+          
+          // Handle media content
+          if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+            // Use the first image in the array
+            currentMedia = data.images[0];
+            updateGallery(currentMedia);
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching data from API:', error);
+          showAlert('Error loading content. Please try again.', 'danger');
+        });
+      };
+      
+      // Update content data
+      const updateContent = () => {
+        if (!contentId) {
+          console.error('No content ID available for update');
+          showAlert('Cannot save changes: Missing content ID.', 'danger');
+          return;
+        }
+        
+        // Get values from form fields
+        const title = titleInput.value.trim();
+        const subtitle = subtitleInput.value.trim();
+        const primaryText = primaryTextInput.value.trim();
+        const secondaryText = secondaryTextInput.value.trim();
+        const additionalNotes = additionalNotesInput.value.trim();
+        
+        // Validate required fields
+        if (!title) {
+          showAlert('Please enter text for the first field.', 'warning');
+          titleInput.focus();
+          return;
+        }
+        
+        // Prepare data for API
+        const updateData = {
+          title,
+          subtitle,
+          primaryText,
+          secondaryText,
+          additionalNotes,
+          // Create fields array for the API with proper object format
+          fields: [
+            { value: title },
+            { value: subtitle },
+            { value: primaryText },
+            { value: secondaryText },
+            { value: additionalNotes }
+          ],
+          images: []
+        };
+        
+        // Add media if available
+        if (currentMedia) {
+          // Use the Cloudinary URL if available, otherwise use the local URL
+          const mediaUrl = currentMedia.serverUrl || currentMedia.url;
+          
+          // Create image object with structure matching MongoDB
+          const imageObject = {
+            url: mediaUrl,
+            alt: title || "Why Use Tool image", // Use title as alt text, or default
+            width: 1200, // Default width
+            height: 800, // Default height
+            order: 1 // First image
+          };
+          
+          // Add to images array
+          updateData.images = [imageObject];
+          
+          console.log('Saving image with data:', imageObject);
+        }
+        
+        // Show loading state
+        const saveButton = document.querySelector('button[type="submit"]');
+        const originalButtonText = saveButton.innerHTML;
+        saveButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        saveButton.disabled = true;
+        
+        // JWT Token for authorization
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
+        
+        // Send update request
+        fetch(`http://localhost:4009/api/content/${contentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updateData)
+        })
+        .then(response => {
+          console.log('Sending data to server:', updateData);
+          if (!response.ok) {
+            // Try to get the error message from the response
+            return response.text().then(text => {
+              console.error('Server response:', text);
+              throw new Error('Update failed: ' + response.statusText);
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log('Update successful:', data);
+          showAlert('Your changes have been saved successfully.', 'success');
+        })
+        .catch(error => {
+          console.error('Error updating content:', error);
+          showAlert('Failed to save changes. Please try again.', 'danger');
+        })
+        .finally(() => {
+          // Restore button state
+          saveButton.innerHTML = originalButtonText;
+          saveButton.disabled = false;
+        });
+      };
+      
+      // Function to update the gallery with images from API
+      function updateGallery(content) {
+        const galleryContainer = document.getElementById('image-preview-container');
+        if (!galleryContainer) return;
+        
+        // Remove all current media cards but keep the add button
+        const addImageCard = document.getElementById('add-image-btn')?.closest('.col-6');
+        
+        // Find all media cards (not the add button)
+        const mediaCards = Array.from(galleryContainer.querySelectorAll('.col-6')).filter(card => 
+          !card.contains(document.getElementById('add-image-btn'))
+        );
+        
+        // Remove all media cards
+        mediaCards.forEach(card => card.remove());
+        
+        if (!content) return;
+        
+        // Create a card for the content (image or video)
+        const mediaCard = document.createElement('div');
+        mediaCard.className = 'col-6 col-md-4 col-lg-3';
+        
+        // Check if content is a video or image
+        const isVideo = content.type === 'video' || 
+                       (content.url && (content.url.endsWith('.mp4') || 
+                                        content.url.endsWith('.webm') || 
+                                        content.url.includes('youtube') || 
+                                        content.url.includes('vimeo')));
+        
+        if (isVideo) {
+          // Create video element
+          mediaCard.innerHTML = `
+            <div class="ratio ratio-1x1 rounded-3 overflow-hidden position-relative hover-zoom">
+              ${content.url.includes('youtube') || content.url.includes('vimeo') 
+                ? `<iframe src="${content.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
+                : `<video src="${content.url}" class="object-fit-cover" controls></video>`
+              }
+              <button class="remove-media-btn btn btn-sm btn-danger position-absolute top-0 m-1 d-flex align-items-center justify-content-center">
+                <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
+              </button>
+            </div>
+          `;
+        } else {
+          // Create image element (default)
+          mediaCard.innerHTML = `
+            <div class="ratio ratio-1x1 rounded-3 overflow-hidden position-relative hover-zoom">
+              <img src="${content.url || content}" class="object-fit-cover" alt="Media Content">
+              <button class="remove-media-btn btn btn-sm btn-danger position-absolute top-0 m-1 d-flex align-items-center justify-content-center">
+                <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
+              </button>
+            </div>
+          `;
+        }
+        
+        // Insert the media card before the add button
+        if (addImageCard && addImageCard.parentNode) {
+          galleryContainer.insertBefore(mediaCard, addImageCard);
+        } else {
+          // If add button wasn't found, just append
+          galleryContainer.appendChild(mediaCard);
+        }
+        
+        // Add click event for remove button
+        const removeButton = mediaCard.querySelector('.remove-media-btn');
+        if (removeButton) {
+          removeButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Remove the card
+            mediaCard.remove();
+            
+            // Clear current media reference
+            window.currentMedia = null;
+            currentMedia = null;
+          });
+        }
+      }
+      
+      // Function to upload media to server
+      async function uploadMediaToServer(file, contentId) {
+        if (!file) return null;
+        
+        // JWT Token for authorization
+        const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
+        
+        // Create FormData
+        const formData = new FormData();
+        formData.append('images', file);
+        
+        try {
+          // Show loading indicator
+          const loadingIndicator = document.createElement('div');
+          loadingIndicator.className = 'position-absolute bg-dark bg-opacity-50 w-100 h-100 d-flex align-items-center justify-content-center text-white';
+          loadingIndicator.style.zIndex = '10';
+          loadingIndicator.innerHTML = '<div class="spinner-border text-light" role="status"><span class="visually-hidden">Uploading...</span></div>';
+          
+          // Add loading indicator to the media card
+          const mediaCard = document.querySelector('.ratio.ratio-1x1');
+          if (mediaCard) {
+            mediaCard.style.position = 'relative';
+            mediaCard.appendChild(loadingIndicator);
+          }
+          
+          // Upload the image to Cloudinary via your endpoint
+          const response = await fetch('http://localhost:4009/api/images', {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            body: formData
+          });
+          
+          if (!response.ok) {
+            throw new Error('Upload failed: ' + response.statusText);
+          }
+          
+          const data = await response.json();
+          
+          console.log(data, 'data');
+          // Remove loading indicator
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+          
+          // Return the Cloudinary URL
+          if (data && data.files) {
+            // Replace the local object URL with the Cloudinary URL
+            const image = document.querySelector('.ratio.ratio-1x1 img');
+            if (image) {
+              image.src = data.files[0].url;
+            }
+            
+            // Update the current media object
+            return {
+              url: data.files[0].url,
+              alt: "Uploaded image",
+              width: 1200,
+              height: 800,
+              order: 1,
+              type: file.type.startsWith('video/') ? 'video' : 'image'
+            };
+          }
+          
+          return null;
+        } catch (error) {
+          console.error('Error uploading to Cloudinary:', error);
+          
+          // Remove loading indicator if it exists
+          const loadingIndicator = document.querySelector('.position-absolute.bg-dark.bg-opacity-50');
+          if (loadingIndicator) {
+            loadingIndicator.remove();
+          }
+          
+          // Show error alert
+          alert('Failed to upload image. Please try again.');
+          return null;
+        }
+      }
+      
+      // Helper function to show alerts
+      const showAlert = (message, type = 'success') => {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+          <strong>${type === 'success' ? 'Success!' : type === 'danger' ? 'Error!' : 'Note:'}</strong> ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        // Add alert to the top of the card body
+        document.querySelector('.card-body').prepend(alertDiv);
+        
+        // Remove alert after 4 seconds
+        setTimeout(() => {
+          alertDiv.remove();
+        }, 4000);
+      };
+      
+      // Add event listener to Save Changes button
+      const saveButton = document.querySelector('button[type="submit"]');
+      if (saveButton) {
+        // Prevent the default form submission
+        document.querySelector('form.needs-validation').addEventListener('submit', function(e) {
+          e.preventDefault();
+        });
+        
+        saveButton.addEventListener('click', updateContent);
+      }
+      
+      // Load content data on page load
+      fetchContent();
+    }
+  });
+</script>

@@ -1,0 +1,1426 @@
+<!-- New Category Form -->
+<div class="card shadow-sm border-0 mb-4">
+  <div class="card-header bg-white py-3">
+    <h5 class="card-title mb-0 fw-semibold">Create New Category</h5>
+  </div>
+  <div class="card-body">
+    <form id="newCategoryForm" class="needs-validation" novalidate>
+      <div class="mb-3">
+        <label for="categoryName" class="form-label">Category Name</label>
+        <input type="text" class="form-control" id="categoryName" name="categoryName" 
+               placeholder="Enter category name" required>
+        <div class="invalid-feedback">
+          Please provide a category name.
+        </div>
+      </div>
+      
+      <div class="d-grid gap-2">
+        <button type="submit" class="btn btn-primary">
+          <i class="bi bi-plus-circle me-2"></i> Create Category
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Section Forms - Initially Hidden -->
+<div id="sectionForms" class="d-none">
+  <div class="alert alert-success mb-4">
+    <div class="d-flex align-items-center">
+      <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+      <div>
+        <strong>Category created successfully!</strong>
+        <p class="mb-0">Now you can add sections to your category.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs for Different Section Types -->
+  <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero" type="button" role="tab">
+        Hero Section
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" type="button" role="tab">
+        Images Gallery
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="why-tab" data-bs-toggle="tab" data-bs-target="#why" type="button" role="tab">
+        Why Use Tool
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="text-to-anything-tab" data-bs-toggle="tab" data-bs-target="#text-to-anything" type="button" role="tab">
+        Text to Anything
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="blogs-tab" data-bs-toggle="tab" data-bs-target="#blogs" type="button" role="tab">
+        Blogs
+      </button>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content" id="sectionTabsContent">
+    <!-- Hero Section Tab -->
+    <div class="tab-pane fade show active" id="hero" role="tabpanel" aria-labelledby="hero-tab">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">Hero Section</h5>
+          <span class="badge bg-primary">Required</span>
+        </div>
+        <div class="card-body">
+          <form id="heroSectionForm" class="needs-validation" novalidate>
+            <input type="hidden" id="categoryId" name="categoryId">
+            <input type="hidden" id="sectionType" name="sectionType" value="hero-section">
+            
+            <div class="mb-3">
+              <label for="heroTitle" class="form-label">Title</label>
+              <input type="text" class="form-control" id="heroTitle" name="title" 
+                    placeholder="Enter hero section title" required>
+              <div class="invalid-feedback">
+                Please provide a title.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="heroDescription" class="form-label">Description</label>
+              <textarea class="form-control" id="heroDescription" name="description" 
+                       rows="3" placeholder="Enter description" required></textarea>
+              <div class="invalid-feedback">
+                Please provide a description.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label for="heroImage" class="form-label">Background Image</label>
+              <input type="file" class="form-control" id="heroImage" name="image" accept="image/*" required>
+              <div class="form-text">
+                Recommended size: 1920x1080px. Max file size: 2MB.
+              </div>
+              <div class="invalid-feedback">
+                Please select an image.
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i> Save Hero Section
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Images Gallery Tab (placeholder) -->
+    <div class="tab-pane fade" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">Images Gallery</h5>
+          <span class="badge bg-info">Optional</span>
+        </div>
+        <div class="card-body">
+          <form id="galleryForm" class="needs-validation" novalidate>
+            <input type="hidden" id="galleryCategory" name="categoryId">
+            <input type="hidden" id="galleryType" name="sectionType" value="images-gallery">
+            
+            <!-- Gallery Title and Description -->
+            <div class="mb-4">
+              <div class="mb-3">
+                <label for="galleryTitle" class="form-label">Gallery Title</label>
+                <input type="text" class="form-control" id="galleryTitle" name="title" 
+                      placeholder="Enter gallery title" required>
+                <div class="invalid-feedback">
+                  Please provide a gallery title.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="galleryDescription" class="form-label">Gallery Description</label>
+                <textarea class="form-control" id="galleryDescription" name="description" 
+                         rows="2" placeholder="Enter gallery description" required></textarea>
+                <div class="invalid-feedback">
+                  Please provide a gallery description.
+                </div>
+              </div>
+            </div>
+            
+            <!-- Gallery Images Container -->
+            <div class="mb-4 border rounded-3 p-3 bg-light">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <label class="form-label mb-0 fw-semibold">Gallery Images</label>
+                <button type="button" id="addGalleryImage" class="btn btn-sm btn-primary">
+                  <i class="bi bi-plus-lg me-1"></i> Add Image
+                </button>
+              </div>
+              
+              <!-- Gallery Images Repeater -->
+              <div id="galleryImagesContainer">
+                <!-- Single Image Item Template -->
+                <div class="gallery-image-item mb-4 border rounded p-3 bg-white position-relative">
+                  <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
+                         aria-label="Remove image"></button>
+                  
+                  <div class="row g-3">
+                    <!-- Image Upload -->
+                    <div class="col-md-4">
+                      <div class="mb-3">
+                        <label class="form-label small">Upload Image</label>
+                        <input type="file" class="form-control form-control-sm gallery-image-upload" 
+                               accept="image/*" required>
+                        <div class="invalid-feedback">
+                          Please select an image.
+                        </div>
+                      </div>
+                      <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
+                        <div class="d-flex align-items-center justify-content-center text-muted">
+                          <i class="bi bi-image me-2"></i> No image
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <!-- Image Details -->
+                    <div class="col-md-8">
+                      <div class="mb-3">
+                        <label class="form-label small">Image Title</label>
+                        <input type="text" class="form-control form-control-sm gallery-image-title" 
+                               placeholder="Enter image title" required>
+                        <div class="invalid-feedback">
+                          Please provide an image title.
+                        </div>
+                      </div>
+                      
+                      <div class="mb-3">
+                        <label class="form-label small">Image Description</label>
+                        <textarea class="form-control form-control-sm gallery-image-description" rows="3"
+                                  placeholder="Enter image description" required></textarea>
+                        <div class="invalid-feedback">
+                          Please provide an image description.
+                        </div>
+                      </div>
+                      
+                      <div class="form-check form-switch">
+                        <input class="form-check-input gallery-image-featured" type="checkbox" role="switch">
+                        <label class="form-check-label small">Featured Image</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- End Single Image Item -->
+              </div>
+              
+              <!-- No Images Message -->
+              <div id="noGalleryImages" class="text-center py-4 text-muted">
+                <i class="bi bi-images fs-3 d-block mb-2"></i>
+                <p class="mb-0">No images added yet. Click "Add Image" to get started.</p>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i> Save Gallery
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Why Use Tool Tab -->
+    <div class="tab-pane fade" id="why" role="tabpanel" aria-labelledby="why-tab">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">Why Use Tool</h5>
+          <span class="badge bg-info">Optional</span>
+        </div>
+        <div class="card-body">
+          <form id="whyUseToolForm" class="needs-validation" novalidate>
+            <input type="hidden" id="whyUseToolCategory" name="categoryId">
+            <input type="hidden" id="whyUseToolType" name="sectionType" value="why-use-tool">
+            
+            <!-- Main Title and Description -->
+            <div class="mb-4">
+              <div class="mb-3">
+                <label for="whyUseToolTitle" class="form-label">Section Title</label>
+                <input type="text" class="form-control" id="whyUseToolTitle" name="title" 
+                      placeholder="Enter section title" required>
+                <div class="invalid-feedback">
+                  Please provide a section title.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="whyUseToolDescription" class="form-label">Section Description</label>
+                <textarea class="form-control" id="whyUseToolDescription" name="description" 
+                         rows="2" placeholder="Enter section description" required></textarea>
+                <div class="invalid-feedback">
+                  Please provide a section description.
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature Image -->
+            <div class="mb-4 p-3 bg-light rounded-3 border">
+              <label class="form-label fw-semibold mb-3">Feature Image</label>
+              <div class="row">
+                <div class="col-lg-4">
+                  <div class="mb-3">
+                    <input type="file" class="form-control" id="whyUseToolImage" name="image" 
+                           accept="image/*" required>
+                    <div class="invalid-feedback">
+                      Please select an image.
+                    </div>
+                    <div class="form-text mt-1">
+                      Recommended size: 600x400px or larger
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-8">
+                  <div id="whyUseToolImagePreview" class="ratio ratio-16x9 bg-white rounded overflow-hidden border">
+                    <div class="d-flex align-items-center justify-content-center text-muted">
+                      <i class="bi bi-image fs-3 me-2"></i> 
+                      <span>Preview will appear here</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Feature Points -->
+            <div class="mb-4 p-3 bg-light rounded-3 border">
+              <label class="form-label fw-semibold mb-3">Feature Points</label>
+              
+              <!-- Feature 1 -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-primary text-white">1</span>
+                  <input type="text" class="form-control" id="whyUseToolFeature1" 
+                         placeholder="Enter first feature point" required>
+                  <div class="invalid-feedback">
+                    Please provide the first feature point.
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Feature 2 -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-primary text-white">2</span>
+                  <input type="text" class="form-control" id="whyUseToolFeature2" 
+                         placeholder="Enter second feature point" required>
+                  <div class="invalid-feedback">
+                    Please provide the second feature point.
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Feature 3 -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-primary text-white">3</span>
+                  <input type="text" class="form-control" id="whyUseToolFeature3" 
+                         placeholder="Enter third feature point" required>
+                  <div class="invalid-feedback">
+                    Please provide the third feature point.
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Feature 4 -->
+              <div class="mb-3">
+                <div class="input-group">
+                  <span class="input-group-text bg-primary text-white">4</span>
+                  <input type="text" class="form-control" id="whyUseToolFeature4" 
+                         placeholder="Enter fourth feature point" required>
+                  <div class="invalid-feedback">
+                    Please provide the fourth feature point.
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Feature 5 (Optional) -->
+              <div class="mb-1">
+                <div class="input-group">
+                  <span class="input-group-text bg-secondary text-white">5</span>
+                  <input type="text" class="form-control" id="whyUseToolFeature5" 
+                         placeholder="Enter fifth feature point (optional)">
+                </div>
+                <div class="form-text mt-1">
+                  This feature point is optional.
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i> Save Why Use Tool Section
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Text to Anything Tab -->
+    <div class="tab-pane fade" id="text-to-anything" role="tabpanel" aria-labelledby="text-to-anything-tab">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">Text to Anything</h5>
+          <span class="badge bg-info">Optional</span>
+        </div>
+        <div class="card-body">
+          <form id="textToAnythingForm" class="needs-validation" novalidate>
+            <input type="hidden" id="textToAnythingCategory" name="categoryId">
+            <input type="hidden" id="textToAnythingType" name="sectionType" value="text-to-anything">
+            
+            <!-- Main Title and Subtitle -->
+            <div class="mb-4">
+              <div class="mb-3">
+                <label for="textToAnythingTitle" class="form-label">Title</label>
+                <input type="text" class="form-control" id="textToAnythingTitle" name="title" 
+                      placeholder="Enter section title" required>
+                <div class="invalid-feedback">
+                  Please provide a section title.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="textToAnythingSubtitle" class="form-label">Subtitle</label>
+                <input type="text" class="form-control" id="textToAnythingSubtitle" name="subtitle"
+                       placeholder="Enter section subtitle" required>
+                <div class="invalid-feedback">
+                  Please provide a section subtitle.
+                </div>
+              </div>
+            </div>
+            
+            <!-- Section Images -->
+            <div class="mb-4 p-3 bg-light rounded-3 border">
+              <label class="form-label fw-semibold mb-3">
+                Section Images 
+                <span class="text-muted small fw-normal">(Main banner and examples)</span>
+              </label>
+              
+              <!-- Main Banner Image -->
+              <div class="mb-4 pb-3 border-bottom">
+                <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Main Banner Image</label>
+                <div class="row g-3">
+                  <div class="col-lg-4">
+                    <div class="mb-3">
+                      <input type="file" class="form-control" id="textToAnythingMainImage" name="mainImage" 
+                             accept="image/*" required>
+                      <div class="invalid-feedback">
+                        Please select a main banner image.
+                      </div>
+                      <div class="form-text mt-1">
+                        Recommended size: 1200x600px
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-8">
+                    <div id="textToAnythingMainImagePreview" class="ratio ratio-21x9 bg-white rounded overflow-hidden border">
+                      <div class="d-flex align-items-center justify-content-center text-muted">
+                        <i class="bi bi-image fs-3 me-2"></i> 
+                        <span>Banner preview will appear here</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Example Images -->
+              <div>
+                <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Example Images (Optional)</label>
+                <div class="row g-3 mb-3" id="textToAnythingExampleImages">
+                  <div class="col-6 col-md-3">
+                    <div class="card h-100 border">
+                      <div class="card-body p-2 text-center">
+                        <div class="btn btn-light border w-100 rounded-3 mb-2 text-center py-4" id="addExampleImageBtn">
+                          <i class="bi bi-plus-lg d-block fs-4 mb-1"></i>
+                          <span class="small text-muted">Add Example</span>
+                        </div>
+                        <input type="file" id="exampleImageUpload" class="d-none" accept="image/*" multiple>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-text mt-1">
+                  You can add up to 8 example images to showcase the capabilities.
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i> Save Text to Anything Section
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Blogs Tab -->
+    <div class="tab-pane fade" id="blogs" role="tabpanel" aria-labelledby="blogs-tab">
+      <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="card-title mb-0 fw-semibold">Blog Section</h5>
+          <span class="badge bg-info">Optional</span>
+        </div>
+        <div class="card-body">
+          <form id="blogsForm" class="needs-validation" novalidate>
+            <input type="hidden" id="blogsCategory" name="categoryId">
+            <input type="hidden" id="blogsType" name="sectionType" value="blogs">
+            
+            <!-- Section Title and Description -->
+            <div class="mb-4">
+              <div class="mb-3">
+                <label for="blogsTitle" class="form-label">Section Title</label>
+                <input type="text" class="form-control" id="blogsTitle" name="title" 
+                      placeholder="Enter blog section title" required>
+                <div class="invalid-feedback">
+                  Please provide a section title.
+                </div>
+              </div>
+              
+              <div class="mb-3">
+                <label for="blogsDescription" class="form-label">Section Description</label>
+                <textarea class="form-control" id="blogsDescription" name="description" 
+                         rows="2" placeholder="Enter section description" required></textarea>
+                <div class="invalid-feedback">
+                  Please provide a section description.
+                </div>
+              </div>
+            </div>
+            
+            <!-- Blog Entries -->
+            <div class="mb-4">
+              <h6 class="fw-semibold border-bottom pb-2 mb-3">Blog Entries</h6>
+              
+              <!-- Blog Entries Container -->
+              <div id="blogEntriesContainer">
+                <!-- Blog Entry 1 -->
+                <div class="blog-entry card shadow-sm border mb-4">
+                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">Blog 1</h6>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog1Lead" checked>
+                      <label class="form-check-label small" for="blog1Lead">Lead Blog</label>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- Blog Image -->
+                      <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label small">Blog Image</label>
+                        <input type="file" class="form-control form-control-sm blog-image-upload" 
+                               accept="image/*" required>
+                        <div class="invalid-feedback">
+                          Please select a blog image.
+                        </div>
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+                          <div class="d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-image me-2"></i> No image
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Blog Details -->
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label class="form-label small">Blog Title</label>
+                          <input type="text" class="form-control form-control-sm blog-title" 
+                                 placeholder="Enter blog title" required>
+                          <div class="invalid-feedback">
+                            Please provide a blog title.
+                          </div>
+                        </div>
+                        
+                        <div class="mb-0">
+                          <label class="form-label small">Publication Date</label>
+                          <input type="date" class="form-control form-control-sm blog-date" required>
+                          <div class="invalid-feedback">
+                            Please provide a publication date.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Blog Entry 2 -->
+                <div class="blog-entry card shadow-sm border mb-4">
+                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">Blog 2</h6>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog2Lead">
+                      <label class="form-check-label small" for="blog2Lead">Lead Blog</label>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- Blog Image -->
+                      <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label small">Blog Image</label>
+                        <input type="file" class="form-control form-control-sm blog-image-upload" 
+                               accept="image/*" required>
+                        <div class="invalid-feedback">
+                          Please select a blog image.
+                        </div>
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+                          <div class="d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-image me-2"></i> No image
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Blog Details -->
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label class="form-label small">Blog Title</label>
+                          <input type="text" class="form-control form-control-sm blog-title" 
+                                 placeholder="Enter blog title" required>
+                          <div class="invalid-feedback">
+                            Please provide a blog title.
+                          </div>
+                        </div>
+                        
+                        <div class="mb-0">
+                          <label class="form-label small">Publication Date</label>
+                          <input type="date" class="form-control form-control-sm blog-date" required>
+                          <div class="invalid-feedback">
+                            Please provide a publication date.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Blog Entry 3 -->
+                <div class="blog-entry card shadow-sm border mb-4">
+                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">Blog 3</h6>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog3Lead">
+                      <label class="form-check-label small" for="blog3Lead">Lead Blog</label>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- Blog Image -->
+                      <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label small">Blog Image</label>
+                        <input type="file" class="form-control form-control-sm blog-image-upload" 
+                               accept="image/*" required>
+                        <div class="invalid-feedback">
+                          Please select a blog image.
+                        </div>
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+                          <div class="d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-image me-2"></i> No image
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Blog Details -->
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label class="form-label small">Blog Title</label>
+                          <input type="text" class="form-control form-control-sm blog-title" 
+                                 placeholder="Enter blog title" required>
+                          <div class="invalid-feedback">
+                            Please provide a blog title.
+                          </div>
+                        </div>
+                        
+                        <div class="mb-0">
+                          <label class="form-label small">Publication Date</label>
+                          <input type="date" class="form-control form-control-sm blog-date" required>
+                          <div class="invalid-feedback">
+                            Please provide a publication date.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Blog Entry 4 -->
+                <div class="blog-entry card shadow-sm border mb-4">
+                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
+                    <h6 class="mb-0 fw-semibold">Blog 4</h6>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog4Lead">
+                      <label class="form-check-label small" for="blog4Lead">Lead Blog</label>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <div class="row">
+                      <!-- Blog Image -->
+                      <div class="col-md-4 mb-3 mb-md-0">
+                        <label class="form-label small">Blog Image</label>
+                        <input type="file" class="form-control form-control-sm blog-image-upload" 
+                               accept="image/*" required>
+                        <div class="invalid-feedback">
+                          Please select a blog image.
+                        </div>
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+                          <div class="d-flex align-items-center justify-content-center text-muted">
+                            <i class="bi bi-image me-2"></i> No image
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <!-- Blog Details -->
+                      <div class="col-md-8">
+                        <div class="mb-3">
+                          <label class="form-label small">Blog Title</label>
+                          <input type="text" class="form-control form-control-sm blog-title" 
+                                 placeholder="Enter blog title" required>
+                          <div class="invalid-feedback">
+                            Please provide a blog title.
+                          </div>
+                        </div>
+                        
+                        <div class="mb-0">
+                          <label class="form-label small">Publication Date</label>
+                          <input type="date" class="form-control form-control-sm blog-date" required>
+                          <div class="invalid-feedback">
+                            Please provide a publication date.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-primary">
+                <i class="bi bi-save me-2"></i> Save Blog Section
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const categoryForm = document.getElementById('newCategoryForm');
+    const sectionForms = document.getElementById('sectionForms');
+    let createdCategoryId = null;
+    
+    // Add Bootstrap tab event handlers
+    const tabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabList.forEach(tabEl => {
+      tabEl.addEventListener('shown.bs.tab', event => {
+        const targetTab = event.target.getAttribute('data-bs-target');
+        console.log('Tab activated:', targetTab);
+        
+        // Set category ID on all forms when tabs change
+        if (createdCategoryId) {
+          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+            input.value = createdCategoryId;
+          });
+        }
+      });
+    });
+    
+    // Initialize tab activation events
+    const tabElements = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabElements.forEach(tab => {
+      tab.addEventListener('shown.bs.tab', function (event) {
+        // The newly activated tab
+        const activeTab = event.target.getAttribute('data-bs-target');
+        console.log('Tab activated:', activeTab);
+        
+        // Initialize image previews for the active tab
+        initializeImagePreviews(activeTab);
+        
+        // Initialize form submission for the active tab
+        initializeFormSubmission(activeTab);
+      });
+    });
+    
+    // Function to initialize image previews for a specific tab
+    function initializeImagePreviews(tabId) {
+      let fileInputs = [];
+      
+      // Select the appropriate file inputs based on the active tab
+      switch(tabId) {
+        case '#hero':
+          fileInputs = document.querySelectorAll('#hero .form-control[type="file"]');
+          break;
+        case '#gallery':
+          fileInputs = document.querySelectorAll('#gallery .form-control[type="file"]');
+          break;
+        case '#why':
+          fileInputs = document.querySelectorAll('#why .form-control[type="file"]');
+          break;
+        case '#text-to-anything':
+          fileInputs = document.querySelectorAll('#text-to-anything .form-control[type="file"]');
+          break;
+        case '#blogs':
+          fileInputs = document.querySelectorAll('#blogs .form-control[type="file"]');
+          break;
+        default:
+          return;
+      }
+      
+      // Add change event listeners to file inputs
+      fileInputs.forEach(input => {
+        // Remove existing event listeners to avoid duplicates
+        const newInput = input.cloneNode(true);
+        input.parentNode.replaceChild(newInput, input);
+        
+        // Add new event listener
+        newInput.addEventListener('change', function(event) {
+          const file = this.files[0];
+          if (!file) return;
+          
+          // Find the closest preview container
+          let previewContainer;
+          if (this.closest('.col-md-4')) {
+            previewContainer = this.closest('.col-md-4').querySelector('.image-preview');
+          } else if (this.closest('.mb-3')) {
+            previewContainer = this.closest('.mb-3').nextElementSibling;
+          }
+          
+          if (previewContainer) {
+            const objectUrl = URL.createObjectURL(file);
+            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
+          }
+        });
+      });
+      
+      // Re-initialize tab-specific functionality
+      if (tabId === '#gallery') {
+        const addGalleryImageBtn = document.getElementById('addGalleryImage');
+        if (addGalleryImageBtn) {
+          // Remove existing event listener
+          const newBtn = addGalleryImageBtn.cloneNode(true);
+          addGalleryImageBtn.parentNode.replaceChild(newBtn, addGalleryImageBtn);
+          
+          // Add new event listener
+          newBtn.addEventListener('click', function() {
+            addGalleryImageItem();
+          });
+        }
+      } else if (tabId === '#blogs') {
+        // Reinitialize lead blog toggles
+        const blogLeadToggles = document.querySelectorAll('#blogs .blog-lead-toggle');
+        blogLeadToggles.forEach(toggle => {
+          // Remove existing event listener
+          const newToggle = toggle.cloneNode(true);
+          toggle.parentNode.replaceChild(newToggle, toggle);
+          
+          // Add new event listener
+          newToggle.addEventListener('change', function() {
+            if (this.checked) {
+              blogLeadToggles.forEach(otherToggle => {
+                if (otherToggle !== this && otherToggle.id !== this.id) {
+                  otherToggle.checked = false;
+                }
+              });
+            }
+          });
+        });
+      }
+    }
+    
+    // Function to initialize form submission for a specific tab
+    function initializeFormSubmission(tabId) {
+      let form;
+      
+      switch(tabId) {
+        case '#hero':
+          form = document.getElementById('heroSectionForm');
+          break;
+        case '#gallery':
+          form = document.getElementById('galleryForm');
+          break;
+        case '#why':
+          form = document.getElementById('whyUseToolForm');
+          break;
+        case '#text-to-anything':
+          form = document.getElementById('textToAnythingForm');
+          break;
+        case '#blogs':
+          form = document.getElementById('blogsForm');
+          break;
+        default:
+          return;
+      }
+      
+      if (form) {
+        // Remove existing event listener
+        const newForm = form.cloneNode(true);
+        form.parentNode.replaceChild(newForm, form);
+        
+        // Re-add image preview event listeners for the new form
+        initializeImagePreviews(tabId);
+        
+        // Add submit event listener
+        newForm.addEventListener('submit', async function(event) {
+          event.preventDefault();
+          
+          if (!newForm.checkValidity()) {
+            event.stopPropagation();
+            newForm.classList.add('was-validated');
+            return;
+          }
+          
+          // Show loading state
+          const submitBtn = newForm.querySelector('button[type="submit"]');
+          const originalBtnText = submitBtn.innerHTML;
+          submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+          submitBtn.disabled = true;
+          
+          try {
+            // Get form values
+            const title = newForm.querySelector('[name="title"]').value;
+            const description = newForm.querySelector('[name="description"]').value;
+            const categoryId = createdCategoryId;
+            
+            // Create section based on the tab
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+            
+            let sectionName, sectionSlug, order;
+            switch(tabId) {
+              case '#hero':
+                sectionName = 'Hero Section';
+                sectionSlug = 'hero-section';
+                order = 1;
+                break;
+              case '#gallery':
+                sectionName = 'Images Gallery';
+                sectionSlug = 'images-gallery';
+                order = 2;
+                break;
+              case '#why':
+                sectionName = 'Why Use Tool';
+                sectionSlug = 'why-use-tool';
+                order = 3;
+                break;
+              case '#text-to-anything':
+                sectionName = 'Text to Anything';
+                sectionSlug = 'text-to-anything';
+                order = 4;
+                break;
+              case '#blogs':
+                sectionName = 'Blogs';
+                sectionSlug = 'blogs';
+                order = 5;
+                break;
+            }
+            
+            // Create section data
+            const sectionData = {
+              name: sectionName,
+              slug: sectionSlug,
+              description: sectionName + ' section',
+              category: categoryId,
+              isFolder: false,
+              order: order,
+              isActive: true
+            };
+            
+            // Create section
+            const sectionResponse = await fetch('http://localhost:4009/api/sections', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(sectionData)
+            });
+            
+            if (!sectionResponse.ok) {
+              throw new Error('Failed to create section: ' + sectionResponse.statusText);
+            }
+            
+            const sectionResult = await sectionResponse.json();
+            console.log('Section created:', sectionResult);
+            
+            // Process images and create content based on the tab
+            let contentData = {
+              section: sectionResult._id,
+              slug: `${title.toLowerCase().replace(/\s+/g, '-')}-${sectionSlug}`,
+              title: title,
+              subtitle: description,
+              images: [],
+              fields: [],
+              isActive: true
+            };
+            
+            // Tab-specific processing
+            if (tabId === '#hero') {
+              // Process hero image
+              const heroImage = document.getElementById('heroImage');
+              if (heroImage && heroImage.files.length > 0) {
+                const imageUrl = await uploadImage(heroImage.files[0], token);
+                if (imageUrl) {
+                  contentData.images.push({
+                    url: imageUrl,
+                    alt: title,
+                    width: 1200,
+                    height: 600
+                  });
+                }
+              }
+            } else if (tabId === '#gallery') {
+              // Process gallery images
+              const galleryItems = document.querySelectorAll('.gallery-image-item');
+              for (const item of galleryItems) {
+                const fileInput = item.querySelector('.gallery-image-upload');
+                if (fileInput && fileInput.files.length > 0) {
+                  const imageUrl = await uploadImage(fileInput.files[0], token);
+                  if (imageUrl) {
+                    contentData.images.push({
+                      url: imageUrl,
+                      alt: item.querySelector('.gallery-image-title')?.value,
+                      title: item.querySelector('.gallery-image-title')?.value,
+                      description: item.querySelector('.gallery-image-description')?.value,
+                      width: 800,
+                      height: 600
+                    });
+                  }
+                }
+              }
+            } else if (tabId === '#why') {
+              // Process why use tool
+              const whyImage = document.getElementById('whyUseToolImage');
+              if (whyImage && whyImage.files.length > 0) {
+                const imageUrl = await uploadImage(whyImage.files[0], token);
+                if (imageUrl) {
+                  contentData.images.push({
+                    url: imageUrl,
+                    alt: title,
+                    width: 600,
+                    height: 400
+                  });
+                }
+              }
+              
+              // Add feature points with improved error handling
+              try {
+                for (let i = 1; i <= 5; i++) {
+                  const featureId = `whyUseToolFeature${i}`;
+                  const featureInput = document.getElementById(featureId);
+                  
+                  // Only add if element exists and has a value
+                  if (featureInput && featureInput.value && featureInput.value.trim() !== '') {
+                    contentData.fields.push({
+                      value: featureInput.value.trim(),
+                      order: i - 1
+                    });
+                  }
+                }
+              } catch (featureError) {
+                console.warn('Error processing feature points:', featureError);
+                // Continue without blocking the form submission
+              }
+            } else if (tabId === '#text-to-anything') {
+              // Process text to anything images
+              const mainImage = document.getElementById('textToAnythingMainImage');
+              if (mainImage && mainImage.files.length > 0) {
+                const imageUrl = await uploadImage(mainImage.files[0], token);
+                if (imageUrl) {
+                  contentData.images.push({
+                    url: imageUrl,
+                    alt: title,
+                    width: 1200,
+                    height: 600,
+                    isMain: true
+                  });
+                }
+              }
+              
+              // Process example images if present
+              const exampleImages = document.querySelectorAll('[data-image-id]');
+              for (let i = 0; i < exampleImages.length; i++) {
+                const imgElement = exampleImages[i].querySelector('img');
+                if (imgElement && imgElement.src) {
+                  // For simplicity, we assume example images are already uploaded
+                  // In a real implementation, you might need to upload these too
+                  contentData.images.push({
+                    url: imgElement.src,
+                    alt: `Example ${i + 1}`,
+                    width: 600,
+                    height: 600,
+                    order: i + 1,
+                    isExample: true
+                  });
+                }
+              }
+            } else if (tabId === '#blogs') {
+              // Process blogs
+              const blogEntries = document.querySelectorAll('.blog-entry');
+              for (let i = 0; i < blogEntries.length; i++) {
+                const entry = blogEntries[i];
+                const fileInput = entry.querySelector('.blog-image-upload');
+                const titleInput = entry.querySelector('.blog-title');
+                const dateInput = entry.querySelector('.blog-date');
+                const leadToggle = entry.querySelector('.blog-lead-toggle');
+                
+                if (fileInput && fileInput.files.length > 0 && titleInput && dateInput) {
+                  const imageUrl = await uploadImage(fileInput.files[0], token);
+                  if (imageUrl) {
+                    contentData.fields.push({
+                      type: `blog_${i + 1}`,
+                      key: `blog_${i + 1}`,
+                      value: titleInput?.value,
+                      url: imageUrl,
+                      date: dateInput?.value,
+                      lead: leadToggle.checked,
+                      order: i
+                    });
+                  }
+                }
+              }
+            }
+            
+            // Create content
+            const contentResponse = await fetch('http://localhost:4009/api/content', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+              },
+              body: JSON.stringify(contentData)
+            });
+            
+            if (!contentResponse.ok) {
+              throw new Error('Content creation failed: ' + contentResponse.statusText);
+            }
+            
+            const contentResult = await contentResponse.json();
+            console.log(`${sectionName} content created:`, contentResult);
+            
+            // Show success message
+            alert(`${sectionName} created successfully!`);
+            
+            // Reset form
+            newForm.reset();
+            newForm.classList.remove('was-validated');
+            
+            // Reset image previews
+            newForm.querySelectorAll('.image-preview').forEach(preview => {
+              preview.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image me-2"></i> No image
+                </div>
+              `;
+            });
+            
+          } catch (error) {
+            console.error('Error creating section:', error);
+            alert('Error: ' + error.message);
+          } finally {
+            // Restore button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+          }
+        });
+      }
+    }
+    
+    // Helper function to upload an image
+    async function uploadImage(file, token) {
+      if (!file) return null;
+      
+      try {
+        const formData = new FormData();
+        formData.append('images', file);
+        
+        const uploadResponse = await fetch('http://localhost:4009/api/images', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+        
+        if (!uploadResponse.ok) {
+          throw new Error('Image upload failed: ' + uploadResponse.statusText);
+        }
+        
+        const uploadResult = await uploadResponse.json();
+        console.log('Image uploaded:', uploadResult);
+        
+        if (uploadResult && uploadResult.files && uploadResult.files.length > 0) {
+          return uploadResult.files[0].url;
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        return null;
+      }
+    }
+    
+    // Function to add gallery image item
+    function addGalleryImageItem() {
+      const galleryImagesContainer = document.getElementById('galleryImagesContainer');
+      
+      if (!galleryImagesContainer) return;
+      
+      // Hide no images message
+      updateGalleryVisibility();
+      
+      // Create new gallery image item
+      const newItem = document.createElement('div');
+      newItem.className = 'gallery-image-item mb-4 border rounded p-3 bg-white position-relative';
+      newItem.innerHTML = `
+        <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
+               aria-label="Remove image"></button>
+        
+        <div class="row g-3">
+          <!-- Image Upload -->
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label class="form-label small">Upload Image</label>
+              <input type="file" class="form-control form-control-sm gallery-image-upload" 
+                     accept="image/*" required>
+              <div class="invalid-feedback">
+                Please select an image.
+              </div>
+            </div>
+            <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
+              <div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="bi bi-image me-2"></i> No image
+              </div>
+            </div>
+          </div>
+          
+          <!-- Image Details -->
+          <div class="col-md-8">
+            <div class="mb-3">
+              <label class="form-label small">Image Title</label>
+              <input type="text" class="form-control form-control-sm gallery-image-title" 
+                     placeholder="Enter image title" required>
+              <div class="invalid-feedback">
+                Please provide an image title.
+              </div>
+            </div>
+            
+            <div class="mb-3">
+              <label class="form-label small">Image Description</label>
+              <textarea class="form-control form-control-sm gallery-image-description" rows="3"
+                        placeholder="Enter image description" required></textarea>
+              <div class="invalid-feedback">
+                Please provide an image description.
+              </div>
+            </div>
+            
+            <div class="form-check form-switch">
+              <input class="form-check-input gallery-image-featured" type="checkbox" role="switch">
+              <label class="form-check-label small">Featured Image</label>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      // Append to container
+      galleryImagesContainer.appendChild(newItem);
+      window.galleryImagesCount++;
+      
+      // Add event listener for remove button
+      const removeBtn = newItem.querySelector('.remove-gallery-image');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          newItem.remove();
+          window.galleryImagesCount--;
+          updateGalleryVisibility();
+        });
+      }
+      
+      // Add event listener for image preview
+      const fileInput = newItem.querySelector('.gallery-image-upload');
+      const previewContainer = newItem.querySelector('.image-preview');
+      
+      if (fileInput && previewContainer) {
+        fileInput.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
+          } else {
+            previewContainer.innerHTML = `
+              <div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="bi bi-image me-2"></i> No image
+              </div>
+            `;
+          }
+        });
+      }
+    }
+    
+    // Function to update visibility of elements based on gallery image count
+    function updateGalleryVisibility() {
+      const galleryImagesContainer = document.getElementById('galleryImagesContainer');
+      const noGalleryImagesMessage = document.getElementById('noGalleryImages');
+      
+      if (window.galleryImagesCount === 0) {
+        // Show no images message, hide container
+        if (noGalleryImagesMessage) noGalleryImagesMessage.classList.remove('d-none');
+        if (galleryImagesContainer) galleryImagesContainer.classList.add('d-none');
+      } else {
+        // Hide no images message, show container
+        if (noGalleryImagesMessage) noGalleryImagesMessage.classList.add('d-none');
+        if (galleryImagesContainer) galleryImagesContainer.classList.remove('d-none');
+      }
+    }
+    
+    // Initialize category form
+    if (categoryForm) {
+      categoryForm.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (!categoryForm.checkValidity()) {
+          event.stopPropagation();
+          categoryForm.classList.add('was-validated');
+          return;
+        }
+        
+        // Show loading state
+        const submitBtn = categoryForm.querySelector('button[type="submit"]');
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...';
+        submitBtn.disabled = true;
+        
+        try {
+          // Get form data
+          const categoryName = document.getElementById('categoryName').value;
+          
+          // Create category object with new format
+          const newCategory = {
+            name: categoryName,
+            slug: categoryName.toLowerCase().replace(/\s+/g, '-'),
+            description: categoryName + " Category",
+            isFolder: true,
+            parent: null
+          };
+
+          const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+          
+          // Make POST request to API
+          fetch('http://localhost:4009/api/categories', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(newCategory)
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok: ' + response.status);
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Category created successfully:', data);
+            
+            // Store the category ID for section creation
+            createdCategoryId = data._id || data.id;
+            
+            // Set categoryId for all forms
+            document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+              input.value = createdCategoryId;
+            });
+            
+            // Hide category form and show section forms
+            categoryForm.parentElement.parentElement.classList.add('d-none');
+            sectionForms.classList.remove('d-none');
+            
+            // Initialize all form elements and image previews
+            setTimeout(() => {
+              // Initialize image previews for all tabs
+              document.querySelectorAll('.form-control[type="file"]').forEach(input => {
+                input.addEventListener('change', function(e) {
+                  const file = this.files[0];
+                  if (!file) return;
+                  
+                  // Find the preview container
+                  let previewContainer;
+                  const parent = this.closest('.col-md-4') || this.closest('.mb-3');
+                  if (parent) {
+                    previewContainer = parent.querySelector('.image-preview') || parent.nextElementSibling;
+                  }
+                  
+                  if (previewContainer) {
+                    const objectUrl = URL.createObjectURL(file);
+                    previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
+                  }
+                });
+              });
+              
+              // Initialize gallery add button
+              const addGalleryImageBtn = document.getElementById('addGalleryImage');
+              if (addGalleryImageBtn) {
+                addGalleryImageBtn.addEventListener('click', addGalleryImageItem);
+              }
+              
+              // Initialize lead blog toggles
+              const blogLeadToggles = document.querySelectorAll('.blog-lead-toggle');
+              blogLeadToggles.forEach(toggle => {
+                toggle.addEventListener('change', function() {
+                  if (this.checked) {
+                    blogLeadToggles.forEach(otherToggle => {
+                      if (otherToggle !== this) {
+                        otherToggle.checked = false;
+                      }
+                    });
+                  }
+                });
+              });
+              
+              // Show success notification
+              const successAlert = document.createElement('div');
+              successAlert.className = 'alert alert-success mb-4';
+              successAlert.innerHTML = `
+                <div class="d-flex align-items-center">
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <div>
+                    <strong>Category "${categoryName}" created successfully!</strong>
+                    <p class="mb-0">You can now add sections to your category.</p>
+                  </div>
+                </div>
+              `;
+              sectionForms.insertBefore(successAlert, sectionForms.firstChild);
+              
+              // Scroll to the section forms
+              sectionForms.scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+          })
+          .catch(error => {
+            console.error('Error creating category:', error);
+            alert('Error creating category: ' + error.message);
+            
+            // Restore button state
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+          });
+        } catch (error) {
+          console.error('Error creating category:', error);
+          alert('Error creating category: ' + error.message);
+          
+          // Restore button state
+          submitBtn.innerHTML = originalBtnText;
+          submitBtn.disabled = false;
+        }
+      });
+    }
+  });
+</script>

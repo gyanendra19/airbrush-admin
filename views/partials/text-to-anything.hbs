@@ -1,0 +1,433 @@
+<div class="section-content">
+  <h2 class="h4 mb-3">Text to anything Section</h2>
+
+  <div class="card border-0 shadow-lg overflow-hidden">
+  <div class="card-body p-4">
+    <!-- Header with subtle accent -->
+    <div class="mb-4 pb-2 border-bottom">
+      <h5 class="fw-semibold mb-0 text-primary">Image Management</h5>
+      <p class="small text-muted mb-0">Upload and manage your image collection</p>
+    </div>
+
+    <form class="needs-validation" novalidate id="textToImageForm">
+      <!-- Title/Subtitle Group (Improved spacing + floating labels) -->
+      <div class="row g-3 mb-4">
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" 
+                   class="form-control" 
+                   id="banner-title" 
+                   placeholder="Title"
+                   required>
+            <label for="banner-title" class="text-muted">Title</label>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-floating">
+            <input type="text" 
+                   class="form-control" 
+                   id="banner-subtitle" 
+                   placeholder="Subtitle">
+            <label for="banner-subtitle" class="text-muted">Subtitle</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Image Gallery (Modern masonry grid + hover effects) -->
+      <div class="mb-4">
+        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Image Gallery</label>
+        <div class="row g-3" id="image-preview-container">
+          <!-- Images will be inserted here -->
+          
+          <!-- Add Image Card (Button) -->
+          <div class="col-6 col-md-4 col-lg-3">
+            <div class="ratio ratio-1x1 rounded-3 bg-light border-2 border-dashed hover-shadow-lg cursor-pointer d-flex align-items-center justify-content-center transition-all" id="add-image-btn">
+              <div class="text-center p-2">
+                <i class="bi bi-plus-lg fs-5 text-primary"></i>
+                <p class="small text-muted mb-0">Upload Image</p>
+              </div>
+              <input type="file" id="image-upload" accept="image/*" class="d-none">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons (Sticky bottom with gradient) -->
+      <div class="pt-4 mt-4 border-top">
+        <div class="d-flex justify-content-end gap-3">
+          <button type="button" class="btn btn-outline-secondary px-4 rounded-pill">Cancel</button>
+          <button type="button" id="save-btn" class="btn btn-primary px-4 rounded-pill shadow-sm">
+            <i class="bi bi-check-lg me-2"></i>Save Changes
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<style>
+  .compact-form .form-control-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+  }
+  .img-cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .hover-zoom:hover img {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+  }
+  .border-dashed {
+    border-style: dashed !important;
+  }
+  .transition-all {
+    transition: all 0.2s ease;
+  }
+  .hover-shadow-lg:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.1);
+  }
+  
+  /* Override Bootstrap's ratio positioning for buttons */
+  .ratio .btn-remove-image,
+  .ratio .remove-media-btn {
+    position: absolute;
+    left: auto !important; 
+    top: 0;
+    right: 0;
+    width: 26px;
+    height: 26px;
+    z-index: 10;
+  }
+  
+  /* Loading indicator styles */
+  .loading-indicator .ratio {
+    border: 2px dashed #e9ecef;
+    background-color: #f8f9fa;
+  }
+  
+  .loading-indicator .spinner-border {
+    width: 2rem;
+    height: 2rem;
+  }
+</style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Elements
+    const form = document.getElementById('textToImageForm');
+    const titleInput = document.getElementById('banner-title');
+    const subtitleInput = document.getElementById('banner-subtitle');
+    const saveBtn = document.getElementById('save-btn');
+    const imagePreviewContainer = document.getElementById('image-preview-container');
+    const addImageBtn = document.getElementById('add-image-btn');
+    const imageUpload = document.getElementById('image-upload');
+    
+    // Data storage
+    let contentId = null;
+    let generatedImages = [];
+    
+    // Get content ID from the sidebar link
+    const getContentId = () => {
+      // Try to get from URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('id')) {
+        return urlParams.get('id');
+      }
+      
+      // Check for referrer with URL parameters
+      if (document.referrer.includes('/text-to-anything')) {
+        const referrerUrl = new URL(document.referrer);
+        const referrerParams = new URLSearchParams(referrerUrl.search);
+        if (referrerParams.has('id')) {
+          return referrerParams.get('id');
+        }
+      }
+      
+      // Then check for the sidebar link
+      const sidebarLink = document.querySelector('a[href="/text-to-anything"]');
+      if (sidebarLink && sidebarLink.getAttribute('data-content-id')) {
+        return sidebarLink.getAttribute('data-content-id');
+      }
+      
+      return null;
+    };
+    
+    // JWT Token for authorization
+    const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
+    
+    // Fetch content from API
+    const fetchContent = async () => {
+      contentId = getContentId();
+      
+      if (!contentId) {
+        console.error('No content ID found');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch content: ' + response.statusText);
+        }
+        
+        const data = await response.json();
+        console.log('API Response:', data);
+        
+        // Populate form fields
+        if (data.title) titleInput.value = data.title;
+        if (data.subtitle) subtitleInput.value = data.subtitle;
+        
+        // Clear image container but keep the add button
+        clearImageContainer();
+        
+        // Load images
+        if (data.images && Array.isArray(data.images) && data.images.length > 0) {
+          generatedImages = [...data.images];
+          generatedImages.forEach(image => {
+            if (image && image.url) {
+              addImageToGallery(image.url, image);
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching content:', error);
+      }
+    };
+    
+    // Clear image container but keep the add button
+    const clearImageContainer = () => {
+      // Find all elements except the add button
+      const images = Array.from(imagePreviewContainer.querySelectorAll('.col-6')).filter(
+        el => !el.contains(addImageBtn)
+      );
+      
+      // Remove all images
+      images.forEach(img => img.remove());
+    };
+    
+    // Add image to gallery
+    const addImageToGallery = (url, imageData = {}) => {
+      console.log('Adding image to gallery:', url, imageData);
+      
+      const imageCard = document.createElement('div');
+      imageCard.className = 'col-6 col-md-4 col-lg-3';
+      
+      imageCard.innerHTML = `
+        <div class="ratio ratio-1x1 rounded-3 overflow-hidden position-relative hover-zoom">
+          <img src="${url}" class="object-fit-cover" alt="${imageData.alt || 'Generated image'}">
+          <button class="remove-media-btn btn btn-sm btn-danger position-absolute top-0 m-1 d-flex align-items-center justify-content-center">
+            <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
+          </button>
+        </div>
+      `;
+      
+      // Insert before the add button
+      const addImageElement = document.getElementById('add-image-btn')?.closest('.col-6');
+      if (addImageElement) {
+        imagePreviewContainer.insertBefore(imageCard, addImageElement);
+      } else {
+        imagePreviewContainer.appendChild(imageCard);
+      }
+      
+      // Add delete handler
+      const deleteBtn = imageCard.querySelector('.remove-media-btn');
+      deleteBtn.addEventListener('click', () => {
+        // Remove from DOM
+        imageCard.remove();
+        
+        // Remove from array
+        const index = generatedImages.findIndex(img => img.url === url);
+        if (index !== -1) {
+          generatedImages.splice(index, 1);
+        }
+        
+        console.log('Image removed, remaining images:', generatedImages);
+      });
+    };
+    
+    // Upload image to server
+    const uploadImage = async (file) => {
+      if (!file) return null;
+      
+      console.log('Starting upload for file:', file.name);
+      
+      // Create a loading indicator
+      const loadingCard = document.createElement('div');
+      loadingCard.className = 'col-6 col-md-4 col-lg-3 loading-indicator';
+      loadingCard.innerHTML = `
+        <div class="ratio ratio-1x1 rounded-3 bg-light d-flex align-items-center justify-content-center">
+          <div class="text-center">
+            <div class="spinner-border text-primary mb-2" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="small text-muted mb-0">Uploading...</p>
+          </div>
+        </div>
+      `;
+      
+      // Add the loading indicator before the add button
+      const addImageElement = document.getElementById('add-image-btn')?.closest('.col-6');
+      if (addImageElement) {
+        imagePreviewContainer.insertBefore(loadingCard, addImageElement);
+      } else {
+        imagePreviewContainer.appendChild(loadingCard);
+      }
+      
+      try {
+        // Create FormData
+        const formData = new FormData();
+        formData.append('images', file);
+        
+        console.log('Uploading image to server...');
+        
+        // Upload to server
+        const response = await fetch('http://localhost:4009/api/images', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Server upload response:', errorText);
+          throw new Error('Failed to upload image: ' + response.statusText);
+        }
+        
+        const data = await response.json();
+        console.log('Upload response:', data);
+        
+        // Remove loading indicator
+        loadingCard.remove();
+        
+        if (data && data.files && data.files.length > 0) {
+          // Create image object
+          const newImage = {
+            url: data.files[0].url,
+            alt: file.name || "Uploaded image",
+            width: 1200,
+            height: 800,
+            order: generatedImages.length + 1
+          };
+          
+          console.log('Created new image object:', newImage);
+          console.log('Current images before adding:', [...generatedImages]);
+          
+          // Add to gallery
+          generatedImages.push(newImage);
+          addImageToGallery(newImage.url, newImage);
+          
+          console.log('Images after adding:', generatedImages);
+          return newImage;
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('Error uploading image:', error);
+        // Remove loading indicator on error
+        loadingCard.remove();
+        alert('Failed to upload image. Please try again.');
+        return null;
+      }
+    };
+    
+    // Save changes
+    const saveChanges = async () => {
+      if (!contentId) {
+        console.error('No content ID available for update');
+        return;
+      }
+      
+      // Get values from form
+      const title = titleInput.value.trim();
+      const subtitle = subtitleInput.value.trim();
+      
+      // Prepare data for API
+      const updateData = {
+        title,
+        subtitle,
+        // Add fields array in the correct format
+        fields: [
+          { value: title },
+          { value: subtitle }
+        ],
+        images: generatedImages
+      };
+      
+      console.log('Saving data:', updateData);
+      
+      // Show loading state
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+      
+      try {
+        // Send update request
+        const response = await fetch(`http://localhost:4009/api/content/${contentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(updateData)
+        });
+        
+        if (!response.ok) {
+          // Try to get the error details
+          const errorText = await response.text();
+          console.error('Server response:', errorText);
+          throw new Error('Failed to save changes: ' + response.statusText);
+        }
+        
+        const result = await response.json();
+        console.log('Changes saved successfully:', result);
+        
+        // Show success message
+        alert('Changes saved successfully!');
+      } catch (error) {
+        console.error('Error saving changes:', error);
+        alert('Failed to save changes. Please try again.');
+      } finally {
+        // Reset button
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="bi bi-check-lg me-2"></i>Save Changes';
+      }
+    };
+    
+    // Event Listeners
+    saveBtn.addEventListener('click', saveChanges);
+    
+    // Image upload
+    addImageBtn.addEventListener('click', () => imageUpload.click());
+    
+    imageUpload.addEventListener('change', async (e) => {
+      const files = Array.from(e.target.files);
+      console.log('Files selected:', files.length);
+      
+      if (files.length > 0) {
+        for (const file of files) {
+          if (file && file.type.startsWith('image/')) {
+            await uploadImage(file);
+          } else {
+            console.warn('Skipping non-image file:', file.name, file.type);
+          }
+        }
+      }
+      
+      // Reset input
+      e.target.value = '';
+    });
+    
+    // Load data on page load
+    fetchContent();
+  });
+</script>

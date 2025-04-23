@@ -1,0 +1,297 @@
+<!-- Image Gallery Component -->
+<div class="image-gallery-component">
+  <div class="d-flex flex-wrap gap-2 mb-2" id="imageGalleryContainer">
+    <!-- Images will appear here -->
+  </div>
+  
+  <div class="d-flex gap-2">
+    <!-- Add Image Button -->
+    <button type="button" class="btn btn-sm btn-outline-primary" id="addImageBtn">
+      <i class="bi bi-plus-circle me-1"></i> Add Image
+    </button>
+    
+    <!-- Hidden File Input -->
+    <input type="file" id="imageUpload" accept="image/*" multiple style="display: none;">
+    
+    <!-- Save Button -->
+    <button type="button" class="btn btn-sm btn-success" id="saveGalleryBtn">
+      <i class="bi bi-check-circle me-1"></i> Save Changes
+    </button>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const imageUpload = document.getElementById('imageUpload');
+    const addImageBtn = document.getElementById('addImageBtn');
+    const saveGalleryBtn = document.getElementById('saveGalleryBtn');
+    const galleryContainer = document.getElementById('imageGalleryContainer');
+    
+    // Array to store gallery images
+    let galleryImages = [];
+    let contentId = null;
+    
+    // Get content ID from the sidebar link
+    const getContentId = () => {
+      // Try to get from URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('id')) {
+        return urlParams.get('id');
+      }
+      
+      // Check for referrer with URL parameters
+      if (document.referrer.includes('/images-gallery')) {
+        const referrerUrl = new URL(document.referrer);
+        const referrerParams = new URLSearchParams(referrerUrl.search);
+        if (referrerParams.has('id')) {
+          return referrerParams.get('id');
+        }
+      }
+      
+      // Then check for the sidebar link
+      const sidebarLink = document.querySelector('a[href="/images-gallery"]');
+      if (sidebarLink && sidebarLink.getAttribute('data-content-id')) {
+        return sidebarLink.getAttribute('data-content-id');
+      }
+      
+      return null;
+    };
+    
+    // Fetch images from API
+    const fetchGalleryImages = async () => {
+      contentId = getContentId();
+      console.log('Content ID:', contentId);
+      
+      if (!contentId) {
+        console.error('No content ID found');
+        return;
+      }
+      
+      try {
+        const response = await fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Network response was not ok: ' + response.statusText);
+        }
+        
+        const data = await response.json();
+        console.log('API Response:', data);
+        
+        // Clear the gallery
+        galleryContainer.innerHTML = '';
+        galleryImages = [];
+        
+        // Check if we have images in the response
+        if (data && data.images && Array.isArray(data.images) && data.images.length > 0) {
+          // Store images and render them
+          galleryImages = [...data.images];
+          data.images.forEach(image => {
+            if (image && image.url) {
+              addImageToGallery(image.url, image);
+            }
+          });
+        }
+      } catch (error) {
+        console.error('Error fetching gallery images:', error);
+      }
+    };
+    
+    // Save gallery changes
+    const saveGalleryChanges = async () => {
+      if (!contentId) {
+        console.error('No content ID available for update');
+        return;
+      }
+      
+      // Show loading state
+      saveGalleryBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+      saveGalleryBtn.disabled = true;
+      
+      // JWT Token for authorization
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTMyMDAwMywiZXhwIjoxNzQ1NDA2NDAzfQ.5V9SyTCRvPWGFMzOeIF53PAAyie1XQWurRrBCE09axM';
+      
+      try {
+        const response = await fetch(`http://localhost:4009/api/content/${contentId}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            images: galleryImages
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Update failed: ' + response.statusText);
+        }
+        
+        const result = await response.json();
+        console.log('Gallery updated successfully:', result);
+        
+        // Show success message
+        alert('Gallery saved successfully!');
+      } catch (error) {
+        console.error('Error saving gallery:', error);
+        alert('Failed to save gallery changes. Please try again.');
+      } finally {
+        // Restore button state
+        saveGalleryBtn.innerHTML = '<i class="bi bi-check-circle me-1"></i> Save Changes';
+        saveGalleryBtn.disabled = false;
+      }
+    };
+    
+    // Button click triggers file input
+    addImageBtn.addEventListener('click', () => imageUpload.click());
+    
+    // Save button click handler
+    saveGalleryBtn.addEventListener('click', saveGalleryChanges);
+    
+    // Handle file selection
+    imageUpload.addEventListener('change', async function(e) {
+      const files = e.target.files;
+      
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (file.type.startsWith('image/')) {
+          try {
+            // Upload to server first
+            const uploadedImage = await uploadImageToServer(file);
+            if (uploadedImage && uploadedImage.url) {
+              // Create image object
+              const newImage = {
+                url: uploadedImage.url,
+                alt: file.name || "Gallery image",
+                width: 1200,
+                height: 800,
+                order: galleryImages.length + 1
+              };
+              
+              // Add to gallery
+              galleryImages.push(newImage);
+              addImageToGallery(newImage.url, newImage);
+            }
+          } catch (error) {
+            console.error('Error uploading image:', error);
+          }
+        }
+      }
+      
+      // Reset input to allow selecting same file again
+      e.target.value = '';
+    });
+    
+    // Upload image to server
+    async function uploadImageToServer(file) {
+      if (!file) return null;
+      
+      // JWT Token for authorization
+      const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTMyMDAwMywiZXhwIjoxNzQ1NDA2NDAzfQ.5V9SyTCRvPWGFMzOeIF53PAAyie1XQWurRrBCE09axM';
+      
+      // Create FormData
+      const formData = new FormData();
+      formData.append('images', file);
+      
+      try {
+        // Upload the image to Cloudinary via your endpoint
+        const response = await fetch('http://localhost:4009/api/images', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`
+          },
+          body: formData
+        });
+        
+        if (!response.ok) {
+          throw new Error('Upload failed: ' + response.statusText);
+        }
+        
+        const data = await response.json();
+        console.log('Upload response:', data);
+        
+        // Return the Cloudinary URL
+        if (data && data.files && data.files.length > 0) {
+          return {
+            url: data.files[0].url,
+            width: 1200,
+            height: 800
+          };
+        }
+        
+        return null;
+      } catch (error) {
+        console.error('Error uploading to Cloudinary:', error);
+        alert('Failed to upload image. Please try again.');
+        return null;
+      }
+    }
+    
+    // Add image to gallery
+    function addImageToGallery(imageSrc, imageData) {
+      const imageId = 'img-' + Date.now();
+      
+      const imageCard = document.createElement('div');
+      imageCard.className = 'position-relative gallery-image-card';
+      imageCard.style.width = '150px';
+      imageCard.style.height = '150px';
+      imageCard.dataset.id = imageId;
+      
+      imageCard.innerHTML = `
+        <img src="${imageSrc}" 
+             class="img-cover rounded border h-100 w-100" 
+             alt="${imageData?.alt || 'Gallery image'}">
+        <button class="btn-remove-image btn btn-sm btn-danger position-absolute top-0 end-0 m-1">
+          <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
+        </button>
+      `;
+      
+      galleryContainer.appendChild(imageCard);
+      
+      // Add delete handler
+      imageCard.querySelector('.btn-remove-image').addEventListener('click', () => {
+        // Remove from DOM
+        imageCard.remove();
+        
+        // Remove from our array (find by URL)
+        const imageUrl = imageSrc;
+        const index = galleryImages.findIndex(img => img.url === imageUrl);
+        if (index !== -1) {
+          galleryImages.splice(index, 1);
+        }
+      });
+    }
+    
+    // Load images on page load
+    fetchGalleryImages();
+  });
+</script>
+
+<style>
+  .gallery-image-card {
+    transition: all 0.2s ease;
+  }
+  
+  .gallery-image-card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1);
+  }
+  
+  .img-cover {
+    object-fit: cover;
+  }
+  
+  .btn-remove-image {
+    padding: 0.15rem 0.25rem;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  
+  .gallery-image-card:hover .btn-remove-image {
+    opacity: 1;
+  }
+</style>
