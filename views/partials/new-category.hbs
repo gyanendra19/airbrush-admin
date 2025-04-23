@@ -13,6 +13,32 @@
           Please provide a category name.
         </div>
       </div>
+
+      <div class="mb-3">
+        <label for="categoryDescription" class="form-label">Description</label>
+        <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
+                  rows="3" placeholder="Enter category description" required></textarea>
+        <div class="invalid-feedback">
+          Please provide a category description.
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="categoryImage" class="form-label">Category Image</label>
+        <input type="file" class="form-control" id="categoryImage" name="categoryImage" 
+               accept="image/*" required>
+        <div class="form-text">
+          Recommended size: 1200x600px. Max file size: 2MB.
+        </div>
+        <div class="invalid-feedback">
+          Please select a category image.
+        </div>
+        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+          <div class="d-flex align-items-center justify-content-center text-muted">
+            <i class="bi bi-image me-2"></i> No image selected
+          </div>
+        </div>
+      </div>
       
       <div class="d-grid gap-2">
         <button type="submit" class="btn btn-primary">
@@ -197,10 +223,19 @@
                       
                       <div class="mb-3">
                         <label class="form-label small">Image Description</label>
-                        <textarea class="form-control form-control-sm gallery-image-description" rows="3"
+                        <textarea class="form-control form-control-sm gallery-image-description" rows="2"
                                   placeholder="Enter image description" required></textarea>
                         <div class="invalid-feedback">
                           Please provide an image description.
+                        </div>
+                      </div>
+
+                      <div class="mb-3">
+                        <label class="form-label small">Image Prompt</label>
+                        <textarea class="form-control form-control-sm gallery-image-prompt" rows="2"
+                                  placeholder="Enter image generation prompt"></textarea>
+                        <div class="form-text">
+                          Optional: The prompt used to generate this image
                         </div>
                       </div>
                       
@@ -716,6 +751,17 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    // API Configuration
+    const API_CONFIG = {
+      BASE_URL: 'http://localhost:5000', // Change this to your actual backend URL
+      ENDPOINTS: {
+        IMAGES: '/api/images',
+        CATEGORIES: '/api/categories',
+        SECTIONS: '/api/sections',
+        CONTENT: '/api/content'
+      }
+    };
+
     const categoryForm = document.getElementById('newCategoryForm');
     const sectionForms = document.getElementById('sectionForms');
     let createdCategoryId = null;
@@ -738,20 +784,212 @@
     
     // Initialize tab activation events
     const tabElements = document.querySelectorAll('button[data-bs-toggle="tab"]');
-    tabElements.forEach(tab => {
-      tab.addEventListener('shown.bs.tab', function (event) {
-        // The newly activated tab
-        const activeTab = event.target.getAttribute('data-bs-target');
-        console.log('Tab activated:', activeTab);
-        
-        // Initialize image previews for the active tab
-        initializeImagePreviews(activeTab);
-        
-        // Initialize form submission for the active tab
-        initializeFormSubmission(activeTab);
-      });
-    });
+    console.log('Found tab elements:', tabElements.length);
     
+    // Add event listener to the gallery tab content
+    const galleryTabContent = document.getElementById('gallery');
+    if (galleryTabContent) {
+      console.log('Gallery tab content found');
+      
+      // Add event listener for when the tab content becomes visible
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+            const isActive = galleryTabContent.classList.contains('show');
+            console.log('Gallery tab content visibility changed:', isActive);
+            
+            if (isActive) {
+              // Get content ID from URL and clean it
+              const urlParams = new URLSearchParams(window.location.search);
+              let contentId = urlParams.get('id');
+              
+              // Remove any 'Con' prefix if present
+              if (contentId && contentId.startsWith('Con')) {
+                contentId = contentId.substring(3);
+              }
+              
+              console.log('Content ID from URL (cleaned):', contentId);
+              
+              if (contentId) {
+                console.log('Fetching gallery content for ID:', contentId);
+                fetchGalleryContent(contentId);
+              } else {
+                console.warn('No valid content ID found in URL');
+              }
+            }
+          }
+        });
+      });
+      
+      // Start observing the gallery tab content
+      observer.observe(galleryTabContent, {
+        attributes: true,
+        attributeFilter: ['class']
+      });
+    }
+
+    // Update fetchGalleryContent function to include more debugging
+    async function fetchGalleryContent(contentId) {
+      try {
+        console.log('Starting fetchGalleryContent with ID:', contentId);
+        
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+        
+        console.log('Making API request to:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`);
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          console.error('API request failed:', response.status, response.statusText);
+          throw new Error('Failed to fetch gallery content');
+        }
+
+        const content = await response.json();
+        console.log('API Response received:', content);
+
+        // Clear existing gallery items
+        const galleryContainer = document.getElementById('galleryImagesContainer');
+        if (galleryContainer) {
+          console.log('Clearing existing gallery items');
+          galleryContainer.innerHTML = '';
+        } else {
+          console.error('Gallery container not found!');
+          return;
+        }
+
+        // Add each image from the content
+        if (content.images && content.images.length > 0) {
+          console.log('Processing', content.images.length, 'images');
+          
+          // Process images in order
+          const sortedImages = [...content.images].sort((a, b) => (a.order || 0) - (b.order || 0));
+          
+          sortedImages.forEach((image, index) => {
+            console.log(`Processing image ${index + 1}:`, {
+              title: image.title,
+              prompt: image.prompt,
+              alt: image.alt,
+              order: image.order,
+              url: image.url
+            });
+            
+            // Create image data object with all properties
+            const imageData = {
+              url: image.url,
+              title: image.title || image.alt || `Image ${index + 1}`,
+              prompt: image.prompt || '',
+              description: image.alt || '',
+              alt: image.alt || `Image ${index + 1}`,
+              featured: false,
+              order: image.order || index,
+              width: image.width || 1200,
+              height: image.height || 800
+            };
+            
+            console.log('Created image data object:', imageData);
+            
+            // Create the HTML for the image item
+            const newItem = document.createElement('div');
+            newItem.className = 'gallery-image-item mb-4 border rounded p-3 bg-white position-relative';
+            
+            const html = `
+              <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
+                     aria-label="Remove image"></button>
+              
+              <div class="row g-3">
+                <!-- Image Upload -->
+                <div class="col-md-4">
+                  <div class="mb-3">
+                    <label class="form-label small">Upload Image</label>
+                    <input type="file" class="form-control form-control-sm gallery-image-upload" 
+                           accept="image/*" ${imageData ? '' : 'required'}>
+                    <div class="invalid-feedback">
+                      Please select an image.
+                    </div>
+                  </div>
+                  <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
+                    <img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt}">
+                  </div>
+                </div>
+                
+                <!-- Image Details -->
+                <div class="col-md-8">
+                  <div class="mb-3">
+                    <label class="form-label small">Image Title</label>
+                    <input type="text" class="form-control form-control-sm gallery-image-title" 
+                           placeholder="Enter image title" 
+                           value="${imageData.title}"
+                           required>
+                    <div class="invalid-feedback">
+                      Please provide an image title.
+                    </div>
+                  </div>
+                  
+                  <div class="mb-3">
+                    <label class="form-label small">Image Description</label>
+                    <textarea class="form-control form-control-sm gallery-image-description" rows="2"
+                              placeholder="Enter image description" required>${imageData.description}</textarea>
+                    <div class="invalid-feedback">
+                      Please provide an image description.
+                    </div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label class="form-label small">Image Prompt</label>
+                    <textarea class="form-control form-control-sm gallery-image-prompt" rows="2"
+                              placeholder="Enter image generation prompt">${imageData.prompt}</textarea>
+                    <div class="form-text">
+                      Optional: The prompt used to generate this image
+                    </div>
+                  </div>
+                  
+                  <div class="form-check form-switch">
+                    <input class="form-check-input gallery-image-featured" type="checkbox" role="switch"
+                           ${imageData.featured ? 'checked' : ''}>
+                    <label class="form-check-label small">Featured Image</label>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            newItem.innerHTML = html;
+            
+            // Append to container
+            galleryContainer.appendChild(newItem);
+            
+            // Add event listener for remove button
+            const removeBtn = newItem.querySelector('.remove-gallery-image');
+            if (removeBtn) {
+              removeBtn.addEventListener('click', function() {
+                newItem.remove();
+                updateGalleryVisibility();
+              });
+            }
+            
+            // Verify the values were set correctly
+            console.log('Verifying form values:', {
+              title: newItem.querySelector('.gallery-image-title')?.value,
+              prompt: newItem.querySelector('.gallery-image-prompt')?.value,
+              description: newItem.querySelector('.gallery-image-description')?.value
+            });
+          });
+        } else {
+          console.log('No images found in the response');
+        }
+
+        // Update gallery visibility
+        updateGalleryVisibility();
+        console.log('Gallery content fetch completed');
+
+      } catch (error) {
+        console.error('Error in fetchGalleryContent:', error);
+        alert('Error loading gallery content: ' + error.message);
+      }
+    }
+
     // Function to initialize image previews for a specific tab
     function initializeImagePreviews(tabId) {
       let fileInputs = [];
@@ -887,10 +1125,36 @@
           submitBtn.disabled = true;
           
           try {
-            // Get form values
-            const title = newForm.querySelector('[name="title"]').value;
-            const description = newForm.querySelector('[name="description"]').value;
+            // Get form values with null checks
+            let title, description;
+            
+            if (tabId === '#text-to-anything') {
+              const titleInput = newForm.querySelector('#textToAnythingTitle');
+              const subtitleInput = newForm.querySelector('#textToAnythingSubtitle');
+              
+              if (!titleInput || !subtitleInput) {
+                throw new Error('Required form elements not found for Text to Anything section');
+              }
+              
+              title = titleInput.value;
+              description = subtitleInput.value;
+            } else {
+              const titleInput = newForm.querySelector('[name="title"]');
+              const descriptionInput = newForm.querySelector('[name="description"]');
+              
+              if (!titleInput || !descriptionInput) {
+                throw new Error('Required form elements not found');
+              }
+              
+              title = titleInput.value;
+              description = descriptionInput.value;
+            }
+            
             const categoryId = createdCategoryId;
+            
+            if (!categoryId) {
+              throw new Error('Category ID not found. Please create a category first.');
+            }
             
             // Create section based on the tab
             const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
@@ -936,7 +1200,8 @@
             };
             
             // Create section
-            const sectionResponse = await fetch('http://localhost:4009/api/sections', {
+            console.log('Creating section with data:', sectionData);
+            const sectionResponse = await fetch('http://localhost:5000/api/sections', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -946,7 +1211,10 @@
             });
             
             if (!sectionResponse.ok) {
-              throw new Error('Failed to create section: ' + sectionResponse.statusText);
+              const errorText = await sectionResponse.text();
+              console.error('Section creation failed. Status:', sectionResponse.status);
+              console.error('Error response:', errorText);
+              throw new Error('Failed to create section: ' + errorText);
             }
             
             const sectionResult = await sectionResponse.json();
@@ -990,11 +1258,22 @@
                       url: imageUrl,
                       alt: item.querySelector('.gallery-image-title')?.value,
                       title: item.querySelector('.gallery-image-title')?.value,
-                      description: item.querySelector('.gallery-image-description')?.value,
+                      prompt: item.querySelector('.gallery-image-prompt')?.value,
                       width: 800,
                       height: 600
                     });
                   }
+                } else if (item.querySelector('.image-preview img')) {
+                  // Handle existing images
+                  const existingImage = {
+                    url: item.querySelector('.image-preview img').src,
+                    alt: item.querySelector('.gallery-image-title')?.value,
+                    title: item.querySelector('.gallery-image-title')?.value,
+                    prompt: item.querySelector('.gallery-image-prompt')?.value,
+                    width: 800,
+                    height: 600
+                  };
+                  contentData.images.push(existingImage);
                 }
               }
             } else if (tabId === '#why') {
@@ -1091,7 +1370,7 @@
             }
             
             // Create content
-            const contentResponse = await fetch('http://localhost:4009/api/content', {
+            const contentResponse = await fetch('http://localhost:5000/api/content', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1142,8 +1421,11 @@
       try {
         const formData = new FormData();
         formData.append('images', file);
+        console.log("Uploading file:", file.name);
+        console.log("File size:", file.size);
+        console.log("File type:", file.type);
         
-        const uploadResponse = await fetch('http://localhost:4009/api/images', {
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.IMAGES}`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -1151,29 +1433,49 @@
           body: formData
         });
         
-        if (!uploadResponse.ok) {
-          throw new Error('Image upload failed: ' + uploadResponse.statusText);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Image upload failed with status:', response.status);
+          console.error('Error response:', errorText);
+          throw new Error(`Image upload failed: ${response.status} ${response.statusText}`);
         }
         
-        const uploadResult = await uploadResponse.json();
-        console.log('Image uploaded:', uploadResult);
+        const result = await response.json();
+        console.log('Image upload response:', result);
         
-        if (uploadResult && uploadResult.files && uploadResult.files.length > 0) {
-          return uploadResult.files[0].url;
+        // Handle the actual response format
+        if (!result || !result.files || !result.files[0]) {
+          console.error('Invalid response format:', result);
+          throw new Error('Invalid image upload response format');
         }
         
-        return null;
+        // Extract just the URL from the file object
+        const fileObject = result.files[0];
+        if (typeof fileObject === 'object' && fileObject.url) {
+          return fileObject.url;
+        }
+        
+        // If it's already a string URL, return it directly
+        return fileObject;
       } catch (error) {
-        console.error('Error uploading image:', error);
-        return null;
+        console.error('Error in uploadImage:', error);
+        if (error.message.includes('Failed to fetch')) {
+          throw new Error(`Could not connect to the server at ${API_CONFIG.BASE_URL}. Please make sure the backend server is running.`);
+        }
+        throw error;
       }
     }
     
     // Function to add gallery image item
-    function addGalleryImageItem() {
+    function addGalleryImageItem(imageData = null) {
       const galleryImagesContainer = document.getElementById('galleryImagesContainer');
       
-      if (!galleryImagesContainer) return;
+      if (!galleryImagesContainer) {
+        console.error('Gallery container not found');
+        return;
+      }
+      
+      console.log('Adding gallery image item with data:', imageData);
       
       // Hide no images message
       updateGalleryVisibility();
@@ -1181,7 +1483,9 @@
       // Create new gallery image item
       const newItem = document.createElement('div');
       newItem.className = 'gallery-image-item mb-4 border rounded p-3 bg-white position-relative';
-      newItem.innerHTML = `
+      
+      // Create the HTML string with proper escaping
+      const html = `
         <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
                aria-label="Remove image"></button>
         
@@ -1191,15 +1495,18 @@
             <div class="mb-3">
               <label class="form-label small">Upload Image</label>
               <input type="file" class="form-control form-control-sm gallery-image-upload" 
-                     accept="image/*" required>
+                     accept="image/*" ${imageData ? '' : 'required'}>
               <div class="invalid-feedback">
                 Please select an image.
               </div>
             </div>
             <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
-              <div class="d-flex align-items-center justify-content-center text-muted">
-                <i class="bi bi-image me-2"></i> No image
-              </div>
+              ${imageData ? 
+                `<img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt || 'Gallery image'}">` :
+                `<div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image me-2"></i> No image
+                </div>`
+              }
             </div>
           </div>
           
@@ -1208,7 +1515,9 @@
             <div class="mb-3">
               <label class="form-label small">Image Title</label>
               <input type="text" class="form-control form-control-sm gallery-image-title" 
-                     placeholder="Enter image title" required>
+                     placeholder="Enter image title" 
+                     value="${imageData?.title || ''}"
+                     required>
               <div class="invalid-feedback">
                 Please provide an image title.
               </div>
@@ -1216,24 +1525,44 @@
             
             <div class="mb-3">
               <label class="form-label small">Image Description</label>
-              <textarea class="form-control form-control-sm gallery-image-description" rows="3"
-                        placeholder="Enter image description" required></textarea>
+              <textarea class="form-control form-control-sm gallery-image-description" rows="2"
+                        placeholder="Enter image description" required>${imageData?.description || ''}</textarea>
               <div class="invalid-feedback">
                 Please provide an image description.
               </div>
             </div>
+
+            <div class="mb-3">
+              <label class="form-label small">Image Prompt</label>
+              <textarea class="form-control form-control-sm gallery-image-prompt" rows="2"
+                        placeholder="Enter image generation prompt">${imageData?.prompt || ''}</textarea>
+              <div class="form-text">
+                Optional: The prompt used to generate this image
+              </div>
+            </div>
             
             <div class="form-check form-switch">
-              <input class="form-check-input gallery-image-featured" type="checkbox" role="switch">
+              <input class="form-check-input gallery-image-featured" type="checkbox" role="switch"
+                     ${imageData?.featured ? 'checked' : ''}>
               <label class="form-check-label small">Featured Image</label>
             </div>
           </div>
         </div>
       `;
       
+      newItem.innerHTML = html;
+      
       // Append to container
       galleryImagesContainer.appendChild(newItem);
-      window.galleryImagesCount++;
+      window.galleryImagesCount = (window.galleryImagesCount || 0) + 1;
+      
+      // Debug log after appending
+      console.log('New item added. Current gallery items:', {
+        count: window.galleryImagesCount,
+        titleValue: newItem.querySelector('.gallery-image-title')?.value,
+        promptValue: newItem.querySelector('.gallery-image-prompt')?.value,
+        descriptionValue: newItem.querySelector('.gallery-image-description')?.value
+      });
       
       // Add event listener for remove button
       const removeBtn = newItem.querySelector('.remove-gallery-image');
@@ -1245,24 +1574,26 @@
         });
       }
       
-      // Add event listener for image preview
-      const fileInput = newItem.querySelector('.gallery-image-upload');
-      const previewContainer = newItem.querySelector('.image-preview');
-      
-      if (fileInput && previewContainer) {
-        fileInput.addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
-          } else {
-            previewContainer.innerHTML = `
-              <div class="d-flex align-items-center justify-content-center text-muted">
-                <i class="bi bi-image me-2"></i> No image
-              </div>
-            `;
-          }
-        });
+      // Add event listener for image preview if no existing image
+      if (!imageData) {
+        const fileInput = newItem.querySelector('.gallery-image-upload');
+        const previewContainer = newItem.querySelector('.image-preview');
+        
+        if (fileInput && previewContainer) {
+          fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+              const objectUrl = URL.createObjectURL(file);
+              previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
+            } else {
+              previewContainer.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image me-2"></i> No image
+                </div>
+              `;
+            }
+          });
+        }
       }
     }
     
@@ -1284,7 +1615,18 @@
     
     // Initialize category form
     if (categoryForm) {
-      categoryForm.addEventListener('submit', function(event) {
+      // Remove temporary test code
+      // categoryForm.parentElement.parentElement.classList.add('d-none');
+      // sectionForms.classList.remove('d-none');
+      
+      // Remove test category ID
+      // createdCategoryId = 'test-category-id-123';
+      // document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+      //   input.value = createdCategoryId;
+      // });
+      
+      // Original category form submission code
+      categoryForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         
         if (!categoryForm.checkValidity()) {
@@ -1302,120 +1644,96 @@
         try {
           // Get form data
           const categoryName = document.getElementById('categoryName').value;
+          const categoryDescription = document.getElementById('categoryDescription').value;
+          const categoryImage = document.getElementById('categoryImage').files[0];
           
-          // Create category object with new format
-          const newCategory = {
-            name: categoryName,
-            slug: categoryName.toLowerCase().replace(/\s+/g, '-'),
-            description: categoryName + " Category",
-            isFolder: true,
-            parent: null
-          };
+          if (!categoryImage) {
+            throw new Error('Please select an image');
+          }
 
           const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
           
-          // Make POST request to API
-          fetch('http://localhost:4009/api/categories', {
+          // Upload image first
+          const formData = new FormData();
+          formData.append('images', categoryImage);
+          console.log("file", categoryImage);
+          console.log("formData", formData);
+          
+          // Use the uploadImage helper function
+          const imageUrl = await uploadImage(categoryImage, token);
+          
+          if (!imageUrl) {
+            throw new Error('Failed to upload image');
+          }
+          
+          // Show preview (optional)
+          const previewContainer = document.querySelector('.image-preview');
+          if (previewContainer) {
+            previewContainer.innerHTML = `<img src="${imageUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
+          }
+          
+          // Create category object
+          const newCategory = {
+            name: categoryName,
+            slug: categoryName.toLowerCase().replace(/\s+/g, '-'),
+            description: categoryDescription,
+            image: imageUrl,
+            isFolder: true,
+            parent: null
+          };
+          
+          // Now send this to create the category
+          const categoryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORIES}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify(newCategory)
-          })
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok: ' + response.status);
-            }
-            return response.json();
-          })
-          .then(data => {
-            console.log('Category created successfully:', data);
-            
-            // Store the category ID for section creation
-            createdCategoryId = data._id || data.id;
-            
-            // Set categoryId for all forms
-            document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-              input.value = createdCategoryId;
-            });
-            
-            // Hide category form and show section forms
-            categoryForm.parentElement.parentElement.classList.add('d-none');
-            sectionForms.classList.remove('d-none');
-            
-            // Initialize all form elements and image previews
-            setTimeout(() => {
-              // Initialize image previews for all tabs
-              document.querySelectorAll('.form-control[type="file"]').forEach(input => {
-                input.addEventListener('change', function(e) {
-                  const file = this.files[0];
-                  if (!file) return;
-                  
-                  // Find the preview container
-                  let previewContainer;
-                  const parent = this.closest('.col-md-4') || this.closest('.mb-3');
-                  if (parent) {
-                    previewContainer = parent.querySelector('.image-preview') || parent.nextElementSibling;
-                  }
-                  
-                  if (previewContainer) {
-                    const objectUrl = URL.createObjectURL(file);
-                    previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
-                  }
-                });
-              });
-              
-              // Initialize gallery add button
-              const addGalleryImageBtn = document.getElementById('addGalleryImage');
-              if (addGalleryImageBtn) {
-                addGalleryImageBtn.addEventListener('click', addGalleryImageItem);
-              }
-              
-              // Initialize lead blog toggles
-              const blogLeadToggles = document.querySelectorAll('.blog-lead-toggle');
-              blogLeadToggles.forEach(toggle => {
-                toggle.addEventListener('change', function() {
-                  if (this.checked) {
-                    blogLeadToggles.forEach(otherToggle => {
-                      if (otherToggle !== this) {
-                        otherToggle.checked = false;
-                      }
-                    });
-                  }
-                });
-              });
-              
-              // Show success notification
-              const successAlert = document.createElement('div');
-              successAlert.className = 'alert alert-success mb-4';
-              successAlert.innerHTML = `
-                <div class="d-flex align-items-center">
-                  <i class="bi bi-check-circle-fill me-2"></i>
-                  <div>
-                    <strong>Category "${categoryName}" created successfully!</strong>
-                    <p class="mb-0">You can now add sections to your category.</p>
-                  </div>
-                </div>
-              `;
-              sectionForms.insertBefore(successAlert, sectionForms.firstChild);
-              
-              // Scroll to the section forms
-              sectionForms.scrollIntoView({ behavior: 'smooth' });
-            }, 100);
-          })
-          .catch(error => {
-            console.error('Error creating category:', error);
-            alert('Error creating category: ' + error.message);
-            
-            // Restore button state
-            submitBtn.innerHTML = originalBtnText;
-            submitBtn.disabled = false;
           });
+          
+          if (!categoryResponse.ok) {
+            const errorText = await categoryResponse.text();
+            console.error('Category creation failed:', errorText);
+            throw new Error('Category creation failed: ' + errorText);
+          }
+          
+          const createdCategory = await categoryResponse.json();
+          console.log('Category created:', createdCategory);
+          
+          // Store the category ID for section creation
+          createdCategoryId = createdCategory._id || createdCategory.id;
+          
+          // Set categoryId for all forms
+          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+            input.value = createdCategoryId;
+          });
+          
+          // Hide category form and show section forms
+          categoryForm.parentElement.parentElement.classList.add('d-none');
+          sectionForms.classList.remove('d-none');
+          
+          // Show success notification
+          const successAlert = document.createElement('div');
+          successAlert.className = 'alert alert-success mb-4';
+          successAlert.innerHTML = `
+            <div class="d-flex align-items-center">
+              <i class="bi bi-check-circle-fill me-2"></i>
+              <div>
+                <strong>Category "${categoryName}" created successfully!</strong>
+                <p class="mb-0">You can now add sections to your category.</p>
+              </div>
+            </div>
+          `;
+          sectionForms.insertBefore(successAlert, sectionForms.firstChild);
+          
+          // Scroll to the section forms
+          sectionForms.scrollIntoView({ behavior: 'smooth' });
+          
         } catch (error) {
           console.error('Error creating category:', error);
           alert('Error creating category: ' + error.message);
-          
+        } finally {
           // Restore button state
           submitBtn.innerHTML = originalBtnText;
           submitBtn.disabled = false;

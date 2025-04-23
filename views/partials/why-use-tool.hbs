@@ -274,7 +274,7 @@
           return;
         }
         
-        fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+        fetch(`http://localhost:5000/api/content/id/${contentId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -395,7 +395,7 @@
         const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
         
         // Send update request
-        fetch(`http://localhost:4009/api/content/${contentId}`, {
+        fetch(`http://localhost:5000/api/content/${contentId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -534,7 +534,7 @@
           }
           
           // Upload the image to Cloudinary via your endpoint
-          const response = await fetch('http://localhost:4009/api/images', {
+          const response = await fetch('http://localhost:5000/api/images', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`
