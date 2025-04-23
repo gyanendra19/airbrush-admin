@@ -259,7 +259,7 @@
         }
         
         try {
-          const response = await fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+          const response = await fetch(`http://localhost:5000/api/content/id/${contentId}`, {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -375,7 +375,7 @@
           formData.append('images', file);
           
           // Upload to server
-          const response = await fetch('http://localhost:4009/api/images', {
+          const response = await fetch('http://localhost:5000/api/images', {
             method: 'POST',
             headers: {
               'Authorization': `Bearer ${token}`
@@ -509,7 +509,7 @@
         
         try {
           // Send update request
-          const response = await fetch(`http://localhost:4009/api/content/${contentId}`, {
+          const response = await fetch(`http://localhost:5000/api/content/${contentId}`, {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',

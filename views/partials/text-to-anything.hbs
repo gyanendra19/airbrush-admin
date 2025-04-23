@@ -168,7 +168,7 @@
       }
       
       try {
-        const response = await fetch(`http://localhost:4009/api/content/id/${contentId}`, {
+        const response = await fetch(`http://localhost:5000/api/content/id/${contentId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -290,7 +290,7 @@
         console.log('Uploading image to server...');
         
         // Upload to server
-        const response = await fetch('http://localhost:4009/api/images', {
+        const response = await fetch('http://localhost:5000/api/images', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -372,7 +372,7 @@
       
       try {
         // Send update request
-        const response = await fetch(`http://localhost:4009/api/content/${contentId}`, {
+        const response = await fetch(`http://localhost:5000/api/content/${contentId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
