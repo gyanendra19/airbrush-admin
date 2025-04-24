@@ -1,3 +1,6 @@
+<!-- Add Font Awesome CDN in the head section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
 <div class="section-content">
   <h2 class="h4 mb-3">Ghibli Hero Configuration</h2>
 
@@ -37,32 +40,23 @@
 
       <!-- Image Gallery (Modern masonry grid + hover effects) -->
       <div class="mb-4">
-        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Hero Image</label>
+        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Gallery</label>
         <div class="row g-3" id="image-preview-container">
-          <!-- Single Image Card with hover zoom -->
+          <!-- Single Image Card with replace button -->
           <div class="col-12">
-            <div class="position-relative rounded-3 overflow-hidden hover-zoom" style="height: 300px; background-color: #f8f9fa;">
-              <img src="https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg"
-                   class="w-100 h-100"
-                   style="object-fit: contain; object-position: left; background-color: #f8f9fa;"
-                   alt="Hero Image">
-              <button class="btn-replace-image btn btn-sm btn-primary position-absolute top-0 end-0 m-2 d-flex align-items-center justify-content-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0d6efd" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
-                  <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
-                  <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
-                </svg>
-              </button>
-            </div>
-          </div>
-          
-          <!-- Add Image Card (Hidden by default, shown only when no image exists) -->
-          <div class="col-12 d-none" id="add-image-btn">
-            <div class="position-relative rounded-3 bg-light border-2 border-dashed hover-shadow-lg cursor-pointer d-flex align-items-center justify-content-center transition-all" style="height: 300px;">
-              <div class="text-center p-2">
-                <i class="bi bi-plus-lg fs-5 text-primary"></i>
-                <p class="small text-muted mb-0">Add Hero Image</p>
+            <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
+              <div class="ratio ratio-4x3" style="width: 300px;">
+                <img src="https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg"
+                     class="object-fit-contain rounded"
+                     alt="Ghibli Image">
+                <button class="btn-replace-image btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1">
+                  <i class="fas fa-sync-alt"></i>
+                </button>
               </div>
-              <input type="file" id="media-upload" accept="image/*" class="d-none">
+              <div class="flex-grow-1">
+                <h6 class="mb-1">Current Image</h6>
+                <p class="small text-muted mb-0">Click the replace button to change the image</p>
+              </div>
             </div>
           </div>
         </div>
@@ -92,22 +86,10 @@
     object-fit: cover;
   }
 
-  .hover-zoom {
-    transition: transform 0.3s ease;
-  }
-
-  .hover-zoom:hover {
-    transform: scale(1.02);
-  }
-
-  .hover-zoom img {
-    transition: transform 0.3s ease;
-  }
-
   .hover-zoom:hover img {
     transform: scale(1.05);
+    transition: transform 0.3s ease;
   }
-
   .border-dashed {
     border-style: dashed !important;
   }
@@ -119,50 +101,51 @@
   }
 
   /* Override Bootstrap's ratio positioning for buttons */
-  .btn-replace-image {
+  .ratio .btn-replace-image {
     position: absolute;
     left: auto !important; 
     top: 0;
     right: 0;
+    width: 36px;
+    height: 36px;
     z-index: 10;
-    opacity: 0;
-    transition: opacity 0.2s ease;
-    width: 32px;
-    height: 32px;
-    padding: 0;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  .position-relative:hover .btn-replace-image {
-    opacity: 1;
+  .ratio .btn-replace-image:hover {
+    background: white;
+    transform: rotate(180deg);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
-  .btn-replace-image:hover {
-    background-color: rgba(255, 255, 255, 1);
-    transform: scale(1.05);
+  .ratio .btn-replace-image i {
+    font-size: 1.1rem;
+    color: #0d6efd;
   }
 
-  .btn-replace-image svg {
-    width: 16px;
-    height: 16px;
+  .ratio .btn-replace-image:hover i {
+    color: #0a58ca;
   }
 
-  /* Ensure image container has proper background */
-  .position-relative {
-    background-color: #f8f9fa;
+  /* Ensure the image container has proper padding */
+  .ratio.ratio-4x3 {
+    padding: 10px;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
 
-  .ratio {
-    background-color: #f8f9fa;
-  }
-
-  .ratio img {
-    object-fit: cover;
-    width: 100%;
-    height: 100%;
+  /* Make sure the image fits properly */
+  .object-fit-contain {
+    object-fit: contain !important;
+    max-width: 100%;
+    max-height: 100%;
   }
 </style>
 
@@ -201,13 +184,17 @@
       // Current media content holder
       let currentMedia = null;
       
-      // Handle image upload functionality
-      const addImageBtn = document.getElementById('add-image-btn');
-      const mediaUpload = document.getElementById('media-upload');
+      // Handle image replace functionality
+      const replaceButton = document.querySelector('.btn-replace-image');
+      const mediaUpload = document.createElement('input');
+      mediaUpload.type = 'file';
+      mediaUpload.accept = 'image/*';
+      mediaUpload.style.display = 'none';
+      document.body.appendChild(mediaUpload);
       
-      if (addImageBtn && mediaUpload) {
-        // Trigger file input when add image button is clicked
-        addImageBtn.addEventListener('click', function() {
+      if (replaceButton) {
+        // Trigger file input when replace button is clicked
+        replaceButton.addEventListener('click', function() {
           mediaUpload.click();
         });
         
@@ -216,7 +203,6 @@
           const file = event.target.files[0];
           if (!file) return;
           
-          // Check if file is an image
           if (file.type.startsWith('image/')) {
             // Create object URL for preview
             const objectUrl = URL.createObjectURL(file);
@@ -228,7 +214,7 @@
               url: objectUrl
             };
             
-            // Update gallery with new media immediately
+            // Update gallery with new media
             updateGallery(currentMedia);
             
             // Upload file to server
@@ -237,8 +223,7 @@
                 // Update the currentMedia with the server URL
                 currentMedia.serverUrl = response.url;
                 currentMedia.url = response.url;
-                // Update the gallery again with the final URL
-                updateGallery(currentMedia);
+                console.log('Media uploaded to server:', response);
               }
             });
           } else {
@@ -294,36 +279,6 @@
         
         saveButton.addEventListener('click', function() {
           updateContent(contentId, currentMedia);
-        });
-      }
-
-      // Set up replace button for existing image
-      const initialReplaceBtn = document.querySelector('.btn-replace-image');
-      if (initialReplaceBtn) {
-        initialReplaceBtn.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          if (mediaUpload) {
-            mediaUpload.click();
-          }
-        });
-      }
-
-      // Update the event listeners
-      const fileInput = document.getElementById('media-upload');
-      if (fileInput) {
-        // Remove any existing event listeners
-        fileInput.removeEventListener('change', handleFileSelect);
-        // Add the new event listener
-        fileInput.addEventListener('change', handleFileSelect);
-      }
-
-      const replaceButton = document.querySelector('.btn-replace-image');
-      if (replaceButton && fileInput) {
-        replaceButton.addEventListener('click', function(e) {
-          e.preventDefault();
-          e.stopPropagation();
-          fileInput.click();
         });
       }
     }
@@ -427,67 +382,16 @@
     });
   }
 
-  // Function to handle file selection
-  function handleFileSelect(event) {
-    const file = event.target.files[0];
-    if (!file) return;
-    
-    // Check if file is an image
-    if (file.type.startsWith('image/')) {
-      // Create object URL for preview
-      const objectUrl = URL.createObjectURL(file);
-      
-      // Prepare media object
-      currentMedia = {
-        type: 'image',
-        file: file,
-        url: objectUrl
-      };
-      
-      // Update gallery with new media immediately
-      updateGallery(currentMedia);
-      
-      // Upload file to server
-      uploadMediaToServer(file, contentId).then(response => {
-        if (response && response.url) {
-          // Update the currentMedia with the server URL
-          currentMedia.serverUrl = response.url;
-          currentMedia.url = response.url;
-          // Update the gallery again with the final URL
-          updateGallery(currentMedia);
-        }
-      });
-    } else {
-      alert('Please select an image file.');
-    }
-  }
-
   // Function to update the gallery with images from API
   function updateGallery(content) {
     const galleryContainer = document.getElementById('image-preview-container');
     if (!galleryContainer) return;
     
-    // Get the image card and add button elements
-    const imageCard = galleryContainer.querySelector('.position-relative');
-    const addButton = document.getElementById('add-image-btn');
-    
-    if (!content) {
-      // If no content, show add button and hide image card
-      if (addButton) addButton.classList.remove('d-none');
-      if (imageCard) imageCard.closest('.col-12').classList.add('d-none');
-      return;
+    // Update the image in the container
+    const imageElement = galleryContainer.querySelector('img');
+    if (imageElement && content) {
+      imageElement.src = content.url || content;
     }
-    
-    // Update the image source
-    const img = imageCard.querySelector('img');
-    if (img) {
-      img.src = content.url || content;
-      img.alt = content.alt || "Hero Image";
-    }
-    
-    // Show image card and hide add button
-    if (imageCard) imageCard.closest('.col-12').classList.remove('d-none');
-    if (addButton) addButton.classList.add('d-none');
   }
 
   // Function to upload media to server
@@ -504,21 +408,14 @@
     try {
       // Show loading indicator
       const loadingIndicator = document.createElement('div');
-      loadingIndicator.className = 'position-absolute top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center';
-      loadingIndicator.style.backgroundColor = 'rgba(255, 255, 255, 0.8)';
+      loadingIndicator.className = 'position-absolute bg-dark bg-opacity-50 w-100 h-100 d-flex align-items-center justify-content-center text-white';
       loadingIndicator.style.zIndex = '10';
-      loadingIndicator.innerHTML = `
-        <div class="text-center">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Uploading...</span>
-          </div>
-          <p class="mt-2 text-primary">Uploading...</p>
-        </div>
-      `;
+      loadingIndicator.innerHTML = '<div class="spinner-border text-light" role="status"><span class="visually-hidden">Uploading...</span></div>';
       
       // Add loading indicator to the media card
-      const mediaCard = document.querySelector('.position-relative');
+      const mediaCard = document.querySelector('.ratio.ratio-4x3');
       if (mediaCard) {
+        mediaCard.style.position = 'relative';
         mediaCard.appendChild(loadingIndicator);
       }
       
@@ -532,8 +429,7 @@
       });
       
       if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || 'Upload failed: ' + response.statusText);
+        throw new Error('Upload failed: ' + response.statusText);
       }
       
       const data = await response.json();
@@ -545,6 +441,13 @@
       
       // Return the Cloudinary URL
       if (data && data.files) {
+        // Update the image source
+        const image = document.querySelector('.ratio.ratio-4x3 img');
+        if (image) {
+          image.src = data.files[0].url;
+        }
+        
+        // Return the image data
         return {
           url: data.files[0].url,
           alt: "Uploaded image",
@@ -560,57 +463,14 @@
       console.error('Error uploading to Cloudinary:', error);
       
       // Remove loading indicator if it exists
-      const loadingIndicator = document.querySelector('.position-absolute.top-0');
+      const loadingIndicator = document.querySelector('.position-absolute.bg-dark.bg-opacity-50');
       if (loadingIndicator) {
         loadingIndicator.remove();
       }
       
-      // Show error alert with retry option
-      const retry = confirm('Failed to upload image. Would you like to try again?');
-      if (retry) {
-        // Clear the file input and trigger click again
-        const fileInput = document.getElementById('media-upload');
-        if (fileInput) {
-          fileInput.value = '';
-          fileInput.click();
-        }
-      }
+      // Show error alert
+      alert('Failed to upload image. Please try again.');
       return null;
     }
   }
-
-  // Initialize event listeners
-  document.addEventListener('DOMContentLoaded', function() {
-    let fileInput = document.getElementById('media-upload');
-    const replaceButton = document.querySelector('.btn-replace-image');
-    
-    // Function to create a new file input
-    function createNewFileInput() {
-      const newFileInput = document.createElement('input');
-      newFileInput.type = 'file';
-      newFileInput.id = 'media-upload';
-      newFileInput.accept = 'image/*';
-      newFileInput.className = 'd-none';
-      newFileInput.addEventListener('change', handleFileSelect);
-      return newFileInput;
-    }
-    
-    // Set up file input handler
-    if (fileInput) {
-      const newFileInput = createNewFileInput();
-      fileInput.parentNode.replaceChild(newFileInput, fileInput);
-      fileInput = newFileInput;
-    }
-    
-    // Set up replace button handler
-    if (replaceButton) {
-      replaceButton.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        if (fileInput) {
-          fileInput.click();
-        }
-      });
-    }
-  });
 </script>
