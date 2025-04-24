@@ -237,20 +237,61 @@
       
       const imageCard = document.createElement('div');
       imageCard.className = 'position-relative gallery-image-card';
-      imageCard.style.width = '150px';
-      imageCard.style.height = '150px';
+      imageCard.style.width = '250px';
+      imageCard.style.height = 'auto';
       imageCard.dataset.id = imageId;
       
       imageCard.innerHTML = `
-        <img src="${imageSrc}" 
-             class="img-cover rounded border h-100 w-100" 
-             alt="${imageData?.alt || 'Gallery image'}">
-        <button class="btn-remove-image btn btn-sm btn-danger position-absolute top-0 end-0 m-1">
-          <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
-        </button>
+        <div class="card h-100">
+          <div class="position-relative" style="height: 200px;">
+            <img src="${imageSrc}" 
+                 class="img-cover rounded-top h-100 w-100" 
+                 alt="${imageData?.alt || 'Gallery image'}">
+            <button class="btn-remove-image btn btn-sm btn-danger position-absolute top-0 end-0 m-1">
+              <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
+            </button>
+          </div>
+          <div class="card-body p-2">
+            <div class="mb-2">
+              <label class="form-label small mb-1">Title</label>
+              <input type="text" 
+                     class="form-control form-control-sm image-title" 
+                     value="${imageData?.title || ''}" 
+                     placeholder="Enter image title"
+                     data-original-title="${imageData?.title || ''}">
+            </div>
+            <div class="mb-2">
+              <label class="form-label small mb-1">Prompt</label>
+              <textarea class="form-control form-control-sm image-prompt" 
+                        rows="2" 
+                        placeholder="Enter image prompt"
+                        data-original-prompt="${imageData?.prompt || ''}">${imageData?.prompt || ''}</textarea>
+            </div>
+          </div>
+        </div>
       `;
       
       galleryContainer.appendChild(imageCard);
+      
+      // Add input change handlers
+      const titleInput = imageCard.querySelector('.image-title');
+      const promptInput = imageCard.querySelector('.image-prompt');
+      
+      titleInput.addEventListener('change', function() {
+        const imageUrl = imageSrc;
+        const index = galleryImages.findIndex(img => img.url === imageUrl);
+        if (index !== -1) {
+          galleryImages[index].title = this.value;
+        }
+      });
+      
+      promptInput.addEventListener('change', function() {
+        const imageUrl = imageSrc;
+        const index = galleryImages.findIndex(img => img.url === imageUrl);
+        if (index !== -1) {
+          galleryImages[index].prompt = this.value;
+        }
+      });
       
       // Add delete handler
       imageCard.querySelector('.btn-remove-image').addEventListener('click', () => {
@@ -293,5 +334,32 @@
   
   .gallery-image-card:hover .btn-remove-image {
     opacity: 1;
+  }
+
+  .card {
+    border: 1px solid rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+  }
+
+  .card:hover {
+    border-color: rgba(0,0,0,0.2);
+  }
+
+  .form-label {
+    font-size: 0.8rem;
+    font-weight: 500;
+  }
+
+  .form-control {
+    font-size: 0.8rem;
+  }
+
+  .image-title {
+    height: 28px;
+  }
+
+  .image-prompt {
+    resize: none;
+    min-height: 50px;
   }
 </style>

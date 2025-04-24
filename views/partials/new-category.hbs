@@ -799,22 +799,14 @@
             console.log('Gallery tab content visibility changed:', isActive);
             
             if (isActive) {
-              // Get content ID from URL and clean it
+              // Get content ID from URL
               const urlParams = new URLSearchParams(window.location.search);
-              let contentId = urlParams.get('id');
-              
-              // Remove any 'Con' prefix if present
-              if (contentId && contentId.startsWith('Con')) {
-                contentId = contentId.substring(3);
-              }
-              
-              console.log('Content ID from URL (cleaned):', contentId);
+              const contentId = urlParams.get('id');
+              console.log('Content ID from URL:', contentId);
               
               if (contentId) {
                 console.log('Fetching gallery content for ID:', contentId);
                 fetchGalleryContent(contentId);
-              } else {
-                console.warn('No valid content ID found in URL');
               }
             }
           }
@@ -826,170 +818,30 @@
         attributes: true,
         attributeFilter: ['class']
       });
+    } else {
+      console.error('Gallery tab content not found!');
     }
 
-    // Update fetchGalleryContent function to include more debugging
-    async function fetchGalleryContent(contentId) {
-      try {
-        console.log('Starting fetchGalleryContent with ID:', contentId);
+    // Also add direct click handler for gallery tab
+    const galleryTab = document.getElementById('gallery-tab');
+    if (galleryTab) {
+      console.log('Gallery tab button found');
+      
+      galleryTab.addEventListener('click', function() {
+        console.log('Gallery tab clicked');
         
-        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+        // Get content ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const contentId = urlParams.get('id');
+        console.log('Content ID from URL (click):', contentId);
         
-        console.log('Making API request to:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`);
-        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-
-        if (!response.ok) {
-          console.error('API request failed:', response.status, response.statusText);
-          throw new Error('Failed to fetch gallery content');
+        if (contentId) {
+          console.log('Fetching gallery content for ID (click):', contentId);
+          fetchGalleryContent(contentId);
         }
-
-        const content = await response.json();
-        console.log('API Response received:', content);
-
-        // Clear existing gallery items
-        const galleryContainer = document.getElementById('galleryImagesContainer');
-        if (galleryContainer) {
-          console.log('Clearing existing gallery items');
-          galleryContainer.innerHTML = '';
-        } else {
-          console.error('Gallery container not found!');
-          return;
-        }
-
-        // Add each image from the content
-        if (content.images && content.images.length > 0) {
-          console.log('Processing', content.images.length, 'images');
-          
-          // Process images in order
-          const sortedImages = [...content.images].sort((a, b) => (a.order || 0) - (b.order || 0));
-          
-          sortedImages.forEach((image, index) => {
-            console.log(`Processing image ${index + 1}:`, {
-              title: image.title,
-              prompt: image.prompt,
-              alt: image.alt,
-              order: image.order,
-              url: image.url
-            });
-            
-            // Create image data object with all properties
-            const imageData = {
-              url: image.url,
-              title: image.title || image.alt || `Image ${index + 1}`,
-              prompt: image.prompt || '',
-              description: image.alt || '',
-              alt: image.alt || `Image ${index + 1}`,
-              featured: false,
-              order: image.order || index,
-              width: image.width || 1200,
-              height: image.height || 800
-            };
-            
-            console.log('Created image data object:', imageData);
-            
-            // Create the HTML for the image item
-            const newItem = document.createElement('div');
-            newItem.className = 'gallery-image-item mb-4 border rounded p-3 bg-white position-relative';
-            
-            const html = `
-              <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
-                     aria-label="Remove image"></button>
-              
-              <div class="row g-3">
-                <!-- Image Upload -->
-                <div class="col-md-4">
-                  <div class="mb-3">
-                    <label class="form-label small">Upload Image</label>
-                    <input type="file" class="form-control form-control-sm gallery-image-upload" 
-                           accept="image/*" ${imageData ? '' : 'required'}>
-                    <div class="invalid-feedback">
-                      Please select an image.
-                    </div>
-                  </div>
-                  <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
-                    <img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt}">
-                  </div>
-                </div>
-                
-                <!-- Image Details -->
-                <div class="col-md-8">
-                  <div class="mb-3">
-                    <label class="form-label small">Image Title</label>
-                    <input type="text" class="form-control form-control-sm gallery-image-title" 
-                           placeholder="Enter image title" 
-                           value="${imageData.title}"
-                           required>
-                    <div class="invalid-feedback">
-                      Please provide an image title.
-                    </div>
-                  </div>
-                  
-                  <div class="mb-3">
-                    <label class="form-label small">Image Description</label>
-                    <textarea class="form-control form-control-sm gallery-image-description" rows="2"
-                              placeholder="Enter image description" required>${imageData.description}</textarea>
-                    <div class="invalid-feedback">
-                      Please provide an image description.
-                    </div>
-                  </div>
-
-                  <div class="mb-3">
-                    <label class="form-label small">Image Prompt</label>
-                    <textarea class="form-control form-control-sm gallery-image-prompt" rows="2"
-                              placeholder="Enter image generation prompt">${imageData.prompt}</textarea>
-                    <div class="form-text">
-                      Optional: The prompt used to generate this image
-                    </div>
-                  </div>
-                  
-                  <div class="form-check form-switch">
-                    <input class="form-check-input gallery-image-featured" type="checkbox" role="switch"
-                           ${imageData.featured ? 'checked' : ''}>
-                    <label class="form-check-label small">Featured Image</label>
-                  </div>
-                </div>
-              </div>
-            `;
-            
-            newItem.innerHTML = html;
-            
-            // Append to container
-            galleryContainer.appendChild(newItem);
-            
-            // Add event listener for remove button
-            const removeBtn = newItem.querySelector('.remove-gallery-image');
-            if (removeBtn) {
-              removeBtn.addEventListener('click', function() {
-                newItem.remove();
-                updateGalleryVisibility();
-              });
-            }
-            
-            // Verify the values were set correctly
-            console.log('Verifying form values:', {
-              title: newItem.querySelector('.gallery-image-title')?.value,
-              prompt: newItem.querySelector('.gallery-image-prompt')?.value,
-              description: newItem.querySelector('.gallery-image-description')?.value
-            });
-          });
-        } else {
-          console.log('No images found in the response');
-        }
-
-        // Update gallery visibility
-        updateGalleryVisibility();
-        console.log('Gallery content fetch completed');
-
-      } catch (error) {
-        console.error('Error in fetchGalleryContent:', error);
-        alert('Error loading gallery content: ' + error.message);
-      }
+      });
     }
-
+    
     // Function to initialize image previews for a specific tab
     function initializeImagePreviews(tabId) {
       let fileInputs = [];
@@ -1739,6 +1591,99 @@
           submitBtn.disabled = false;
         }
       });
+    }
+
+    // Update fetchGalleryContent function to include more debugging
+    async function fetchGalleryContent(contentId) {
+      try {
+        console.log('Starting fetchGalleryContent with ID:', contentId);
+        
+        const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+        
+        console.log('Making API request to:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`);
+        const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+
+        if (!response.ok) {
+          console.error('API request failed:', response.status, response.statusText);
+          throw new Error('Failed to fetch gallery content');
+        }
+
+        const content = await response.json();
+        console.log('API Response received:', content);
+
+        // Clear existing gallery items
+        const galleryContainer = document.getElementById('galleryImagesContainer');
+        if (galleryContainer) {
+          console.log('Clearing existing gallery items');
+          galleryContainer.innerHTML = '';
+        } else {
+          console.error('Gallery container not found!');
+          return;
+        }
+
+        // Add each image from the content
+        if (content.images && content.images.length > 0) {
+          console.log('Processing', content.images.length, 'images');
+          
+          // Process images in order
+          const sortedImages = [...content.images].sort((a, b) => (a.order || 0) - (b.order || 0));
+          
+          sortedImages.forEach((image, index) => {
+            console.log(`Processing image ${index + 1}:`, {
+              title: image.title,
+              prompt: image.prompt,
+              alt: image.alt,
+              order: image.order,
+              url: image.url
+            });
+            
+            // Create image data object with all properties
+            const imageData = {
+              url: image.url,
+              title: image.title || '',
+              prompt: image.prompt || '',
+              description: image.alt || '',
+              alt: image.alt || '',
+              featured: false,
+              order: image.order || index
+            };
+            
+            console.log('Created image data object:', imageData);
+            
+            // Add the image item to the gallery
+            addGalleryImageItem(imageData);
+            
+            // Verify the values were set correctly
+            setTimeout(() => {
+              const newItem = galleryContainer.lastElementChild;
+              if (newItem) {
+                const titleInput = newItem.querySelector('.gallery-image-title');
+                const promptInput = newItem.querySelector('.gallery-image-prompt');
+                console.log('Verifying form values:', {
+                  title: titleInput?.value,
+                  prompt: promptInput?.value,
+                  expectedTitle: imageData.title,
+                  expectedPrompt: imageData.prompt
+                });
+              }
+            }, 0);
+          });
+        } else {
+          console.log('No images found in the response');
+        }
+
+        // Update gallery visibility
+        updateGalleryVisibility();
+        console.log('Gallery content fetch completed');
+
+      } catch (error) {
+        console.error('Error in fetchGalleryContent:', error);
+        alert('Error loading gallery content: ' + error.message);
+      }
     }
   });
 </script>
