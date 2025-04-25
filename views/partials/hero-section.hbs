@@ -75,6 +75,16 @@
   </div>
 </div>
 
+<!-- Add alert container at the end of the body -->
+<div class="alert-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+  <div id="heroSuccessAlert" class="alert alert-success d-flex align-items-center mb-0 d-none">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div>
+      <strong>Success!</strong> Your changes have been saved.
+    </div>
+  </div>
+</div>
+
 <style>
   .compact-form .form-control-sm {
     padding: 0.25rem 0.5rem;
@@ -147,11 +157,41 @@
     max-width: 100%;
     max-height: 100%;
   }
+
+  /* Alert container styles */
+  .alert-container {
+    min-width: 300px;
+    max-width: 500px;
+  }
+
+  .alert-container .alert {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    animation: slideIn 0.3s ease-out;
+    margin-bottom: 0;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
 </style>
 
 <script>
   // Only execute this code when hero-section is loaded
   document.addEventListener('DOMContentLoaded', function() {
+    // Hide any existing alerts when page loads
+    const successAlert = document.getElementById('heroSuccessAlert');
+    if (successAlert) {
+      successAlert.classList.add('d-none');
+    }
+
     // Check if we're on the hero section page
     if (window.location.pathname.includes('hero-section')) {
       // Get content ID and category from the URL
@@ -304,22 +344,15 @@
     
     // Add media if available
     if (media) {
-      // Use the Cloudinary URL if available, otherwise use the local URL
       const mediaUrl = media.serverUrl || media.url;
-      
-      // Create image object with structure matching MongoDB
       const imageObject = {
         url: mediaUrl,
-        alt: title || "Hero image", // Use title as alt text, or default
-        width: 1200, // Default width
-        height: 800, // Default height
-        order: 1 // First image
+        alt: title || "Hero image",
+        width: 1200,
+        height: 800,
+        order: 1
       };
-      
-      // Add to images array
       updateData.images = [imageObject];
-      
-      console.log('Saving image with data:', imageObject);
     }
     
     // Show loading state
@@ -349,31 +382,39 @@
     .then(data => {
       console.log('Update successful:', data);
       
-      // Show success message
-      const alertDiv = document.createElement('div');
-      alertDiv.className = 'alert alert-success alert-dismissible fade show';
-      alertDiv.innerHTML = `
-        <strong>Success!</strong> Your changes have been saved.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      `;
-      document.querySelector('.card-body').prepend(alertDiv);
-      
-      // Remove alert after 3 seconds
-      setTimeout(() => {
-        alertDiv.remove();
-      }, 3000);
+      // Show success message in bottom right
+      const successAlert = document.getElementById('heroSuccessAlert');
+      if (successAlert) {
+        successAlert.classList.remove('d-none');
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+          successAlert.classList.add('d-none');
+        }, 3000);
+      }
     })
     .catch(error => {
       console.error('Error updating content:', error);
       
-      // Show error message
-      const alertDiv = document.createElement('div');
-      alertDiv.className = 'alert alert-danger alert-dismissible fade show';
-      alertDiv.innerHTML = `
-        <strong>Error!</strong> Failed to save changes. Please try again.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-      `;
-      document.querySelector('.card-body').prepend(alertDiv);
+      // Show error message in bottom right
+      const successAlert = document.getElementById('heroSuccessAlert');
+      if (successAlert) {
+        successAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+        successAlert.classList.remove('d-none');
+        
+        // Hide after 3 seconds
+        setTimeout(() => {
+          successAlert.classList.add('d-none');
+          // Reset to success alert for next time
+          successAlert.className = 'alert alert-success d-flex align-items-center mb-0 d-none';
+          successAlert.innerHTML = `
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>
+              <strong>Success!</strong> Your changes have been saved.
+            </div>
+          `;
+        }, 3000);
+      }
     })
     .finally(() => {
       // Restore button state
@@ -473,4 +514,22 @@
       return null;
     }
   }
+
+  // Remove any existing alerts when the page loads
+  document.addEventListener('DOMContentLoaded', function() {
+    // Remove any existing alerts except our fixed one
+    const existingAlerts = document.querySelectorAll('.alert:not(#heroSuccessAlert)');
+    existingAlerts.forEach(alert => alert.remove());
+    
+    // Remove any alert containers except our fixed one
+    const alertContainers = document.querySelectorAll('.alert-container:not(.position-fixed)');
+    alertContainers.forEach(container => container.remove());
+    
+    // Remove any alerts that might be in the card body
+    const cardBody = document.querySelector('.card-body');
+    if (cardBody) {
+      const cardAlerts = cardBody.querySelectorAll('.alert');
+      cardAlerts.forEach(alert => alert.remove());
+    }
+  });
 </script>

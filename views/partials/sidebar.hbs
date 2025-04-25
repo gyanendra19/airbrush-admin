@@ -133,64 +133,120 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    // Define categories and their sections
-    const categories = [
-      {
-        id: '3dSubmenu',
-        name: '3D Images',
-        icon: 'bi-film',
-        href: '#3dSubmenu',
-        sections: [
-          { name: 'Hero Section', href: '/hero-section', contentId: '68049ec8a4c47b1127e4d533' },
-          { name: 'Images Gallery', href: '/images-gallery', contentId: '6805028d386a5fc127d44a84' },
-          { name: 'why Use Tool', href: '/why-use-tool', contentId: "68060897529304e58e885c7b"  },
-          { name: 'Text to Anything', href: '/text-to-anything', contentId: '68050d5e386a5fc127d44add' },
-          { name: 'Blogs', href: '/blogs', contentId: '680693c1fed139cd60415c19' }
-        ]
-      },
-      {
-        id: 'ghibliSubmenu',
-        name: 'Ghibli',
-        icon: 'bi-box-seam',
-        href: '#ghibliSubmenu',
-        sections: [
-          { name: 'Hero Section', href: '/hero-section', contentId: '680545ef386a5fc127d44b64' },
-          { name: 'Images Gallery', href: '/images-gallery', contentId: "6805475b386a5fc127d44b72" },
-          { name: 'Why Use Tool', href: '/why-use-tool', contentId: "680623db2de273de22a536e4" },
-          { name: 'Text to Anything', href: '/text-to-anything', contentId: "680547a6386a5fc127d44b7c" },
-          { name: 'Blogs', href: '/blogs'}
-        ]
+    // Fetch categories and their sections from the backend
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/content', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to fetch categories');
+        }
+        
+        const data = await response.json();
+        console.log('Fetched categories:', data);
+        
+        // Group content by category
+        const categories = {};
+        data.forEach(item => {
+          // Skip items without required properties
+          if (!item || !item.section || !item.section.category) {
+            console.warn('Skipping item with missing properties:', item);
+            return;
+          }
+          
+          const categoryName = item.section.category.name;
+          const categorySlug = item.section.category.slug;
+          
+          if (!categories[categoryName]) {
+            categories[categoryName] = {
+              id: `category_${categorySlug}`, // Add prefix to make it a valid CSS selector
+              name: categoryName,
+              sections: []
+            };
+          }
+          
+          // Add section to category if it doesn't exist
+          const sectionExists = categories[categoryName].sections.some(
+            section => section.href === `/${item.section.slug}`
+          );
+          
+          if (!sectionExists) {
+            categories[categoryName].sections.push({
+              name: item.section.name,
+              href: `/${item.section.slug}`,
+              contentId: item._id
+            });
+          }
+        });
+        
+        // Convert to array and sort sections
+        const categoriesArray = Object.values(categories).map(category => ({
+          ...category,
+          sections: category.sections.sort((a, b) => {
+            // Define the order of sections
+            const order = ['hero-section', 'images-gallery', 'why-use-tool', 'text-to-anything', 'blogs'];
+            
+            // Get the section names without the path
+            const aSection = a.href.replace('/', '');
+            const bSection = b.href.replace('/', '');
+            
+            // Find the index of each section in the order array
+            const aIndex = order.indexOf(aSection);
+            const bIndex = order.indexOf(bSection);
+            
+            // If both sections are in the order array, sort by their position
+            if (aIndex !== -1 && bIndex !== -1) {
+              return aIndex - bIndex;
+            }
+            
+            // If only one section is in the order array, prioritize it
+            if (aIndex !== -1) return -1;
+            if (bIndex !== -1) return 1;
+            
+            // If neither section is in the order array, maintain original order
+            return 0;
+          })
+        }));
+        
+        return categoriesArray;
+      } catch (error) {
+        console.error('Error fetching categories:', error);
+        return [];
       }
-    ];
+    };
     
     // Render categories to the sidebar
-    const renderCategories = () => {
+    const renderCategories = async () => {
       const dynamicCategoriesContainer = document.getElementById('dynamic-categories');
       if (!dynamicCategoriesContainer) return;
       
       // Clear the container
       dynamicCategoriesContainer.innerHTML = '';
       
+      // Fetch categories from backend
+      const categories = await fetchCategories();
+      
       // Add each category
       categories.forEach(category => {
-        const isOpen = category.id === '3dSubmenu'; // Default open for 3D Images
-        
+        // Remove default open state
         const categoryHTML = `
           <div class="submenu-item mb-2">
             <a class="d-flex align-items-center px-3 py-1 text-dark rounded-3 submenu-toggle text-decoration-none" 
                data-bs-toggle="collapse"
-               href="${category.href}">
-              {{!-- <i class="bi ${category.icon} me-3 text-primary"></i> --}}
+               href="#${category.id}">
               <span>${category.name}</span>
-              <i class="bi bi-chevron-down ms-auto transition-all" style="transform: rotate(${isOpen ? '180deg' : '0'});"></i>
+              <i class="bi bi-chevron-down ms-auto transition-all"></i>
             </a>
-            <div class="collapse${isOpen ? ' show' : ''} ps-4" id="${category.id}">
+            <div class="collapse ps-4" id="${category.id}">
               <ul class="list-unstyled mt-2">
                 ${category.sections.map(section => {
-                  // Add the content ID as a query parameter if available
-                  const href = section.contentId ? 
-                    `${section.href}?id=${section.contentId}&category=${category.name.toLowerCase().replace(/\s+/g, '-')}` : 
-                    section.href;
+                  // Add the content ID as a query parameter
+                  const href = `${section.href}?id=${section.contentId}&category=${category.name.toLowerCase().replace(/\s+/g, '-')}`;
                   
                   return `<li><a href="${href}" class="d-block px-3 py-1 rounded-3 text-decoration-none">${section.name}</a></li>`;
                 }).join('')}
