@@ -13,7 +13,7 @@
           Please provide a category name.
         </div>
       </div>
-
+      
       <div class="mb-3">
         <label for="categoryDescription" class="form-label">Description</label>
         <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
@@ -51,16 +51,6 @@
 
 <!-- Section Forms - Initially Hidden -->
 <div id="sectionForms" class="d-none">
-  <div class="alert alert-success mb-4">
-    <div class="d-flex align-items-center">
-      <i class="bi bi-check-circle-fill me-2 fs-5"></i>
-      <div>
-        <strong>Category created successfully!</strong>
-        <p class="mb-0">Now you can add sections to your category.</p>
-      </div>
-    </div>
-  </div>
-
   <!-- Tabs for Different Section Types -->
   <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
     <li class="nav-item" role="presentation">
@@ -749,6 +739,45 @@
   </div>
 </div>
 
+<!-- Add alert container at the end of the body -->
+<div class="alert-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+  <div id="categorySuccessAlert" class="alert alert-success d-flex align-items-center mb-0 d-none">
+    <i class="bi bi-check-circle-fill me-2"></i>
+    <div>
+      <strong>Category created successfully!</strong>
+      <p class="mb-0">You can now add sections to your category.</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ... existing styles ... */
+
+  /* Alert container styles */
+  .alert-container {
+    min-width: 300px;
+    max-width: 500px;
+  }
+
+  .alert-container .alert {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+    border: none;
+    animation: slideIn 0.3s ease-out;
+    margin-bottom: 0;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+</style>
+
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // API Configuration
@@ -810,8 +839,8 @@
               }
             }
           }
-        });
       });
+    });
       
       // Start observing the gallery tab content
       observer.observe(galleryTabContent, {
@@ -1356,7 +1385,7 @@
               ${imageData ? 
                 `<img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt || 'Gallery image'}">` :
                 `<div class="d-flex align-items-center justify-content-center text-muted">
-                  <i class="bi bi-image me-2"></i> No image
+                <i class="bi bi-image me-2"></i> No image
                 </div>`
               }
             </div>
@@ -1428,23 +1457,23 @@
       
       // Add event listener for image preview if no existing image
       if (!imageData) {
-        const fileInput = newItem.querySelector('.gallery-image-upload');
-        const previewContainer = newItem.querySelector('.image-preview');
-        
-        if (fileInput && previewContainer) {
-          fileInput.addEventListener('change', function(event) {
-            const file = event.target.files[0];
-            if (file) {
-              const objectUrl = URL.createObjectURL(file);
-              previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
-            } else {
-              previewContainer.innerHTML = `
-                <div class="d-flex align-items-center justify-content-center text-muted">
-                  <i class="bi bi-image me-2"></i> No image
-                </div>
-              `;
-            }
-          });
+      const fileInput = newItem.querySelector('.gallery-image-upload');
+      const previewContainer = newItem.querySelector('.image-preview');
+      
+      if (fileInput && previewContainer) {
+        fileInput.addEventListener('change', function(event) {
+          const file = event.target.files[0];
+          if (file) {
+            const objectUrl = URL.createObjectURL(file);
+            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
+          } else {
+            previewContainer.innerHTML = `
+              <div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="bi bi-image me-2"></i> No image
+              </div>
+            `;
+          }
+        });
         }
       }
     }
@@ -1533,7 +1562,7 @@
             isFolder: true,
             parent: null
           };
-          
+
           // Now send this to create the category
           const categoryResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CATEGORIES}`, {
             method: 'POST',
@@ -1552,33 +1581,35 @@
           
           const createdCategory = await categoryResponse.json();
           console.log('Category created:', createdCategory);
-          
-          // Store the category ID for section creation
+            
+            // Store the category ID for section creation
           createdCategoryId = createdCategory._id || createdCategory.id;
+            
+            // Set categoryId for all forms
+            document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+              input.value = createdCategoryId;
+            });
           
-          // Set categoryId for all forms
-          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-            input.value = createdCategoryId;
-          });
-          
-          // Hide category form and show section forms
-          categoryForm.parentElement.parentElement.classList.add('d-none');
-          sectionForms.classList.remove('d-none');
-          
-          // Show success notification
-          const successAlert = document.createElement('div');
-          successAlert.className = 'alert alert-success mb-4';
-          successAlert.innerHTML = `
-            <div class="d-flex align-items-center">
-              <i class="bi bi-check-circle-fill me-2"></i>
-              <div>
-                <strong>Category "${categoryName}" created successfully!</strong>
-                <p class="mb-0">You can now add sections to your category.</p>
-              </div>
-            </div>
-          `;
-          sectionForms.insertBefore(successAlert, sectionForms.firstChild);
-          
+          // Show success notification in bottom right
+          const successAlert = document.getElementById('categorySuccessAlert');
+          if (successAlert) {
+            // Remove any existing alerts
+            const existingAlerts = document.querySelectorAll('.alert:not(#categorySuccessAlert)');
+            existingAlerts.forEach(alert => alert.remove());
+            
+            // Show the alert
+            successAlert.classList.remove('d-none');
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+              successAlert.classList.add('d-none');
+            }, 3000);
+          }
+            
+            // Hide category form and show section forms
+            categoryForm.parentElement.parentElement.classList.add('d-none');
+            sectionForms.classList.remove('d-none');
+            
           // Scroll to the section forms
           sectionForms.scrollIntoView({ behavior: 'smooth' });
           
