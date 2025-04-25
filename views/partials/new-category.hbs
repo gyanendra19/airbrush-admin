@@ -13,7 +13,7 @@
           Please provide a category name.
         </div>
       </div>
-      
+          
       <div class="mb-3">
         <label for="categoryDescription" class="form-label">Description</label>
         <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
@@ -33,8 +33,8 @@
         <div class="invalid-feedback">
           Please select a category image.
         </div>
-        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
-          <div class="d-flex align-items-center justify-content-center text-muted">
+        <div class="image-preview bg-light rounded overflow-hidden mt-2" style="width: 200px; height: 200px;">
+          <div class="d-flex align-items-center justify-content-center text-muted h-100">
             <i class="bi bi-image me-2"></i> No image selected
           </div>
         </div>
@@ -121,8 +121,12 @@
               <div class="invalid-feedback">
                 Please select an image.
               </div>
+              <div class="image-preview bg-light rounded overflow-hidden mt-2" style="width: 200px; height: 200px;">
+                <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                  <i class="bi bi-image me-2"></i> No image selected
+                </div>
+              </div>
             </div>
-            
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save me-2"></i> Save Hero Section
@@ -957,6 +961,59 @@
       }
     }
     
+    // Function to switch tabs using Bootstrap's API
+    function switchToTab(tabId) {
+      console.log('=== Tab Switching Debug ===');
+      console.log('Attempting to switch to tab:', tabId);
+      
+      // Get the tab button
+      const tabButton = document.querySelector(`[data-bs-target="${tabId}"]`);
+      if (!tabButton) {
+        console.error('Tab button not found:', tabId);
+        return;
+      }
+      
+      // Create a new Bootstrap Tab instance
+      const tab = new bootstrap.Tab(tabButton);
+      
+      // Show the tab
+      tab.show();
+      
+      console.log('Tab switch completed');
+    }
+
+    // Function to switch from hero to gallery section
+    function switchHeroToGallery() {
+      console.log('Switching from hero to gallery section...');
+      
+      // Get the gallery tab and content
+      const galleryTab = document.getElementById('gallery-tab');
+      const galleryContent = document.getElementById('gallery');
+      const heroTab = document.getElementById('hero-tab');
+      const heroContent = document.getElementById('hero');
+      
+      if (galleryTab && galleryContent && heroTab && heroContent) {
+        // Remove active classes from hero tab
+        heroTab.classList.remove('active');
+        heroContent.classList.remove('show', 'active');
+        
+        // Add active classes to gallery tab
+        galleryTab.classList.add('active');
+        galleryContent.classList.add('show', 'active');
+        
+        // Trigger Bootstrap's tab event
+        const tabEvent = new Event('shown.bs.tab', { bubbles: true });
+        galleryTab.dispatchEvent(tabEvent);
+        
+        // Scroll to the gallery section
+        galleryContent.scrollIntoView({ behavior: 'smooth' });
+        
+        console.log('Successfully switched to gallery section');
+      } else {
+        console.error('Could not find required elements for tab switching');
+      }
+    }
+
     // Function to initialize form submission for a specific tab
     function initializeFormSubmission(tabId) {
       let form;
@@ -982,6 +1039,8 @@
       }
       
       if (form) {
+        console.log('Initializing form submission for tab:', tabId);
+        
         // Remove existing event listener
         const newForm = form.cloneNode(true);
         form.parentNode.replaceChild(newForm, form);
@@ -992,6 +1051,7 @@
         // Add submit event listener
         newForm.addEventListener('submit', async function(event) {
           event.preventDefault();
+          console.log('Form submitted for tab:', tabId);
           
           if (!newForm.checkValidity()) {
             event.stopPropagation();
@@ -1267,8 +1327,55 @@
             const contentResult = await contentResponse.json();
             console.log(`${sectionName} content created:`, contentResult);
             
-            // Show success message
-            alert(`${sectionName} created successfully!`);
+            // If it's the hero section, switch to gallery
+            if (tabId === '#hero') {
+              // Show success message
+              const successAlert = document.createElement('div');
+              successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+              successAlert.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>
+                  <strong>Hero Section created successfully!</strong>
+                  <p class="mb-0">Moving to Images Gallery section...</p>
+                </div>
+              `;
+              
+              // Add to alert container
+              const alertContainer = document.querySelector('.alert-container');
+              if (alertContainer) {
+                alertContainer.appendChild(successAlert);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                  successAlert.remove();
+                }, 3000);
+              }
+              
+              // Switch to gallery section
+              switchHeroToGallery();
+            } else {
+              // Show regular success message for other sections
+              const successAlert = document.createElement('div');
+              successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+              successAlert.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>
+                  <strong>${sectionName} created successfully!</strong>
+                  <p class="mb-0">You can now proceed to the next section.</p>
+                </div>
+              `;
+              
+              // Add to alert container
+              const alertContainer = document.querySelector('.alert-container');
+              if (alertContainer) {
+                alertContainer.appendChild(successAlert);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                  successAlert.remove();
+                }, 3000);
+              }
+            }
             
             // Reset form
             newForm.reset();
@@ -1277,8 +1384,8 @@
             // Reset image previews
             newForm.querySelectorAll('.image-preview').forEach(preview => {
               preview.innerHTML = `
-                <div class="d-flex align-items-center justify-content-center text-muted">
-                  <i class="bi bi-image me-2"></i> No image
+                <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                  <i class="bi bi-image me-2"></i> No image selected
                 </div>
               `;
             });
@@ -1292,6 +1399,8 @@
             submitBtn.disabled = false;
           }
         });
+      } else {
+        console.warn('Form not found for tab:', tabId);
       }
     }
     
@@ -1496,17 +1605,6 @@
     
     // Initialize category form
     if (categoryForm) {
-      // Remove temporary test code
-      // categoryForm.parentElement.parentElement.classList.add('d-none');
-      // sectionForms.classList.remove('d-none');
-      
-      // Remove test category ID
-      // createdCategoryId = 'test-category-id-123';
-      // document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-      //   input.value = createdCategoryId;
-      // });
-      
-      // Original category form submission code
       categoryForm.addEventListener('submit', async function(event) {
         event.preventDefault();
         
@@ -1582,13 +1680,13 @@
           const createdCategory = await categoryResponse.json();
           console.log('Category created:', createdCategory);
             
-            // Store the category ID for section creation
+          // Store the category ID for section creation
           createdCategoryId = createdCategory._id || createdCategory.id;
             
-            // Set categoryId for all forms
-            document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-              input.value = createdCategoryId;
-            });
+          // Set categoryId for all forms
+          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+            input.value = createdCategoryId;
+          });
           
           // Show success notification in bottom right
           const successAlert = document.getElementById('categorySuccessAlert');
@@ -1606,9 +1704,9 @@
             }, 3000);
           }
             
-            // Hide category form and show section forms
-            categoryForm.parentElement.parentElement.classList.add('d-none');
-            sectionForms.classList.remove('d-none');
+          // Hide category form and show section forms
+          categoryForm.parentElement.parentElement.classList.add('d-none');
+          sectionForms.classList.remove('d-none');
             
           // Scroll to the section forms
           sectionForms.scrollIntoView({ behavior: 'smooth' });
@@ -1715,6 +1813,68 @@
         console.error('Error in fetchGalleryContent:', error);
         alert('Error loading gallery content: ' + error.message);
       }
+    }
+
+    // Add image preview functionality for category image
+    const categoryImageInput = document.getElementById('categoryImage');
+    const categoryImagePreview = document.querySelector('.image-preview');
+
+    if (categoryImageInput && categoryImagePreview) {
+      categoryImageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          // Create object URL for preview
+          const objectUrl = URL.createObjectURL(file);
+          
+          // Update preview
+          categoryImagePreview.innerHTML = `
+            <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Category Preview">
+          `;
+          
+          // Clean up object URL when new file is selected
+          categoryImageInput.addEventListener('change', function() {
+            URL.revokeObjectURL(objectUrl);
+          });
+        } else {
+          // Reset preview if no file selected
+          categoryImagePreview.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center text-muted h-100">
+              <i class="bi bi-image me-2"></i> No image selected
+            </div>
+          `;
+        }
+      });
+    }
+
+    // Add image preview functionality for hero image
+    const heroImageInput = document.getElementById('heroImage');
+    const heroImagePreview = document.querySelector('#hero .image-preview');
+
+    if (heroImageInput && heroImagePreview) {
+      heroImageInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+          // Create object URL for preview
+          const objectUrl = URL.createObjectURL(file);
+          
+          // Update preview
+          heroImagePreview.innerHTML = `
+            <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Hero Preview">
+          `;
+          
+          // Clean up object URL when new file is selected
+          heroImageInput.addEventListener('change', function() {
+            URL.revokeObjectURL(objectUrl);
+          });
+        } else {
+          // Reset preview if no file selected
+          heroImagePreview.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center text-muted h-100">
+              <i class="bi bi-image me-2"></i> No image selected
+            </div>
+          `;
+        }
+      });
     }
   });
 </script>
