@@ -38,9 +38,15 @@
                   <label class="form-label small text-muted mb-1">Title</label>
                   <input type="text" class="form-control form-control-sm blog-title" placeholder="Enter title" required>
                 </div>
-                <div>
-                  <label class="form-label small text-muted mb-1">Date</label>
-                  <input type="date" class="form-control form-control-sm blog-date" required>
+                <div class="mb-2">
+                  <label class="form-label small text-muted mb-1">Content</label>
+                  <textarea class="form-control form-control-sm blog-content" placeholder="Enter blog content" rows="3"></textarea>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input blog-is-lead" type="checkbox" value="" id="isLead0">
+                  <label class="form-check-label small text-muted" for="isLead0">
+                    Featured Blog
+                  </label>
                 </div>
               </div>
             </div>
@@ -68,9 +74,15 @@
                   <label class="form-label small text-muted mb-1">Title</label>
                   <input type="text" class="form-control form-control-sm blog-title" placeholder="Enter title" required>
                 </div>
-                <div>
-                  <label class="form-label small text-muted mb-1">Date</label>
-                  <input type="date" class="form-control form-control-sm blog-date" required>
+                <div class="mb-2">
+                  <label class="form-label small text-muted mb-1">Content</label>
+                  <textarea class="form-control form-control-sm blog-content" placeholder="Enter blog content" rows="3"></textarea>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input blog-is-lead" type="checkbox" value="" id="isLead1">
+                  <label class="form-check-label small text-muted" for="isLead1">
+                    Featured Blog
+                  </label>
                 </div>
               </div>
             </div>
@@ -98,9 +110,15 @@
                   <label class="form-label small text-muted mb-1">Title</label>
                   <input type="text" class="form-control form-control-sm blog-title" placeholder="Enter title" required>
                 </div>
-                <div>
-                  <label class="form-label small text-muted mb-1">Date</label>
-                  <input type="date" class="form-control form-control-sm blog-date" required>
+                <div class="mb-2">
+                  <label class="form-label small text-muted mb-1">Content</label>
+                  <textarea class="form-control form-control-sm blog-content" placeholder="Enter blog content" rows="3"></textarea>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input blog-is-lead" type="checkbox" value="" id="isLead2">
+                  <label class="form-check-label small text-muted" for="isLead2">
+                    Featured Blog
+                  </label>
                 </div>
               </div>
             </div>
@@ -128,9 +146,15 @@
                   <label class="form-label small text-muted mb-1">Title</label>
                   <input type="text" class="form-control form-control-sm blog-title" placeholder="Enter title" required>
                 </div>
-                <div>
-                  <label class="form-label small text-muted mb-1">Date</label>
-                  <input type="date" class="form-control form-control-sm blog-date" required>
+                <div class="mb-2">
+                  <label class="form-label small text-muted mb-1">Content</label>
+                  <textarea class="form-control form-control-sm blog-content" placeholder="Enter blog content" rows="3"></textarea>
+                </div>
+                <div class="form-check">
+                  <input class="form-check-input blog-is-lead" type="checkbox" value="" id="isLead3">
+                  <label class="form-check-label small text-muted" for="isLead3">
+                    Featured Blog
+                  </label>
                 </div>
               </div>
             </div>
@@ -274,39 +298,26 @@
           
           // Initialize blog data array with default values
           blogData = [
-            { title: '', date: '', image: { url: '' } },
-            { title: '', date: '', image: { url: '' } },
-            { title: '', date: '', image: { url: '' } },
-            { title: '', date: '', image: { url: '' } }
+            { title: '', content: '', image: { url: '' }, isLead: false },
+            { title: '', content: '', image: { url: '' }, isLead: false },
+            { title: '', content: '', image: { url: '' }, isLead: false },
+            { title: '', content: '', image: { url: '' }, isLead: false }
           ];
           
-          // Process fields from API response
+          // Process fields from API response - using the new structure
           if (data.fields && Array.isArray(data.fields)) {
-            // Process each field that starts with 'blog_'
-            data.fields.forEach(field => {
-              if (field.key && field.key.startsWith('blog_')) {
-                // Extract the blog index (1-based in the API, convert to 0-based for our array)
-                const blogIndex = parseInt(field.key.split('_')[1]) - 1;
-                
-                // Ensure valid index
-                if (blogIndex >= 0 && blogIndex < 4) {
-                  // Set the blog title
-                  blogData[blogIndex].title = field.value || '';
-                  
-                  // Set the blog image URL
-                  if (field.url) {
-                    blogData[blogIndex].image.url = field.url;
-                  }
-                }
-              } else if (field.key && field.key.startsWith('blogdate_')) {
-                // Extract the blog index for date fields
-                const blogIndex = parseInt(field.key.split('_')[1]) - 1;
-                
-                // Ensure valid index
-                if (blogIndex >= 0 && blogIndex < 4) {
-                  // Set the blog date
-                  blogData[blogIndex].date = field.value || '';
-                }
+            data.fields.forEach((field, index) => {
+              if (index < 4 && field.value) {
+                // Set blog data from the field.value object
+                blogData[index] = {
+                  title: field.value.title || '',
+                  content: field.value.content || '',
+                  image: {
+                    url: field.value.url || '',
+                    alt: `Blog image ${index + 1}`
+                  },
+                  isLead: field.value.isLead || false
+                };
               }
             });
           }
@@ -326,20 +337,15 @@
           if (!data) return;
           
           const titleInput = card.querySelector('.blog-title');
-          const dateInput = card.querySelector('.blog-date');
+          const contentInput = card.querySelector('.blog-content');
           const imageElement = card.querySelector('.blog-image');
+          const isLeadCheckbox = card.querySelector('.blog-is-lead');
           
           titleInput.value = data.title || '';
+          contentInput.value = data.content || '';
           
-          // Set date input value, with a default of today's date if none exists
-          if (data.date) {
-            dateInput.value = data.date;
-          } else {
-            const today = new Date();
-            const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
-            dateInput.value = formattedDate;
-            // Update the data object as well
-            data.date = formattedDate;
+          if (isLeadCheckbox) {
+            isLeadCheckbox.checked = data.isLead || false;
           }
           
           if (data.image && data.image.url) {
@@ -431,18 +437,18 @@
         if (!card) return;
         
         const titleInput = card.querySelector('.blog-title');
-        const dateInput = card.querySelector('.blog-date');
+        const contentInput = card.querySelector('.blog-content');
         const imageElement = card.querySelector('.blog-image');
         
         // Reset values
         titleInput.value = '';
-        dateInput.value = '';
+        contentInput.value = '';
         imageElement.src = `https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg`;
         
         // Update blog data
         blogData[cardIndex] = {
           title: '',
-          date: '',
+          content: '',
           image: {
             url: `https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg`,
             alt: `Blog image ${cardIndex+1}`,
@@ -466,32 +472,26 @@
         // Update blog data from form inputs
         blogCards.forEach((card, index) => {
           const titleInput = card.querySelector('.blog-title');
-          const dateInput = card.querySelector('.blog-date');
+          const contentInput = card.querySelector('.blog-content');
+          const isLeadCheckbox = card.querySelector('.blog-is-lead');
           
           blogData[index].title = titleInput.value.trim();
-          blogData[index].date = dateInput.value;
+          blogData[index].content = contentInput.value.trim();
+          blogData[index].isLead = isLeadCheckbox ? isLeadCheckbox.checked : false;
         });
         
-        // Prepare fields array according to the expected format
+        // Prepare fields array according to the expected format with nested value objects
         const fields = [];
-        const blogTypes = ['first blog', 'second blog', 'third blog', 'fourth blog'];
         
         for (let i = 0; i < 4; i++) {
-          // Add blog title and image URL
           fields.push({
-            type: blogTypes[i],
-            key: `blog_${i+1}`,
-            url: blogData[i].image.url,
-            value: blogData[i].title,
-            order: 1
-          });
-          
-          // Add blog date as a separate field
-          fields.push({
-            type: `${blogTypes[i]} date`,
-            key: `blogdate_${i+1}`,
-            value: blogData[i].date,
-            order: 2
+            value: {
+              title: blogData[i].title,
+              content: blogData[i].content,
+              url: blogData[i].image.url,
+              isLead: blogData[i].isLead
+            },
+            order: 0
           });
         }
         
@@ -597,6 +597,20 @@
           
           if (confirm(`Are you sure you want to clear blog post ${cardIndex + 1}?`)) {
             clearBlogCard(cardIndex);
+          }
+        });
+      });
+      
+      // Set up event listeners for isLead checkboxes - allow only one to be selected
+      document.querySelectorAll('.blog-is-lead').forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+          if (this.checked) {
+            // Uncheck all other checkboxes
+            document.querySelectorAll('.blog-is-lead').forEach(cb => {
+              if (cb !== this) {
+                cb.checked = false;
+              }
+            });
           }
         });
       });

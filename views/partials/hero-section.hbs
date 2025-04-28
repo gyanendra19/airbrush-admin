@@ -228,7 +228,7 @@
       const replaceButton = document.querySelector('.btn-replace-image');
       const mediaUpload = document.createElement('input');
       mediaUpload.type = 'file';
-      mediaUpload.accept = 'image/*';
+      mediaUpload.accept = 'image/*,video/*';
       mediaUpload.style.display = 'none';
       document.body.appendChild(mediaUpload);
       
@@ -243,13 +243,13 @@
           const file = event.target.files[0];
           if (!file) return;
           
-          if (file.type.startsWith('image/')) {
+          if (file.type.startsWith('image/') || file.type.startsWith('video/')) {
             // Create object URL for preview
             const objectUrl = URL.createObjectURL(file);
             
             // Prepare media object
             currentMedia = {
-              type: 'image',
+              type: file.type.startsWith('image/') ? 'image' : 'video',
               file: file,
               url: objectUrl
             };
@@ -267,7 +267,7 @@
               }
             });
           } else {
-            alert('Please select an image file.');
+            alert('Please select an image or video file.');
           }
         });
       }
@@ -345,14 +345,15 @@
     // Add media if available
     if (media) {
       const mediaUrl = media.serverUrl || media.url;
-      const imageObject = {
+      const mediaObject = {
         url: mediaUrl,
-        alt: title || "Hero image",
+        alt: title || "Hero media",
         width: 1200,
         height: 800,
-        order: 1
+        order: 1,
+        type: media.type || 'image'
       };
-      updateData.images = [imageObject];
+      updateData.images = [mediaObject];
     }
     
     // Show loading state
@@ -428,11 +429,40 @@
     const galleryContainer = document.getElementById('image-preview-container');
     if (!galleryContainer) return;
     
-    // Update the image in the container
-    const imageElement = galleryContainer.querySelector('img');
-    if (imageElement && content) {
+    // Get the container where we'll put the media
+    const mediaContainer = galleryContainer.querySelector('.ratio.ratio-4x3');
+    if (!mediaContainer || !content) return;
+    
+    // Clear existing content
+    mediaContainer.innerHTML = '';
+    
+    // Create the appropriate element based on media type
+    if (content.type === 'video') {
+      // Create video element
+      const videoElement = document.createElement('video');
+      videoElement.src = content.url || content;
+      videoElement.controls = true;
+      videoElement.autoplay = false;
+      videoElement.muted = true;
+      videoElement.className = 'object-fit-contain rounded w-100 h-100';
+      mediaContainer.appendChild(videoElement);
+    } else {
+      // Create image element (default)
+      const imageElement = document.createElement('img');
       imageElement.src = content.url || content;
+      imageElement.className = 'object-fit-contain rounded';
+      imageElement.alt = "Ghibli Media";
+      mediaContainer.appendChild(imageElement);
     }
+    
+    // Add replace button
+    const replaceButton = document.createElement('button');
+    replaceButton.className = 'btn-replace-image btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1';
+    replaceButton.innerHTML = '<i class="fas fa-sync-alt"></i>';
+    replaceButton.addEventListener('click', function() {
+      document.querySelector('input[type="file"]').click();
+    });
+    mediaContainer.appendChild(replaceButton);
   }
 
   // Function to upload media to server
@@ -460,7 +490,7 @@
         mediaCard.appendChild(loadingIndicator);
       }
       
-      // Upload the image to Cloudinary via your endpoint
+      // Upload the media to Cloudinary via your endpoint
       const response = await fetch('http://localhost:5000/api/images', {
         method: 'POST',
         headers: {
@@ -482,20 +512,23 @@
       
       // Return the Cloudinary URL
       if (data && data.files) {
-        // Update the image source
-        const image = document.querySelector('.ratio.ratio-4x3 img');
-        if (image) {
-          image.src = data.files[0].url;
-        }
+        // Get media type
+        const isVideo = file.type.startsWith('video/');
         
-        // Return the image data
+        // Update the media container
+        updateGallery({
+          type: isVideo ? 'video' : 'image',
+          url: data.files[0].url
+        });
+        
+        // Return the media data
         return {
           url: data.files[0].url,
-          alt: "Uploaded image",
+          alt: "Uploaded media",
           width: 1200,
           height: 800,
           order: 1,
-          type: 'image'
+          type: isVideo ? 'video' : 'image'
         };
       }
       
@@ -510,7 +543,7 @@
       }
       
       // Show error alert
-      alert('Failed to upload image. Please try again.');
+      alert('Failed to upload media. Please try again.');
       return null;
     }
   }

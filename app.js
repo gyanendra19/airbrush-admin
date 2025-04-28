@@ -1,7 +1,6 @@
 const express = require('express');
 const exphbs = require('express-handlebars');
 const path = require('path');
-const apiRouter = require('./routes/api');
 
 const app = express();
 
@@ -9,9 +8,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
-
-// API routes
-app.use('/api', apiRouter);
 
 // View engine setup
 app.engine('hbs', exphbs.engine({

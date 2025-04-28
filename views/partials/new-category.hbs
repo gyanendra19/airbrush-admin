@@ -13,7 +13,7 @@
           Please provide a category name.
         </div>
       </div>
-          
+
       <div class="mb-3">
         <label for="categoryDescription" class="form-label">Description</label>
         <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
@@ -50,7 +50,7 @@
 </div>
 
 <!-- Section Forms - Initially Hidden -->
-<div id="sectionForms" class="d-none">
+<div id="sectionForms">
   <!-- Tabs for Different Section Types -->
   <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
     <li class="nav-item" role="presentation">
@@ -121,7 +121,7 @@
               <div class="invalid-feedback">
                 Please select an image.
               </div>
-              <div class="image-preview bg-light rounded overflow-hidden mt-2" style="width: 200px; height: 200px;">
+              <div class="image-preview bg-light rounded overflow-hidden mt-2" style="width: 200px; height: 150px;">
                 <div class="d-flex align-items-center justify-content-center text-muted h-100">
                   <i class="bi bi-image me-2"></i> No image selected
                 </div>
@@ -214,15 +214,6 @@
                           Please provide an image title.
                         </div>
                       </div>
-                      
-                      <div class="mb-3">
-                        <label class="form-label small">Image Description</label>
-                        <textarea class="form-control form-control-sm gallery-image-description" rows="2"
-                                  placeholder="Enter image description" required></textarea>
-                        <div class="invalid-feedback">
-                          Please provide an image description.
-                        </div>
-                      </div>
 
                       <div class="mb-3">
                         <label class="form-label small">Image Prompt</label>
@@ -233,20 +224,22 @@
                         </div>
                       </div>
                       
-                      <div class="form-check form-switch">
-                        <input class="form-check-input gallery-image-featured" type="checkbox" role="switch">
-                        <label class="form-check-label small">Featured Image</label>
+                      <div class="text-end">
+                        <button type="button" class="btn btn-primary btn-sm save-gallery-image">
+                          <i class="bi bi-save me-1"></i> Save Image
+                        </button>
                       </div>
                     </div>
                   </div>
                 </div>
-                <!-- End Single Image Item -->
               </div>
               
-              <!-- No Images Message -->
-              <div id="noGalleryImages" class="text-center py-4 text-muted">
-                <i class="bi bi-images fs-3 d-block mb-2"></i>
-                <p class="mb-0">No images added yet. Click "Add Image" to get started.</p>
+              <!-- Saved Gallery Images Container -->
+              <div id="savedGalleryImagesContainer" class="mt-4 border-top pt-3 d-none">
+                <h6 class="fw-semibold mb-3">Saved Images</h6>
+                <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3" id="savedImagesGrid">
+                  <!-- Saved images will appear here -->
+                </div>
               </div>
             </div>
             
@@ -533,13 +526,13 @@
               
               <!-- Blog Entries Container -->
               <div id="blogEntriesContainer">
-                <!-- Blog Entry 1 -->
+                <!-- Single Blog Entry Form -->
                 <div class="blog-entry card shadow-sm border mb-4">
                   <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-semibold">Blog 1</h6>
+                    <h6 class="mb-0 fw-semibold">Add New Blog</h6>
                     <div class="form-check form-switch">
-                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog1Lead" checked>
-                      <label class="form-check-label small" for="blog1Lead">Lead Blog</label>
+                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blogLeadToggle">
+                      <label class="form-check-label small" for="blogLeadToggle">Lead Blog</label>
                     </div>
                   </div>
                   <div class="card-body">
@@ -547,12 +540,12 @@
                       <!-- Blog Image -->
                       <div class="col-md-4 mb-3 mb-md-0">
                         <label class="form-label small">Blog Image</label>
-                        <input type="file" class="form-control form-control-sm blog-image-upload" 
+                        <input type="file" class="form-control form-control-sm" id="blogImageUpload" 
                                accept="image/*" required>
                         <div class="invalid-feedback">
                           Please select a blog image.
                         </div>
-                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2" id="blogImagePreview">
                           <div class="d-flex align-items-center justify-content-center text-muted">
                             <i class="bi bi-image me-2"></i> No image
                           </div>
@@ -563,171 +556,39 @@
                       <div class="col-md-8">
                         <div class="mb-3">
                           <label class="form-label small">Blog Title</label>
-                          <input type="text" class="form-control form-control-sm blog-title" 
+                          <input type="text" class="form-control form-control-sm" id="blogTitle" 
                                  placeholder="Enter blog title" required>
                           <div class="invalid-feedback">
                             Please provide a blog title.
                           </div>
                         </div>
                         
-                        <div class="mb-0">
-                          <label class="form-label small">Publication Date</label>
-                          <input type="date" class="form-control form-control-sm blog-date" required>
+                        <div class="mb-3">
+                          <label class="form-label small">Blog Content</label>
+                          <textarea class="form-control form-control-sm" id="blogContent" 
+                                 rows="3" placeholder="Enter blog content" required></textarea>
                           <div class="invalid-feedback">
-                            Please provide a publication date.
+                            Please provide blog content.
                           </div>
+                        </div>
+                        
+                        <div class="text-end mt-3">
+                          <button type="button" class="btn btn-primary btn-sm" id="saveBlogBtn">
+                            <i class="bi bi-plus-circle me-1"></i> Save Blog
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <!-- Blog Entry 2 -->
-                <div class="blog-entry card shadow-sm border mb-4">
-                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-semibold">Blog 2</h6>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog2Lead">
-                      <label class="form-check-label small" for="blog2Lead">Lead Blog</label>
+                <!-- Blog Preview Container -->
+                <div id="blogPreviewContainer" class="mt-4 d-none">
+                  <h6 class="fw-semibold border-bottom pb-2 mb-3">Saved Blogs</h6>
+                  <div id="savedBlogsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <!-- Saved blogs will appear here -->
                     </div>
                   </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <!-- Blog Image -->
-                      <div class="col-md-4 mb-3 mb-md-0">
-                        <label class="form-label small">Blog Image</label>
-                        <input type="file" class="form-control form-control-sm blog-image-upload" 
-                               accept="image/*" required>
-                        <div class="invalid-feedback">
-                          Please select a blog image.
-                        </div>
-                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
-                          <div class="d-flex align-items-center justify-content-center text-muted">
-                            <i class="bi bi-image me-2"></i> No image
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Blog Details -->
-                      <div class="col-md-8">
-                        <div class="mb-3">
-                          <label class="form-label small">Blog Title</label>
-                          <input type="text" class="form-control form-control-sm blog-title" 
-                                 placeholder="Enter blog title" required>
-                          <div class="invalid-feedback">
-                            Please provide a blog title.
-                          </div>
-                        </div>
-                        
-                        <div class="mb-0">
-                          <label class="form-label small">Publication Date</label>
-                          <input type="date" class="form-control form-control-sm blog-date" required>
-                          <div class="invalid-feedback">
-                            Please provide a publication date.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Blog Entry 3 -->
-                <div class="blog-entry card shadow-sm border mb-4">
-                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-semibold">Blog 3</h6>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog3Lead">
-                      <label class="form-check-label small" for="blog3Lead">Lead Blog</label>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <!-- Blog Image -->
-                      <div class="col-md-4 mb-3 mb-md-0">
-                        <label class="form-label small">Blog Image</label>
-                        <input type="file" class="form-control form-control-sm blog-image-upload" 
-                               accept="image/*" required>
-                        <div class="invalid-feedback">
-                          Please select a blog image.
-                        </div>
-                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
-                          <div class="d-flex align-items-center justify-content-center text-muted">
-                            <i class="bi bi-image me-2"></i> No image
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Blog Details -->
-                      <div class="col-md-8">
-                        <div class="mb-3">
-                          <label class="form-label small">Blog Title</label>
-                          <input type="text" class="form-control form-control-sm blog-title" 
-                                 placeholder="Enter blog title" required>
-                          <div class="invalid-feedback">
-                            Please provide a blog title.
-                          </div>
-                        </div>
-                        
-                        <div class="mb-0">
-                          <label class="form-label small">Publication Date</label>
-                          <input type="date" class="form-control form-control-sm blog-date" required>
-                          <div class="invalid-feedback">
-                            Please provide a publication date.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- Blog Entry 4 -->
-                <div class="blog-entry card shadow-sm border mb-4">
-                  <div class="card-header bg-white py-2 d-flex justify-content-between align-items-center">
-                    <h6 class="mb-0 fw-semibold">Blog 4</h6>
-                    <div class="form-check form-switch">
-                      <input class="form-check-input blog-lead-toggle" type="checkbox" id="blog4Lead">
-                      <label class="form-check-label small" for="blog4Lead">Lead Blog</label>
-                    </div>
-                  </div>
-                  <div class="card-body">
-                    <div class="row">
-                      <!-- Blog Image -->
-                      <div class="col-md-4 mb-3 mb-md-0">
-                        <label class="form-label small">Blog Image</label>
-                        <input type="file" class="form-control form-control-sm blog-image-upload" 
-                               accept="image/*" required>
-                        <div class="invalid-feedback">
-                          Please select a blog image.
-                        </div>
-                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2">
-                          <div class="d-flex align-items-center justify-content-center text-muted">
-                            <i class="bi bi-image me-2"></i> No image
-                          </div>
-                        </div>
-                      </div>
-                      
-                      <!-- Blog Details -->
-                      <div class="col-md-8">
-                        <div class="mb-3">
-                          <label class="form-label small">Blog Title</label>
-                          <input type="text" class="form-control form-control-sm blog-title" 
-                                 placeholder="Enter blog title" required>
-                          <div class="invalid-feedback">
-                            Please provide a blog title.
-                          </div>
-                        </div>
-                        
-                        <div class="mb-0">
-                          <label class="form-label small">Publication Date</label>
-                          <input type="date" class="form-control form-control-sm blog-date" required>
-                          <div class="invalid-feedback">
-                            Please provide a publication date.
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
             
@@ -780,6 +641,43 @@
       opacity: 1;
     }
   }
+  
+  /* Blog Preview Styles */
+  .blog-preview-card {
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  .blog-preview-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+  }
+  
+  .blog-card-gradient {
+    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    height: 40px;
+  }
+  
+  .blog-preview-card .btn-close {
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    padding: 0.4rem;
+    width: auto;
+    height: auto;
+  }
+  
+  .blog-preview-card:hover .btn-close {
+    opacity: 1;
+  }
+  
+  .blog-preview-card .card-img-top {
+    transition: transform 0.3s ease;
+  }
+  
+  .blog-preview-card:hover .card-img-top {
+    transform: scale(1.05);
+  }
 </style>
 
 <script>
@@ -798,18 +696,19 @@
     const categoryForm = document.getElementById('newCategoryForm');
     const sectionForms = document.getElementById('sectionForms');
     let createdCategoryId = null;
+    let createdCategory = null; // Store the full category object
     
     // Add Bootstrap tab event handlers
     const tabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
     tabList.forEach(tabEl => {
       tabEl.addEventListener('shown.bs.tab', event => {
-        const targetTab = event.target.getAttribute('data-bs-target');
+          const targetTab = event.target.getAttribute('data-bs-target');
         console.log('Tab activated:', targetTab);
-        
+          
         // Set category ID on all forms when tabs change
-        if (createdCategoryId) {
-          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-            input.value = createdCategoryId;
+          if (createdCategoryId) {
+      document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+        input.value = createdCategoryId;
           });
         }
       });
@@ -843,8 +742,8 @@
               }
             }
           }
+        });
       });
-    });
       
       // Start observing the gallery tab content
       observer.observe(galleryTabContent, {
@@ -877,90 +776,502 @@
     
     // Function to initialize image previews for a specific tab
     function initializeImagePreviews(tabId) {
-      let fileInputs = [];
+      console.log('Initializing image previews for tab:', tabId);
       
-      // Select the appropriate file inputs based on the active tab
-      switch(tabId) {
-        case '#hero':
-          fileInputs = document.querySelectorAll('#hero .form-control[type="file"]');
-          break;
-        case '#gallery':
-          fileInputs = document.querySelectorAll('#gallery .form-control[type="file"]');
-          break;
-        case '#why':
-          fileInputs = document.querySelectorAll('#why .form-control[type="file"]');
-          break;
-        case '#text-to-anything':
-          fileInputs = document.querySelectorAll('#text-to-anything .form-control[type="file"]');
-          break;
-        case '#blogs':
-          fileInputs = document.querySelectorAll('#blogs .form-control[type="file"]');
-          break;
-        default:
-          return;
-      }
+      // Select all file inputs within the tab
+      const fileInputs = document.querySelectorAll(`${tabId} input[type="file"]`);
+      console.log(`Found ${fileInputs.length} file inputs`);
       
-      // Add change event listeners to file inputs
-      fileInputs.forEach(input => {
-        // Remove existing event listeners to avoid duplicates
-        const newInput = input.cloneNode(true);
-        input.parentNode.replaceChild(newInput, input);
+      // Add change event listeners to each file input
+      fileInputs.forEach((input, index) => {
+        console.log(`Setting up file input ${index + 1} in ${tabId}`);
         
-        // Add new event listener
-        newInput.addEventListener('change', function(event) {
-          const file = this.files[0];
-          if (!file) return;
-          
-          // Find the closest preview container
-          let previewContainer;
-          if (this.closest('.col-md-4')) {
-            previewContainer = this.closest('.col-md-4').querySelector('.image-preview');
-          } else if (this.closest('.mb-3')) {
-            previewContainer = this.closest('.mb-3').nextElementSibling;
+        // Find the closest preview container
+        let previewContainer;
+        
+        // Try different strategies to find the preview container
+        if (tabId === '#hero') {
+          previewContainer = document.querySelector('#hero .image-preview');
+        } else if (input.closest('.col-md-4')) {
+          previewContainer = input.closest('.col-md-4').querySelector('.image-preview');
+        } else if (input.nextElementSibling && input.nextElementSibling.classList.contains('image-preview')) {
+          previewContainer = input.nextElementSibling;
+        } else if (input.closest('.mb-3') && input.closest('.mb-3').nextElementSibling) {
+          previewContainer = input.closest('.mb-3').nextElementSibling;
+        } else {
+          // Last resort - find nearby image-preview by traversing up and then down
+          const parent = input.closest('.card-body') || input.closest('form') || input.parentElement;
+          if (parent) {
+            previewContainer = parent.querySelector('.image-preview');
           }
+        }
+        
+        if (previewContainer) {
+          console.log(`Found preview container for input ${index + 1}`);
           
-          if (previewContainer) {
-            const objectUrl = URL.createObjectURL(file);
-            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
-          }
-        });
+          // Remove existing event listeners by cloning and replacing
+          const newInput = input.cloneNode(true);
+          input.parentNode.replaceChild(newInput, input);
+          
+          // Add the new change event listener
+          newInput.addEventListener('change', function(event) {
+            console.log(`File input ${index + 1} changed:`, this.files);
+            const file = this.files[0];
+            
+            if (file) {
+              // Create object URL for preview
+              const objectUrl = URL.createObjectURL(file);
+              console.log('Created object URL:', objectUrl);
+              
+              // Update preview with consistent styling
+              previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
+              
+              // Clean up object URL when input changes again
+              const nextChangeHandler = () => {
+                URL.revokeObjectURL(objectUrl);
+                newInput.removeEventListener('change', nextChangeHandler);
+              };
+              
+              newInput.addEventListener('change', nextChangeHandler);
+            } else {
+              // Reset preview if no file selected
+              previewContainer.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                  <i class="bi bi-image me-2"></i> No image selected
+                </div>
+              `;
+            }
+          });
+        } else {
+          console.warn(`No preview container found for file input ${index + 1} in ${tabId}`);
+        }
       });
       
-      // Re-initialize tab-specific functionality
+      // Tab-specific initialization
       if (tabId === '#gallery') {
-        const addGalleryImageBtn = document.getElementById('addGalleryImage');
-        if (addGalleryImageBtn) {
-          // Remove existing event listener
-          const newBtn = addGalleryImageBtn.cloneNode(true);
-          addGalleryImageBtn.parentNode.replaceChild(newBtn, addGalleryImageBtn);
+        // Initialize Save Gallery Image buttons
+        document.querySelectorAll(`${tabId} .save-gallery-image`).forEach(saveButton => {
+          // Remove existing event listeners by cloning and replacing
+          const newSaveButton = saveButton.cloneNode(true);
+          saveButton.parentNode.replaceChild(newSaveButton, saveButton);
           
-          // Add new event listener
-          newBtn.addEventListener('click', function() {
-            addGalleryImageItem();
-          });
-        }
-      } else if (tabId === '#blogs') {
-        // Reinitialize lead blog toggles
-        const blogLeadToggles = document.querySelectorAll('#blogs .blog-lead-toggle');
-        blogLeadToggles.forEach(toggle => {
-          // Remove existing event listener
-          const newToggle = toggle.cloneNode(true);
-          toggle.parentNode.replaceChild(newToggle, toggle);
-          
-          // Add new event listener
-          newToggle.addEventListener('change', function() {
-            if (this.checked) {
-              blogLeadToggles.forEach(otherToggle => {
-                if (otherToggle !== this && otherToggle.id !== this.id) {
-                  otherToggle.checked = false;
+          // Add click event listener to the new button
+          newSaveButton.addEventListener('click', async function() {
+            // Get the gallery image item container
+            const galleryItem = this.closest('.gallery-image-item');
+            
+            if (!galleryItem) {
+              console.error('Gallery item container not found');
+              return;
+            }
+            
+            // Get form values
+            const fileInput = galleryItem.querySelector('.gallery-image-upload');
+            const titleInput = galleryItem.querySelector('.gallery-image-title');
+            const promptInput = galleryItem.querySelector('.gallery-image-prompt');
+            const previewContainer = galleryItem.querySelector('.image-preview');
+            
+            // Apply Bootstrap validation
+            galleryItem.classList.add('was-validated');
+            
+            // Validate required fields
+            if (!fileInput || !titleInput) {
+              console.error('Required form elements not found');
+              return;
+            }
+            
+            // Validate input values
+            let isValid = true;
+            
+            // Check if image is selected or already exists
+            const imageElement = previewContainer.querySelector('img');
+            if (!imageElement && (!fileInput.files || fileInput.files.length === 0)) {
+              fileInput.setCustomValidity('Please select an image');
+              isValid = false;
+            } else {
+              fileInput.setCustomValidity('');
+            }
+            
+            // Check title
+            if (!titleInput.value.trim()) {
+              titleInput.setCustomValidity('Please provide a title');
+              isValid = false;
+            } else {
+              titleInput.setCustomValidity('');
+            }
+            
+            // If validation failed, stop here
+            if (!isValid) {
+              return;
+            }
+            
+            // Show loading state
+            const originalBtnText = this.innerHTML;
+            this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+            this.disabled = true;
+            
+            try {
+              // Determine image URL - either from existing element or upload new file
+              let imageUrl;
+              
+              if (fileInput.files && fileInput.files.length > 0) {
+                // Upload the file to Cloudinary
+                const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+                imageUrl = await uploadImage(fileInput.files[0], token);
+                
+                if (!imageUrl) {
+                  throw new Error('Failed to upload image');
                 }
-              });
+              } else {
+                throw new Error('No image source available');
+              }
+              
+              // Create gallery image data object with Cloudinary URL
+              const imageData = {
+                url: imageUrl,
+                title: titleInput.value,
+                prompt: promptInput ? promptInput.value : '',
+                timestamp: new Date().getTime()
+              };
+              
+              // Display the saved image
+              displaySavedImage(imageData);
+              
+              // Reset form fields
+              if (titleInput) titleInput.value = '';
+              if (promptInput) promptInput.value = '';
+              
+              // Reset image preview
+              if (previewContainer) {
+                previewContainer.innerHTML = `
+                  <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                    <i class="bi bi-image me-2"></i> No image selected
+                  </div>
+                `;
+              }
+              
+              // Clear file input
+              if (fileInput) {
+                fileInput.value = '';
+              }
+              
+              // Show success message
+              const successAlert = document.createElement('div');
+              successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+              successAlert.innerHTML = `
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <div>
+                  <strong>Image saved!</strong>
+                  <p class="mb-0">The image has been added to the gallery.</p>
+                </div>
+              `;
+              
+              // Add to alert container
+              const alertContainer = document.querySelector('.alert-container');
+              if (alertContainer) {
+                alertContainer.appendChild(successAlert);
+                
+                // Hide after 3 seconds
+                setTimeout(() => {
+                  successAlert.remove();
+                }, 3000);
+              }
+            } catch (error) {
+              console.error('Error saving image:', error);
+              
+              // Show error alert
+              const errorAlert = document.createElement('div');
+              errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+              errorAlert.innerHTML = `
+                <i class="bi bi-exclamation-circle-fill me-2"></i>
+                <div>
+                  <strong>Error!</strong>
+                  <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
+                </div>
+              `;
+              
+              const alertContainer = document.querySelector('.alert-container');
+              if (alertContainer) {
+                alertContainer.appendChild(errorAlert);
+                
+                setTimeout(() => {
+                  errorAlert.remove();
+                }, 5000);
+              }
+            } finally {
+              // Restore button state
+              this.innerHTML = originalBtnText;
+              this.disabled = false;
             }
           });
         });
+      } else if (tabId === '#why') {
+        // Initialize Why Use Tool specific image preview
+        const whyToolImage = document.querySelector('#whyUseToolImage');
+        const whyToolPreview = document.querySelector('#whyUseToolImagePreview');
+        
+        if (whyToolImage && whyToolPreview) {
+          whyToolImage.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+              const objectUrl = URL.createObjectURL(file);
+              whyToolPreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Why Use Tool Preview">`;
+              
+              // Clean up on next change
+              whyToolImage.addEventListener('change', function() {
+                URL.revokeObjectURL(objectUrl);
+              }, { once: true });
+            } else {
+              whyToolPreview.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image fs-3 me-2"></i> 
+                  <span>Preview will appear here</span>
+                </div>
+              `;
+            }
+          });
+        }
+      } else if (tabId === '#text-to-anything') {
+        // Initialize Text to Anything specific image previews
+        const mainImage = document.querySelector('#textToAnythingMainImage');
+        const mainImagePreview = document.querySelector('#textToAnythingMainImagePreview');
+        
+        if (mainImage && mainImagePreview) {
+          mainImage.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+              const objectUrl = URL.createObjectURL(file);
+              mainImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Main Banner Preview">`;
+              
+              // Clean up on next change
+              mainImage.addEventListener('change', function() {
+                URL.revokeObjectURL(objectUrl);
+              }, { once: true });
+            } else {
+              mainImagePreview.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image fs-3 me-2"></i> 
+                  <span>Banner preview will appear here</span>
+                </div>
+              `;
+            }
+          });
+        }
       }
     }
     
+    // Initialize image previews for all tabs on page load
+    ['#hero', '#gallery', '#why', '#text-to-anything', '#blogs'].forEach(tabId => {
+      initializeImagePreviews(tabId);
+    });
+
+    // Initialize Save Gallery Image buttons
+    document.querySelectorAll('.save-gallery-image').forEach(saveButton => {
+      saveButton.addEventListener('click', async function() {
+        // Get the gallery image item container
+        const galleryItem = this.closest('.gallery-image-item');
+        
+        if (!galleryItem) {
+          console.error('Gallery item container not found');
+          return;
+        }
+        
+        // Get form values
+        const fileInput = galleryItem.querySelector('.gallery-image-upload');
+        const titleInput = galleryItem.querySelector('.gallery-image-title');
+        const descriptionInput = galleryItem.querySelector('.gallery-image-description');
+        const promptInput = galleryItem.querySelector('.gallery-image-prompt');
+        const featuredCheckbox = galleryItem.querySelector('.gallery-image-featured');
+        const previewContainer = galleryItem.querySelector('.image-preview');
+        
+        // Apply Bootstrap validation
+        galleryItem.classList.add('was-validated');
+        
+        // Validate required fields
+        if (!fileInput || !titleInput || !descriptionInput) {
+          console.error('Required form elements not found');
+          return;
+        }
+        
+        // Validate input values
+        let isValid = true;
+        
+        // Check if image is selected or already exists
+        const imageElement = previewContainer.querySelector('img');
+        if (!imageElement && (!fileInput.files || fileInput.files.length === 0)) {
+          fileInput.setCustomValidity('Please select an image');
+          isValid = false;
+        } else {
+          fileInput.setCustomValidity('');
+        }
+        
+        // Check title
+        if (!titleInput.value.trim()) {
+          titleInput.setCustomValidity('Please provide a title');
+          isValid = false;
+        } else {
+          titleInput.setCustomValidity('');
+        }
+        
+        // If validation failed, stop here
+        if (!isValid) {
+          return;
+        }
+        
+        // Show loading state
+        const originalBtnText = this.innerHTML;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        this.disabled = true;
+        
+        try {
+          // Determine image URL - either from existing element or upload new file
+          let imageUrl;
+          
+          if (fileInput.files && fileInput.files.length > 0) {
+            // Upload the file to Cloudinary
+            const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+            imageUrl = await uploadImage(fileInput.files[0], token);
+            
+            if (!imageUrl) {
+              throw new Error('Failed to upload image');
+            }
+          } else {
+            throw new Error('No image source available');
+          }
+          
+          // Create gallery image data object with Cloudinary URL
+          const imageData = {
+            url: imageUrl,
+            title: titleInput.value,
+            prompt: promptInput ? promptInput.value : '',
+            timestamp: new Date().getTime()
+          };
+          
+          // Display the saved image
+          displaySavedImage(imageData);
+          
+          // Reset form fields
+          if (titleInput) titleInput.value = '';
+          if (descriptionInput) descriptionInput.value = '';
+          if (promptInput) promptInput.value = '';
+          if (featuredCheckbox) featuredCheckbox.checked = false;
+          
+          // Reset image preview
+          if (previewContainer) {
+            previewContainer.innerHTML = `
+              <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                <i class="bi bi-image me-2"></i> No image selected
+              </div>
+            `;
+          }
+          
+          // Clear file input
+          if (fileInput) {
+            fileInput.value = '';
+          }
+          
+          // Show success message
+          const successAlert = document.createElement('div');
+          successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+          successAlert.innerHTML = `
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>
+              <strong>Image saved!</strong>
+              <p class="mb-0">The image has been added to the gallery.</p>
+            </div>
+          `;
+          
+          // Add to alert container
+          const alertContainer = document.querySelector('.alert-container');
+          if (alertContainer) {
+            alertContainer.appendChild(successAlert);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+              successAlert.remove();
+            }, 3000);
+          }
+        } catch (error) {
+          console.error('Error saving image:', error);
+          
+          // Show error alert
+          const errorAlert = document.createElement('div');
+          errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+          errorAlert.innerHTML = `
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            <div>
+              <strong>Error!</strong>
+              <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
+            </div>
+          `;
+          
+          const alertContainer = document.querySelector('.alert-container');
+          if (alertContainer) {
+            alertContainer.appendChild(errorAlert);
+            
+            setTimeout(() => {
+              errorAlert.remove();
+            }, 5000);
+          }
+        } finally {
+          // Restore button state
+          this.innerHTML = originalBtnText;
+          this.disabled = false;
+        }
+      });
+    });
+    
+    // Function to display a saved image in the saved images container
+    function displaySavedImage(imageData) {
+      // Get the saved images container
+      const savedImagesContainer = document.getElementById('savedGalleryImagesContainer');
+      const savedImagesGrid = document.getElementById('savedImagesGrid');
+      
+      if (!savedImagesContainer || !savedImagesGrid) {
+        console.error('Saved images container not found');
+        return;
+      }
+      
+      // Create a card for the saved image
+      const imageCard = document.createElement('div');
+      imageCard.className = 'col';
+      imageCard.dataset.timestamp = imageData.timestamp;
+      
+      imageCard.innerHTML = `
+        <div class="card h-100 shadow-sm">
+          <div class="position-relative">
+            <img src="${imageData.url}" class="card-img-top" alt="${imageData.title}" style="height: 180px; object-fit: cover;">
+            ${imageData.featured ? '<span class="position-absolute top-0 start-0 badge bg-primary m-2">Featured</span>' : ''}
+            <button type="button" class="btn-close position-absolute top-0 end-0 m-2 bg-white remove-saved-image" 
+                  aria-label="Remove image"></button>
+          </div>
+          <div class="card-body">
+            <h6 class="card-title">${imageData.title}</h6>
+            ${imageData.prompt ? `<small class="text-muted d-block">Prompt: ${imageData.prompt}</small>` : ''}
+          </div>
+        </div>
+      `;
+      
+      // Add event listener for remove button
+      const removeBtn = imageCard.querySelector('.remove-saved-image');
+      if (removeBtn) {
+        removeBtn.addEventListener('click', function() {
+          imageCard.remove();
+          
+          // Check if any saved images remain
+          if (savedImagesGrid.children.length === 0) {
+            savedImagesContainer.classList.add('d-none');
+          }
+        });
+      }
+      
+      // Add the card to the grid
+      savedImagesGrid.appendChild(imageCard);
+      
+      // Show the saved images container
+      savedImagesContainer.classList.remove('d-none');
+    }
+
     // Function to switch tabs using Bootstrap's API
     function switchToTab(tabId) {
       console.log('=== Tab Switching Debug ===');
@@ -1013,7 +1324,7 @@
         console.error('Could not find required elements for tab switching');
       }
     }
-
+    
     // Function to initialize form submission for a specific tab
     function initializeFormSubmission(tabId) {
       let form;
@@ -1037,6 +1348,8 @@
         default:
           return;
       }
+
+      console.log('Form:', form);
       
       if (form) {
         console.log('Initializing form submission for tab:', tabId);
@@ -1053,12 +1366,7 @@
           event.preventDefault();
           console.log('Form submitted for tab:', tabId);
           
-          if (!newForm.checkValidity()) {
-            event.stopPropagation();
-            newForm.classList.add('was-validated');
-            return;
-          }
-          
+          // Remove form validation check for "Save Gallery" button
           // Show loading state
           const submitBtn = newForm.querySelector('button[type="submit"]');
           const originalBtnText = submitBtn.innerHTML;
@@ -1126,6 +1434,35 @@
                 sectionName = 'Blogs';
                 sectionSlug = 'blogs';
                 order = 5;
+                
+                // Check for exactly 4 blogs before creating any section
+                if (savedBlogs.length !== 4) {
+                  // Wrong number of blogs - show validation error
+                  const errorAlert = document.createElement('div');
+                  errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+                  errorAlert.innerHTML = `
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    <div>
+                      <strong>Error!</strong>
+                      <p class="mb-0">You must add exactly 4 blogs before saving this section. You currently have ${savedBlogs.length} blog(s).</p>
+                    </div>
+                  `;
+                  
+                  const alertContainer = newForm.querySelector('.alert-container') || document.querySelector('.alert-container');
+                  if (alertContainer) {
+                    alertContainer.appendChild(errorAlert);
+                    
+                    setTimeout(() => {
+                      errorAlert.remove();
+                    }, 5000);
+                  }
+                  
+                  // Restore button state
+                  submitBtn.innerHTML = originalBtnText;
+                  submitBtn.disabled = false;
+                  
+                  return; // Stop form submission before creating section
+                }
                 break;
             }
             
@@ -1164,7 +1501,7 @@
             // Process images and create content based on the tab
             let contentData = {
               section: sectionResult._id,
-              slug: `${title.toLowerCase().replace(/\s+/g, '-')}-${sectionSlug}`,
+              slug: `${window.createdCategory?.slug || 'category'}-${sectionSlug}`,
               title: title,
               subtitle: description,
               images: [],
@@ -1177,32 +1514,56 @@
               // Process hero image
               const heroImage = document.getElementById('heroImage');
               if (heroImage && heroImage.files.length > 0) {
-                const imageUrl = await uploadImage(heroImage.files[0], token);
-                if (imageUrl) {
-                  contentData.images.push({
-                    url: imageUrl,
-                    alt: title,
-                    width: 1200,
-                    height: 600
-                  });
+                  const imageUrl = await uploadImage(heroImage.files[0], token);
+                  if (imageUrl) {
+                    contentData.images.push({
+                      url: imageUrl,
+                      alt: title,
+                      width: 1200,
+                      height: 600
+                    });
                 }
               }
             } else if (tabId === '#gallery') {
-              // Process gallery images
+              // Process gallery images from the saved images container
+              const savedImages = document.querySelectorAll('#savedImagesGrid .col');
+              console.log('Found saved images:', savedImages.length);
+              
+              if (savedImages.length > 0) {
+                // Process images from the savedImagesGrid
+                for (const savedImage of savedImages) {
+                  const imageElement = savedImage.querySelector('img');
+                  const imageTitle = savedImage.querySelector('.card-title');
+                  const imagePrompt = savedImage.querySelector('.text-muted');
+                  
+                  if (imageElement && imageElement.src) {
+                    contentData.images.push({
+                      url: imageElement.src,
+                      alt: 'image gallery alt',
+                      title: imageTitle ? imageTitle.textContent : '',
+                      prompt: imagePrompt ? imagePrompt.textContent.replace('Prompt: ', '') : '',
+                      width: 800,
+                      height: 600
+                    });
+                  }
+                }
+                console.log('Images to save:', contentData.images);
+              } else {
+                // Fallback to legacy gallery items if no saved images found
               const galleryItems = document.querySelectorAll('.gallery-image-item');
               for (const item of galleryItems) {
                 const fileInput = item.querySelector('.gallery-image-upload');
                 if (fileInput && fileInput.files.length > 0) {
                   const imageUrl = await uploadImage(fileInput.files[0], token);
                   if (imageUrl) {
-                    contentData.images.push({
-                      url: imageUrl,
+                  contentData.images.push({
+                    url: imageUrl,
                       alt: item.querySelector('.gallery-image-title')?.value,
                       title: item.querySelector('.gallery-image-title')?.value,
                       prompt: item.querySelector('.gallery-image-prompt')?.value,
-                      width: 800,
-                      height: 600
-                    });
+                    width: 800,
+                    height: 600
+                  });
                   }
                 } else if (item.querySelector('.image-preview img')) {
                   // Handle existing images
@@ -1215,6 +1576,7 @@
                     height: 600
                   };
                   contentData.images.push(existingImage);
+                  }
                 }
               }
             } else if (tabId === '#why') {
@@ -1284,30 +1646,19 @@
                 }
               }
             } else if (tabId === '#blogs') {
-              // Process blogs
-              const blogEntries = document.querySelectorAll('.blog-entry');
-              for (let i = 0; i < blogEntries.length; i++) {
-                const entry = blogEntries[i];
-                const fileInput = entry.querySelector('.blog-image-upload');
-                const titleInput = entry.querySelector('.blog-title');
-                const dateInput = entry.querySelector('.blog-date');
-                const leadToggle = entry.querySelector('.blog-lead-toggle');
-                
-                if (fileInput && fileInput.files.length > 0 && titleInput && dateInput) {
-                  const imageUrl = await uploadImage(fileInput.files[0], token);
-                  if (imageUrl) {
-                    contentData.fields.push({
-                      type: `blog_${i + 1}`,
-                      key: `blog_${i + 1}`,
-                      value: titleInput?.value,
-                      url: imageUrl,
-                      date: dateInput?.value,
-                      lead: leadToggle.checked,
-                      order: i
-                    });
+              // Process saved blogs
+              // Add blogs to content data
+              savedBlogs.forEach(blog => {
+                contentData.fields.push({
+                  name: 'blog',
+                  value: {
+                    title: blog.title,
+                    content: blog.content,
+                    url: blog.imageUrl,
+                    isLead: blog.isLead
                   }
-                }
-              }
+                });
+              });
             }
             
             // Create content
@@ -1329,7 +1680,7 @@
             
             // If it's the hero section, switch to gallery
             if (tabId === '#hero') {
-              // Show success message
+            // Show success message
               const successAlert = document.createElement('div');
               successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
               successAlert.innerHTML = `
@@ -1485,7 +1836,7 @@
             <div class="mb-3">
               <label class="form-label small">Upload Image</label>
               <input type="file" class="form-control form-control-sm gallery-image-upload" 
-                     accept="image/*" ${imageData ? '' : 'required'}>
+                     accept="image/*" required>
               <div class="invalid-feedback">
                 Please select an image.
               </div>
@@ -1494,7 +1845,7 @@
               ${imageData ? 
                 `<img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt || 'Gallery image'}">` :
                 `<div class="d-flex align-items-center justify-content-center text-muted">
-                <i class="bi bi-image me-2"></i> No image
+                  <i class="bi bi-image me-2"></i> No image
                 </div>`
               }
             </div>
@@ -1566,23 +1917,23 @@
       
       // Add event listener for image preview if no existing image
       if (!imageData) {
-      const fileInput = newItem.querySelector('.gallery-image-upload');
-      const previewContainer = newItem.querySelector('.image-preview');
-      
-      if (fileInput && previewContainer) {
-        fileInput.addEventListener('change', function(event) {
-          const file = event.target.files[0];
-          if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
-          } else {
-            previewContainer.innerHTML = `
-              <div class="d-flex align-items-center justify-content-center text-muted">
-                <i class="bi bi-image me-2"></i> No image
-              </div>
-            `;
-          }
-        });
+        const fileInput = newItem.querySelector('.gallery-image-upload');
+        const previewContainer = newItem.querySelector('.image-preview');
+        
+        if (fileInput && previewContainer) {
+          fileInput.addEventListener('change', function(event) {
+            const file = event.target.files[0];
+            if (file) {
+              const objectUrl = URL.createObjectURL(file);
+              previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
+            } else {
+              previewContainer.innerHTML = `
+                <div class="d-flex align-items-center justify-content-center text-muted">
+                  <i class="bi bi-image me-2"></i> No image
+                </div>
+              `;
+            }
+          });
         }
       }
     }
@@ -1611,9 +1962,9 @@
         if (!categoryForm.checkValidity()) {
           event.stopPropagation();
           categoryForm.classList.add('was-validated');
-          return;
-        }
-        
+        return;
+      }
+      
         // Show loading state
         const submitBtn = categoryForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
@@ -1682,6 +2033,9 @@
             
           // Store the category ID for section creation
           createdCategoryId = createdCategory._id || createdCategory.id;
+          
+          // Store the full category object
+          window.createdCategory = createdCategory;
             
           // Set categoryId for all forms
           document.querySelectorAll('input[name="categoryId"]').forEach(input => {
@@ -1721,7 +2075,7 @@
         }
       });
     }
-
+    
     // Update fetchGalleryContent function to include more debugging
     async function fetchGalleryContent(contentId) {
       try {
@@ -1814,7 +2168,7 @@
         alert('Error loading gallery content: ' + error.message);
       }
     }
-
+    
     // Add image preview functionality for category image
     const categoryImageInput = document.getElementById('categoryImage');
     const categoryImagePreview = document.querySelector('.image-preview');
@@ -1857,10 +2211,10 @@
           // Create object URL for preview
           const objectUrl = URL.createObjectURL(file);
           
-          // Update preview
-          heroImagePreview.innerHTML = `
+          // Update preview - using object-fit-cover to maintain aspect ratio and fill container
+          {{!-- heroImagePreview.innerHTML = `
             <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Hero Preview">
-          `;
+          `; --}}
           
           // Clean up object URL when new file is selected
           heroImageInput.addEventListener('change', function() {
@@ -1869,12 +2223,434 @@
         } else {
           // Reset preview if no file selected
           heroImagePreview.innerHTML = `
-            <div class="d-flex align-items-center justify-content-center text-muted h-100">
-              <i class="bi bi-image me-2"></i> No image selected
-            </div>
+           <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Hero Preview">
+
           `;
         }
       });
     }
+    
+    // Direct event listener for Add Gallery Image button
+    const addGalleryImageBtn = document.getElementById('addGalleryImage');
+    const galleryImagesContainer = document.getElementById('galleryImagesContainer');
+    
+    if (addGalleryImageBtn && galleryImagesContainer) {
+      console.log('Setting up Add Gallery Image button');
+      
+      // Event listener for Add Gallery Image button removed
+    }
+
+    // Add click event for Hero Section save button
+    const heroSaveButton = document.querySelector('#heroSectionForm button[type="submit"]');
+    if (heroSaveButton) {
+      heroSaveButton.addEventListener('click', async function(event) {
+        // Prevent default form submission to handle it manually
+        event.preventDefault();
+        
+        const heroForm = document.getElementById('heroSectionForm');
+        
+        // Validate form
+        if (!heroForm.checkValidity()) {
+          event.stopPropagation();
+          heroForm.classList.add('was-validated');
+          return;
+        }
+        
+        // Show loading state
+        const originalBtnText = this.innerHTML;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        this.disabled = true;
+        
+        try {
+          // Get form values
+          const heroTitle = document.getElementById('heroTitle').value;
+          const heroDescription = document.getElementById('heroDescription').value;
+          const heroImage = document.getElementById('heroImage').files[0];
+          const categoryId = document.getElementById('categoryId').value;
+          
+          if (!categoryId) {
+            throw new Error('Category ID is missing. Please create a category first.');
+          }
+          
+          if (!heroImage) {
+            throw new Error('Please select an image for the hero section.');
+          }
+          
+          const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+          
+          // Upload hero image
+          const imageUrl = await uploadImage(heroImage, token);
+          
+          if (!imageUrl) {
+            throw new Error('Failed to upload hero image');
+          }
+          
+          // Create section
+          const sectionData = {
+            name: 'Hero Section',
+            slug: 'hero-section',
+            description: 'Hero section for the category',
+            category: categoryId,
+            isFolder: false,
+            order: 1,
+            isActive: true
+          };
+          
+          console.log('Creating section with data:', sectionData);
+          const sectionResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SECTIONS}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(sectionData)
+          });
+          
+          if (!sectionResponse.ok) {
+            const errorText = await sectionResponse.text();
+            console.error('Section creation failed:', errorText);
+            throw new Error('Failed to create section: ' + errorText);
+          }
+          
+          const sectionResult = await sectionResponse.json();
+          console.log('Hero section created:', sectionResult);
+          
+          // Create content for the section
+          const contentData = {
+            section: sectionResult._id,
+            slug: `${title.toLowerCase().replace(/\s+/g, '-')}-${sectionSlug}`,
+            title: heroTitle,
+            subtitle: heroDescription,
+            images: [{
+              url: imageUrl,
+              alt: heroTitle,
+              width: 1920,
+              height: 1080
+            }],
+            fields: [],
+            isActive: true
+          };
+          
+          console.log('Creating content with data:', contentData);
+          const contentResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(contentData)
+          });
+          
+          if (!contentResponse.ok) {
+            const errorText = await contentResponse.text();
+            console.error('Content creation failed:', errorText);
+            throw new Error('Failed to create content: ' + errorText);
+          }
+          
+          const contentResult = await contentResponse.json();
+          console.log('Hero content created:', contentResult);
+          
+          // Show success notification
+          const successAlert = document.createElement('div');
+          successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+          successAlert.innerHTML = `
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>
+              <strong>Hero Section saved successfully!</strong>
+              <p class="mb-0">Moving to Images Gallery section...</p>
+            </div>
+          `;
+          
+          // Add to alert container
+          const alertContainer = document.querySelector('.alert-container');
+          if (alertContainer) {
+            alertContainer.appendChild(successAlert);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+              successAlert.remove();
+            }, 3000);
+          }
+          
+          // Switch to gallery section
+          setTimeout(() => {
+            switchHeroToGallery();
+          }, 1000);
+          
+          // Reset form
+          heroForm.reset();
+          heroForm.classList.remove('was-validated');
+          
+          // Reset image preview
+          if (heroImagePreview) {
+            heroImagePreview.innerHTML = `
+              <div class="d-flex align-items-center justify-content-center text-muted h-100">
+                <i class="bi bi-image me-2"></i> No image selected
+              </div>
+            `;
+          }
+          
+        } catch (error) {
+          console.error('Error saving hero section:', error);
+          alert('Error saving hero section: ' + error.message);
+        } finally {
+          // Restore button state
+          this.innerHTML = originalBtnText;
+          this.disabled = false;
+        }
+      });
+    }
+    
+    // Initialize form submission for all section tabs
+    console.log('Initializing form submission for all section tabs');
+    
+    // Array of all tab IDs
+    const tabIds = ['#hero', '#gallery', '#why', '#text-to-anything', '#blogs'];
+    
+    // Blog functionality
+    const savedBlogs = [];
+    
+    // Initialize blog save button functionality
+    const initializeBlogFunctionality = () => {
+      const saveBlogBtn = document.getElementById('saveBlogBtn');
+      const blogImageUpload = document.getElementById('blogImageUpload');
+      const blogTitle = document.getElementById('blogTitle');
+      const blogContent = document.getElementById('blogContent');
+      const blogLeadToggle = document.getElementById('blogLeadToggle');
+      const blogImagePreview = document.getElementById('blogImagePreview');
+      const savedBlogsGrid = document.getElementById('savedBlogsGrid');
+      const blogPreviewContainer = document.getElementById('blogPreviewContainer');
+      
+      if (!saveBlogBtn || !blogImageUpload || !blogTitle || !blogContent || !savedBlogsGrid) {
+        console.error('Blog elements not found');
+        return;
+      }
+      
+      // Add image preview functionality
+      blogImageUpload.addEventListener('change', function(event) {
+        const file = this.files[0];
+        if (file) {
+          const objectUrl = URL.createObjectURL(file);
+          blogImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Blog Image Preview">`;
+        } else {
+          blogImagePreview.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center text-muted">
+              <i class="bi bi-image me-2"></i> No image
+            </div>
+          `;
+        }
+      });
+      
+      // Add save blog button functionality
+      saveBlogBtn.addEventListener('click', async function() {
+        // Validate form
+        if (!blogTitle.value.trim()) {
+          blogTitle.classList.add('is-invalid');
+          return;
+        } else {
+          blogTitle.classList.remove('is-invalid');
+        }
+        
+        if (!blogContent.value.trim()) {
+          blogContent.classList.add('is-invalid');
+          return;
+        } else {
+          blogContent.classList.remove('is-invalid');
+        }
+        
+        if (!blogImageUpload.files || blogImageUpload.files.length === 0) {
+          blogImageUpload.classList.add('is-invalid');
+          return;
+        } else {
+          blogImageUpload.classList.remove('is-invalid');
+        }
+        
+        // Show loading state
+        const originalBtnText = this.innerHTML;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
+        this.disabled = true;
+        
+        try {
+          // Upload image to Cloudinary
+          const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
+          const imageUrl = await uploadImage(blogImageUpload.files[0], token);
+          
+          if (!imageUrl) {
+            throw new Error('Failed to upload blog image');
+          }
+          
+          // Create blog data object
+          const blogData = {
+            title: blogTitle.value,
+            content: blogContent.value,
+            imageUrl: imageUrl,
+            isLead: blogLeadToggle.checked,
+            timestamp: new Date().getTime()
+          };
+          
+          // Add to saved blogs array
+          savedBlogs.push(blogData);
+          
+          // Create a preview card
+          const blogCard = document.createElement('div');
+          blogCard.className = 'col';
+          blogCard.innerHTML = `
+            <div class="card h-100 shadow-sm border-0 blog-preview-card">
+              <div class="position-relative overflow-hidden">
+                <img src="${blogData.imageUrl}" class="card-img-top" alt="${blogData.title}" style="height: 160px; object-fit: cover;">
+                ${blogData.isLead ? '<span class="position-absolute top-0 start-0 badge bg-primary m-2 py-2 px-3">Lead Blog</span>' : ''}
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 bg-white rounded-circle shadow-sm remove-blog" 
+                      aria-label="Remove blog" data-timestamp="${blogData.timestamp}"></button>
+                <div class="blog-card-gradient position-absolute bottom-0 start-0 w-100 py-2"></div>
+              </div>
+              <div class="card-body p-3">
+                <h6 class="card-title fw-bold mb-2">${blogData.title}</h6>
+                <p class="card-text small text-muted mb-0">${blogData.content.length > 100 ? blogData.content.substring(0, 100) + '...' : blogData.content}</p>
+              </div>
+            </div>
+          `;
+          
+          // Add remove button functionality
+          const removeBtn = blogCard.querySelector('.remove-blog');
+          removeBtn.addEventListener('click', function() {
+            const timestamp = this.getAttribute('data-timestamp');
+            const index = savedBlogs.findIndex(blog => blog.timestamp.toString() === timestamp);
+            
+            if (index !== -1) {
+              savedBlogs.splice(index, 1);
+              blogCard.remove();
+              
+              // Hide container if no blogs left
+              if (savedBlogs.length === 0) {
+                blogPreviewContainer.classList.add('d-none');
+              }
+            }
+          });
+          
+          // Add to grid
+          savedBlogsGrid.appendChild(blogCard);
+          
+          // Show preview container
+          blogPreviewContainer.classList.remove('d-none');
+          
+          // Reset form
+          blogTitle.value = '';
+          blogContent.value = '';
+          blogLeadToggle.checked = false;
+          blogImageUpload.value = '';
+          blogImagePreview.innerHTML = `
+            <div class="d-flex align-items-center justify-content-center text-muted">
+              <i class="bi bi-image me-2"></i> No image
+            </div>
+          `;
+          
+          // Show success message
+          const successAlert = document.createElement('div');
+          successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
+          successAlert.innerHTML = `
+            <i class="bi bi-check-circle-fill me-2"></i>
+            <div>
+              <strong>Blog saved!</strong>
+              <p class="mb-0">The blog has been added to the preview.</p>
+            </div>
+          `;
+          
+          // Add to alert container
+          const alertContainer = document.querySelector('.alert-container');
+          if (alertContainer) {
+            alertContainer.appendChild(successAlert);
+            
+            // Hide after 3 seconds
+            setTimeout(() => {
+              successAlert.remove();
+            }, 3000);
+          }
+        } catch (error) {
+          console.error('Error saving blog:', error);
+          
+          // Show error alert
+          const errorAlert = document.createElement('div');
+          errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+          errorAlert.innerHTML = `
+            <i class="bi bi-exclamation-circle-fill me-2"></i>
+            <div>
+              <strong>Error!</strong>
+              <p class="mb-0">${error.message || 'Failed to save blog. Please try again.'}</p>
+            </div>
+          `;
+          
+          const alertContainer = document.querySelector('.alert-container');
+          if (alertContainer) {
+            alertContainer.appendChild(errorAlert);
+            
+            setTimeout(() => {
+              errorAlert.remove();
+            }, 5000);
+          }
+        } finally {
+          // Restore button state
+          this.innerHTML = originalBtnText;
+          this.disabled = false;
+        }
+      });
+    };
+    
+    // Add event listeners for tab activation to initialize forms when tabs are shown
+    const tabButtons = document.querySelectorAll('button[data-bs-toggle="tab"]');
+    tabButtons.forEach(tabButton => {
+      tabButton.addEventListener('shown.bs.tab', function(event) {
+        const targetTabId = event.target.getAttribute('data-bs-target');
+        console.log('Tab activated, initializing form:', targetTabId);
+        
+        // Initialize form submission for the activated tab
+        initializeFormSubmission(targetTabId);
+        
+        // Initialize blog functionality if blogs tab is activated
+        if (targetTabId === '#blogs') {
+          initializeBlogFunctionality();
+        }
+      });
+    });
+    
+    // Also initialize the first tab (Hero section) which is visible by default
+    initializeFormSubmission('#hero');
+    
+    // Initialize blog functionality
+    initializeBlogFunctionality();
+    
+    // Initialize the save buttons for all other tabs
+    tabIds.forEach(tabId => {
+      if (tabId !== '#hero') { // Hero already has a special handler above
+        const form = document.querySelector(`${tabId} form`);
+        const submitBtn = form?.querySelector('button[type="submit"]');
+        
+        if (submitBtn) {
+          console.log(`Setting up save button for ${tabId}`);
+          
+          submitBtn.addEventListener('click', function(event) {
+            // Prevent default action
+            event.preventDefault();
+            
+            console.log(`${tabId} save button clicked`);
+            
+            // Get the form
+            const form = this.closest('form');
+            if (!form) {
+              console.error('Form not found for', tabId);
+              return;
+            }
+            
+            // Submit the form
+            const submitEvent = new Event('submit', {
+              bubbles: true,
+              cancelable: true
+            });
+            form.dispatchEvent(submitEvent);
+          });
+        } else {
+          console.warn(`Save button not found for ${tabId}`);
+        }
+      }
+    });
   });
 </script>

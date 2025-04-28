@@ -370,19 +370,29 @@
           // Use the Cloudinary URL if available, otherwise use the local URL
           const mediaUrl = currentMedia.serverUrl || currentMedia.url;
           
-          // Create image object with structure matching MongoDB
+          // Determine if media is a video
+          const isVideo = currentMedia.type === 'video' || 
+                         (mediaUrl && (mediaUrl.endsWith('.mp4') || 
+                                      mediaUrl.endsWith('.webm') || 
+                                      mediaUrl.endsWith('.mov') ||
+                                      mediaUrl.endsWith('.avi') ||
+                                      mediaUrl.includes('youtube') || 
+                                      mediaUrl.includes('vimeo')));
+          
+          // Create media object with structure matching MongoDB
           const imageObject = {
             url: mediaUrl,
-            alt: title || "Why Use Tool image", // Use title as alt text, or default
+            alt: title || (isVideo ? "Why Use Tool video" : "Why Use Tool image"),
             width: 1200, // Default width
             height: 800, // Default height
-            order: 1 // First image
+            order: 1, // First image
+            type: isVideo ? 'video' : 'image'
           };
           
           // Add to images array
           updateData.images = [imageObject];
           
-          console.log('Saving image with data:', imageObject);
+          console.log('Saving media with data:', imageObject);
         }
         
         // Show loading state
@@ -455,20 +465,26 @@
         const isVideo = content.type === 'video' || 
                        (content.url && (content.url.endsWith('.mp4') || 
                                         content.url.endsWith('.webm') || 
+                                        content.url.endsWith('.mov') ||
+                                        content.url.endsWith('.avi') ||
                                         content.url.includes('youtube') || 
                                         content.url.includes('vimeo')));
         
+        // Add appropriate media element based on type
         if (isVideo) {
-          // Create video element
+          // Create video element with responsive container
           mediaCard.innerHTML = `
             <div class="ratio ratio-1x1 rounded-3 overflow-hidden position-relative hover-zoom">
               ${content.url.includes('youtube') || content.url.includes('vimeo') 
                 ? `<iframe src="${content.url}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`
-                : `<video src="${content.url}" class="object-fit-cover" controls></video>`
+                : `<video src="${content.url}" class="object-fit-cover" controls playsinline></video>`
               }
               <button class="remove-media-btn btn btn-sm btn-danger position-absolute top-0 m-1 d-flex align-items-center justify-content-center">
                 <img src="/img/delete.svg" alt="Delete" style="width: 28px; height: 28px; padding: 5px;">
               </button>
+              <div class="video-indicator position-absolute bottom-0 end-0 m-1 p-1 bg-dark bg-opacity-75 rounded text-white small">
+                <i class="bi bi-film"></i> Video
+              </div>
             </div>
           `;
         } else {
@@ -533,7 +549,7 @@
             mediaCard.appendChild(loadingIndicator);
           }
           
-          // Upload the image to Cloudinary via your endpoint
+          // Upload the media file to Cloudinary via your endpoint
           const response = await fetch('http://localhost:5000/api/images', {
             method: 'POST',
             headers: {
@@ -556,20 +572,30 @@
           
           // Return the Cloudinary URL
           if (data && data.files) {
-            // Replace the local object URL with the Cloudinary URL
-            const image = document.querySelector('.ratio.ratio-1x1 img');
-            if (image) {
-              image.src = data.files[0].url;
+            const isVideo = file.type.startsWith('video/');
+            
+            // Replace the local preview with the Cloudinary URL
+            if (isVideo) {
+              const video = document.querySelector('.ratio.ratio-1x1 video');
+              if (video) {
+                video.src = data.files[0].url;
+                video.load(); // Reload the video with the new source
+              }
+            } else {
+              const image = document.querySelector('.ratio.ratio-1x1 img');
+              if (image) {
+                image.src = data.files[0].url;
+              }
             }
             
             // Update the current media object
             return {
               url: data.files[0].url,
-              alt: "Uploaded image",
+              alt: isVideo ? "Uploaded video" : "Uploaded image",
               width: 1200,
               height: 800,
               order: 1,
-              type: file.type.startsWith('video/') ? 'video' : 'image'
+              type: isVideo ? 'video' : 'image'
             };
           }
           
@@ -584,7 +610,7 @@
           }
           
           // Show error alert
-          alert('Failed to upload image. Please try again.');
+          alert('Failed to upload media. Please try again.');
           return null;
         }
       }

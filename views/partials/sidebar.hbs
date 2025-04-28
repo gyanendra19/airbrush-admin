@@ -189,7 +189,7 @@
           ...category,
           sections: category.sections.sort((a, b) => {
             // Define the order of sections
-            const order = ['hero-section', 'images-gallery', 'why-use-tool', 'text-to-anything', 'blogs'];
+            const order = ['hero-section', 'image-gallery', 'why-use-tool', 'text-to-anything', 'blogs'];
             
             // Get the section names without the path
             const aSection = a.href.replace('/', '');
@@ -245,8 +245,22 @@
             <div class="collapse ps-4" id="${category.id}">
               <ul class="list-unstyled mt-2">
                 ${category.sections.map(section => {
+                  // Map section names to the correct slug
+                  let sectionSlug = section.href.replace('/', '');
+                  
+                  // Override with specific slugs for certain sections
+                  if (section.name.includes('Images Gallery') || section.name.includes('image gallery')) {
+                    sectionSlug = 'images-gallery';
+                  } else if (section.name.includes('Text to')) {
+                    sectionSlug = 'text-to-anything';
+                  } else if (section.name.includes('Why Use') || (section.name.includes('Why-use'))) {
+                    sectionSlug = 'why-use-tool';
+                  } else if (section.name.includes('Blog')) {
+                    sectionSlug = 'blogs';
+                  }
+                  
                   // Add the content ID as a query parameter
-                  const href = `${section.href}?id=${section.contentId}&category=${category.name.toLowerCase().replace(/\s+/g, '-')}`;
+                  const href = `/${sectionSlug}?id=${section.contentId}&category=${category.name.toLowerCase().replace(/\s+/g, '-')}`;
                   
                   return `<li><a href="${href}" class="d-block px-3 py-1 rounded-3 text-decoration-none">${section.name}</a></li>`;
                 }).join('')}
