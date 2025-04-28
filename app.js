@@ -34,6 +34,13 @@ app.get('/hero-section', (req, res) => {
   });
 });
 
+app.get('/edit-category', (req, res) => {
+  res.render('index', {
+    partialName: 'edit-category',
+    section: { title: 'Edit Category', description: 'Edit Category' }
+  });
+});
+
 app.get('/text-to-anything', (req, res) => {
   res.render('index', {
     partialName: 'text-to-anything',
