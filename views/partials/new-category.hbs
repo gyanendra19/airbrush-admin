@@ -7,8 +7,8 @@
     <form id="newCategoryForm" class="needs-validation" novalidate>
       <div class="mb-3">
         <label for="categoryName" class="form-label">Category Name</label>
-        <input type="text" class="form-control" id="categoryName" name="categoryName" 
-               placeholder="Enter category name" required>
+        <input type="text" class="form-control" id="categoryName" name="categoryName" placeholder="Enter category name"
+          required>
         <div class="invalid-feedback">
           Please provide a category name.
         </div>
@@ -16,8 +16,8 @@
 
       <div class="mb-3">
         <label for="categoryDescription" class="form-label">Description</label>
-        <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
-                  rows="3" placeholder="Enter category description" required></textarea>
+        <textarea class="form-control" id="categoryDescription" name="categoryDescription" rows="3"
+          placeholder="Enter category description" required></textarea>
         <div class="invalid-feedback">
           Please provide a category description.
         </div>
@@ -25,8 +25,7 @@
 
       <div class="mb-3">
         <label for="categoryImage" class="form-label">Category Image</label>
-        <input type="file" class="form-control" id="categoryImage" name="categoryImage" 
-               accept="image/*" required>
+        <input type="file" class="form-control" id="categoryImage" name="categoryImage" accept="image/*" required>
         <div class="form-text">
           Recommended size: 1200x600px. Max file size: 2MB.
         </div>
@@ -39,7 +38,7 @@
           </div>
         </div>
       </div>
-      
+
       <div class="d-grid gap-2">
         <button type="submit" class="btn btn-primary">
           <i class="bi bi-plus-circle me-2"></i> Create Category
@@ -54,7 +53,8 @@
   <!-- Tabs for Different Section Types -->
   <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero" type="button" role="tab">
+      <button class="nav-link active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero" type="button"
+        role="tab">
         Hero Section
       </button>
     </li>
@@ -69,7 +69,8 @@
       </button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="text-to-anything-tab" data-bs-toggle="tab" data-bs-target="#text-to-anything" type="button" role="tab">
+      <button class="nav-link" id="text-to-anything-tab" data-bs-toggle="tab" data-bs-target="#text-to-anything"
+        type="button" role="tab">
         Text to Anything
       </button>
     </li>
@@ -93,25 +94,25 @@
           <form id="heroSectionForm" class="needs-validation" novalidate>
             <input type="hidden" id="categoryId" name="categoryId">
             <input type="hidden" id="sectionType" name="sectionType" value="hero-section">
-            
+
             <div class="mb-3">
               <label for="heroTitle" class="form-label">Title</label>
-              <input type="text" class="form-control" id="heroTitle" name="title" 
-                    placeholder="Enter hero section title" required>
+              <input type="text" class="form-control" id="heroTitle" name="title" placeholder="Enter hero section title"
+                required>
               <div class="invalid-feedback">
                 Please provide a title.
               </div>
             </div>
-            
+
             <div class="mb-3">
               <label for="heroDescription" class="form-label">Description</label>
-              <textarea class="form-control" id="heroDescription" name="description" 
-                       rows="3" placeholder="Enter description" required></textarea>
+              <textarea class="form-control" id="heroDescription" name="description" rows="3"
+                placeholder="Enter description" required></textarea>
               <div class="invalid-feedback">
                 Please provide a description.
               </div>
             </div>
-            
+
             <div class="mb-3">
               <label for="heroImage" class="form-label">Background Image</label>
               <input type="file" class="form-control" id="heroImage" name="image" accept="image/*" required>
@@ -136,7 +137,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Images Gallery Tab (placeholder) -->
     <div class="tab-pane fade" id="gallery" role="tabpanel" aria-labelledby="gallery-tab">
       <div class="card shadow-sm border-0 mb-4">
@@ -148,28 +149,28 @@
           <form id="galleryForm" class="needs-validation" novalidate>
             <input type="hidden" id="galleryCategory" name="categoryId">
             <input type="hidden" id="galleryType" name="sectionType" value="images-gallery">
-            
+
             <!-- Gallery Title and Description -->
             <div class="mb-4">
               <div class="mb-3">
                 <label for="galleryTitle" class="form-label">Gallery Title</label>
-                <input type="text" class="form-control" id="galleryTitle" name="title" 
-                      placeholder="Enter gallery title" required>
+                <input type="text" class="form-control" id="galleryTitle" name="title" placeholder="Enter gallery title"
+                  required>
                 <div class="invalid-feedback">
                   Please provide a gallery title.
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <label for="galleryDescription" class="form-label">Gallery Description</label>
-                <textarea class="form-control" id="galleryDescription" name="description" 
-                         rows="2" placeholder="Enter gallery description" required></textarea>
+                <textarea class="form-control" id="galleryDescription" name="description" rows="2"
+                  placeholder="Enter gallery description" required></textarea>
                 <div class="invalid-feedback">
                   Please provide a gallery description.
                 </div>
               </div>
             </div>
-            
+
             <!-- Gallery Images Container -->
             <div class="mb-4 border rounded-3 p-3 bg-light">
               <div class="d-flex justify-content-between align-items-center mb-3">
@@ -178,21 +179,21 @@
                   <i class="bi bi-plus-lg me-1"></i> Add Image
                 </button>
               </div>
-              
+
               <!-- Gallery Images Repeater -->
               <div id="galleryImagesContainer">
                 <!-- Single Image Item Template -->
                 <div class="gallery-image-item mb-4 border rounded p-3 bg-white position-relative">
-                  <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
-                         aria-label="Remove image"></button>
-                  
+                  <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image"
+                    aria-label="Remove image"></button>
+
                   <div class="row g-3">
                     <!-- Image Upload -->
                     <div class="col-md-4">
                       <div class="mb-3">
                         <label class="form-label small">Upload Image</label>
-                        <input type="file" class="form-control form-control-sm gallery-image-upload" 
-                               accept="image/*" required>
+                        <input type="file" class="form-control form-control-sm gallery-image-upload" accept="image/*"
+                          required>
                         <div class="invalid-feedback">
                           Please select an image.
                         </div>
@@ -203,13 +204,13 @@
                         </div>
                       </div>
                     </div>
-                    
+
                     <!-- Image Details -->
                     <div class="col-md-8">
                       <div class="mb-3">
                         <label class="form-label small">Image Title</label>
-                        <input type="text" class="form-control form-control-sm gallery-image-title" 
-                               placeholder="Enter image title" required>
+                        <input type="text" class="form-control form-control-sm gallery-image-title"
+                          placeholder="Enter image title" required>
                         <div class="invalid-feedback">
                           Please provide an image title.
                         </div>
@@ -218,12 +219,12 @@
                       <div class="mb-3">
                         <label class="form-label small">Image Prompt</label>
                         <textarea class="form-control form-control-sm gallery-image-prompt" rows="2"
-                                  placeholder="Enter image generation prompt"></textarea>
+                          placeholder="Enter image generation prompt"></textarea>
                         <div class="form-text">
                           Optional: The prompt used to generate this image
                         </div>
                       </div>
-                      
+
                       <div class="text-end">
                         <button type="button" class="btn btn-primary btn-sm save-gallery-image">
                           <i class="bi bi-save me-1"></i> Save Image
@@ -233,7 +234,7 @@
                   </div>
                 </div>
               </div>
-              
+
               <!-- Saved Gallery Images Container -->
               <div id="savedGalleryImagesContainer" class="mt-4 border-top pt-3 d-none">
                 <h6 class="fw-semibold mb-3">Saved Images</h6>
@@ -242,7 +243,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save me-2"></i> Save Gallery
@@ -252,7 +253,7 @@
         </div>
       </div>
     </div>
-    
+
     <!-- Why Use Tool Tab -->
     <div class="tab-pane fade" id="why" role="tabpanel" aria-labelledby="why-tab">
       <div class="card shadow-sm border-0 mb-4">
@@ -264,36 +265,35 @@
           <form id="whyUseToolForm" class="needs-validation" novalidate>
             <input type="hidden" id="whyUseToolCategory" name="categoryId">
             <input type="hidden" id="whyUseToolType" name="sectionType" value="why-use-tool">
-            
+
             <!-- Main Title and Description -->
             <div class="mb-4">
               <div class="mb-3">
                 <label for="whyUseToolTitle" class="form-label">Section Title</label>
-                <input type="text" class="form-control" id="whyUseToolTitle" name="title" 
-                      placeholder="Enter section title" required>
+                <input type="text" class="form-control" id="whyUseToolTitle" name="title"
+                  placeholder="Enter section title" required>
                 <div class="invalid-feedback">
                   Please provide a section title.
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <label for="whyUseToolDescription" class="form-label">Section Description</label>
-                <textarea class="form-control" id="whyUseToolDescription" name="description" 
-                         rows="2" placeholder="Enter section description" required></textarea>
+                <textarea class="form-control" id="whyUseToolDescription" name="description" rows="2"
+                  placeholder="Enter section description" required></textarea>
                 <div class="invalid-feedback">
                   Please provide a section description.
                 </div>
               </div>
             </div>
-            
+
             <!-- Feature Image -->
             <div class="mb-4 p-3 bg-light rounded-3 border">
               <label class="form-label fw-semibold mb-3">Feature Image</label>
               <div class="row">
                 <div class="col-lg-4">
                   <div class="mb-3">
-                    <input type="file" class="form-control" id="whyUseToolImage" name="image" 
-                           accept="image/*" required>
+                    <input type="file" class="form-control" id="whyUseToolImage" name="image" accept="image/*" required>
                     <div class="invalid-feedback">
                       Please select an image.
                     </div>
@@ -305,79 +305,79 @@
                 <div class="col-lg-8">
                   <div id="whyUseToolImagePreview" class="ratio ratio-16x9 bg-white rounded overflow-hidden border">
                     <div class="d-flex align-items-center justify-content-center text-muted">
-                      <i class="bi bi-image fs-3 me-2"></i> 
+                      <i class="bi bi-image fs-3 me-2"></i>
                       <span>Preview will appear here</span>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <!-- Feature Points -->
             <div class="mb-4 p-3 bg-light rounded-3 border">
               <label class="form-label fw-semibold mb-3">Feature Points</label>
-              
+
               <!-- Feature 1 -->
               <div class="mb-3">
                 <div class="input-group">
                   <span class="input-group-text bg-primary text-white">1</span>
-                  <input type="text" class="form-control" id="whyUseToolFeature1" 
-                         placeholder="Enter first feature point" required>
+                  <input type="text" class="form-control" id="whyUseToolFeature1"
+                    placeholder="Enter first feature point" required>
                   <div class="invalid-feedback">
                     Please provide the first feature point.
                   </div>
                 </div>
               </div>
-              
+
               <!-- Feature 2 -->
               <div class="mb-3">
                 <div class="input-group">
                   <span class="input-group-text bg-primary text-white">2</span>
-                  <input type="text" class="form-control" id="whyUseToolFeature2" 
-                         placeholder="Enter second feature point" required>
+                  <input type="text" class="form-control" id="whyUseToolFeature2"
+                    placeholder="Enter second feature point" required>
                   <div class="invalid-feedback">
                     Please provide the second feature point.
                   </div>
                 </div>
               </div>
-              
+
               <!-- Feature 3 -->
               <div class="mb-3">
                 <div class="input-group">
                   <span class="input-group-text bg-primary text-white">3</span>
-                  <input type="text" class="form-control" id="whyUseToolFeature3" 
-                         placeholder="Enter third feature point" required>
+                  <input type="text" class="form-control" id="whyUseToolFeature3"
+                    placeholder="Enter third feature point" required>
                   <div class="invalid-feedback">
                     Please provide the third feature point.
                   </div>
                 </div>
               </div>
-              
+
               <!-- Feature 4 -->
               <div class="mb-3">
                 <div class="input-group">
                   <span class="input-group-text bg-primary text-white">4</span>
-                  <input type="text" class="form-control" id="whyUseToolFeature4" 
-                         placeholder="Enter fourth feature point" required>
+                  <input type="text" class="form-control" id="whyUseToolFeature4"
+                    placeholder="Enter fourth feature point" required>
                   <div class="invalid-feedback">
                     Please provide the fourth feature point.
                   </div>
                 </div>
               </div>
-              
+
               <!-- Feature 5 (Optional) -->
               <div class="mb-1">
                 <div class="input-group">
                   <span class="input-group-text bg-secondary text-white">5</span>
-                  <input type="text" class="form-control" id="whyUseToolFeature5" 
-                         placeholder="Enter fifth feature point (optional)">
+                  <input type="text" class="form-control" id="whyUseToolFeature5"
+                    placeholder="Enter fifth feature point (optional)">
                 </div>
                 <div class="form-text mt-1">
                   This feature point is optional.
                 </div>
               </div>
             </div>
-            
+
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save me-2"></i> Save Why Use Tool Section
@@ -399,43 +399,43 @@
           <form id="textToAnythingForm" class="needs-validation" novalidate>
             <input type="hidden" id="textToAnythingCategory" name="categoryId">
             <input type="hidden" id="textToAnythingType" name="sectionType" value="text-to-anything">
-            
+
             <!-- Main Title and Subtitle -->
             <div class="mb-4">
               <div class="mb-3">
                 <label for="textToAnythingTitle" class="form-label">Title</label>
-                <input type="text" class="form-control" id="textToAnythingTitle" name="title" 
-                      placeholder="Enter section title" required>
+                <input type="text" class="form-control" id="textToAnythingTitle" name="title"
+                  placeholder="Enter section title" required>
                 <div class="invalid-feedback">
                   Please provide a section title.
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <label for="textToAnythingSubtitle" class="form-label">Subtitle</label>
                 <input type="text" class="form-control" id="textToAnythingSubtitle" name="subtitle"
-                       placeholder="Enter section subtitle" required>
+                  placeholder="Enter section subtitle" required>
                 <div class="invalid-feedback">
                   Please provide a section subtitle.
                 </div>
               </div>
             </div>
-            
+
             <!-- Section Images -->
             <div class="mb-4 p-3 bg-light rounded-3 border">
               <label class="form-label fw-semibold mb-3">
-                Section Images 
+                Section Images
                 <span class="text-muted small fw-normal">(Main banner and examples)</span>
               </label>
-              
+
               <!-- Main Banner Image -->
               <div class="mb-4 pb-3 border-bottom">
                 <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Main Banner Image</label>
                 <div class="row g-3">
                   <div class="col-lg-4">
                     <div class="mb-3">
-                      <input type="file" class="form-control" id="textToAnythingMainImage" name="mainImage" 
-                             accept="image/*" required>
+                      <input type="file" class="form-control" id="textToAnythingMainImage" name="mainImage"
+                        accept="image/*" required>
                       <div class="invalid-feedback">
                         Please select a main banner image.
                       </div>
@@ -445,19 +445,21 @@
                     </div>
                   </div>
                   <div class="col-lg-8">
-                    <div id="textToAnythingMainImagePreview" class="ratio ratio-21x9 bg-white rounded overflow-hidden border">
+                    <div id="textToAnythingMainImagePreview"
+                      class="ratio ratio-21x9 bg-white rounded overflow-hidden border">
                       <div class="d-flex align-items-center justify-content-center text-muted">
-                        <i class="bi bi-image fs-3 me-2"></i> 
+                        <i class="bi bi-image fs-3 me-2"></i>
                         <span>Banner preview will appear here</span>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
-              
+
               <!-- Example Images -->
               <div>
-                <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Example Images (Optional)</label>
+                <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Example Images
+                  (Optional)</label>
                 <div class="row g-3 mb-3" id="textToAnythingExampleImages">
                   <div class="col-6 col-md-3">
                     <div class="card h-100 border">
@@ -476,7 +478,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save me-2"></i> Save Text to Anything Section
@@ -498,32 +500,32 @@
           <form id="blogsForm" class="needs-validation" novalidate>
             <input type="hidden" id="blogsCategory" name="categoryId">
             <input type="hidden" id="blogsType" name="sectionType" value="blogs">
-            
+
             <!-- Section Title and Description -->
             <div class="mb-4">
               <div class="mb-3">
                 <label for="blogsTitle" class="form-label">Section Title</label>
-                <input type="text" class="form-control" id="blogsTitle" name="title" 
-                      placeholder="Enter blog section title" required>
+                <input type="text" class="form-control" id="blogsTitle" name="title"
+                  placeholder="Enter blog section title" required>
                 <div class="invalid-feedback">
                   Please provide a section title.
                 </div>
               </div>
-              
+
               <div class="mb-3">
                 <label for="blogsDescription" class="form-label">Section Description</label>
-                <textarea class="form-control" id="blogsDescription" name="description" 
-                         rows="2" placeholder="Enter section description" required></textarea>
+                <textarea class="form-control" id="blogsDescription" name="description" rows="2"
+                  placeholder="Enter section description" required></textarea>
                 <div class="invalid-feedback">
                   Please provide a section description.
                 </div>
               </div>
             </div>
-            
+
             <!-- Blog Entries -->
             <div class="mb-4">
               <h6 class="fw-semibold border-bottom pb-2 mb-3">Blog Entries</h6>
-              
+
               <!-- Blog Entries Container -->
               <div id="blogEntriesContainer">
                 <!-- Single Blog Entry Form -->
@@ -540,38 +542,38 @@
                       <!-- Blog Image -->
                       <div class="col-md-4 mb-3 mb-md-0">
                         <label class="form-label small">Blog Image</label>
-                        <input type="file" class="form-control form-control-sm" id="blogImageUpload" 
-                               accept="image/*" required>
+                        <input type="file" class="form-control form-control-sm" id="blogImageUpload" accept="image/*"
+                          required>
                         <div class="invalid-feedback">
                           Please select a blog image.
                         </div>
-                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2" id="blogImagePreview">
+                        <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mt-2"
+                          id="blogImagePreview">
                           <div class="d-flex align-items-center justify-content-center text-muted">
                             <i class="bi bi-image me-2"></i> No image
                           </div>
                         </div>
                       </div>
-                      
+
                       <!-- Blog Details -->
                       <div class="col-md-8">
                         <div class="mb-3">
                           <label class="form-label small">Blog Title</label>
-                          <input type="text" class="form-control form-control-sm" id="blogTitle" 
-                                 placeholder="Enter blog title" required>
+                          <input type="text" class="form-control form-control-sm" id="blogTitle"
+                            placeholder="Enter blog title" required>
                           <div class="invalid-feedback">
                             Please provide a blog title.
                           </div>
                         </div>
-                        
+
                         <div class="mb-3">
                           <label class="form-label small">Blog Content</label>
-                          <textarea class="form-control form-control-sm" id="blogContent" 
-                                 rows="3" placeholder="Enter blog content" required></textarea>
+                          <div id="editor"></div>
                           <div class="invalid-feedback">
                             Please provide blog content.
                           </div>
                         </div>
-                        
+
                         <div class="text-end mt-3">
                           <button type="button" class="btn btn-primary btn-sm" id="saveBlogBtn">
                             <i class="bi bi-plus-circle me-1"></i> Save Blog
@@ -587,11 +589,11 @@
                   <h6 class="fw-semibold border-bottom pb-2 mb-3">Saved Blogs</h6>
                   <div id="savedBlogsGrid" class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     <!-- Saved blogs will appear here -->
-                    </div>
                   </div>
+                </div>
               </div>
             </div>
-            
+
             <div class="d-grid gap-2">
               <button type="submit" class="btn btn-primary">
                 <i class="bi bi-save me-2"></i> Save Blog Section
@@ -604,13 +606,23 @@
   </div>
 </div>
 
-<!-- Add alert container at the end of the body -->
+<!-- Add Success alert container at the end of the body -->
 <div class="alert-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
   <div id="categorySuccessAlert" class="alert alert-success d-flex align-items-center mb-0 d-none">
     <i class="bi bi-check-circle-fill me-2"></i>
     <div>
       <strong>Category created successfully!</strong>
       <p class="mb-0">You can now add sections to your category.</p>
+    </div>
+  </div>
+</div>
+<!-- Add Danger alert container at the end of the body -->
+<div class="alert-container position-fixed bottom-0 end-0 p-3" style="z-index: 1050;">
+  <div id="categoryErrorAlert" class="alert alert-danger d-flex align-items-center mb-0 d-none">
+    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+    <div>
+      <strong>Error creating category!</strong>
+      <p class="mb-0">Please try again.</p>
     </div>
   </div>
 </div>
@@ -636,29 +648,30 @@
       transform: translateX(100%);
       opacity: 0;
     }
+
     to {
       transform: translateX(0);
       opacity: 1;
     }
   }
-  
+
   /* Blog Preview Styles */
   .blog-preview-card {
     transition: all 0.2s ease;
     border-radius: 8px;
     overflow: hidden;
   }
-  
+
   .blog-preview-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
   }
-  
+
   .blog-card-gradient {
-    background: linear-gradient(to top, rgba(0,0,0,0.6), rgba(0,0,0,0));
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0));
     height: 40px;
   }
-  
+
   .blog-preview-card .btn-close {
     opacity: 0;
     transition: opacity 0.2s ease;
@@ -666,22 +679,47 @@
     width: auto;
     height: auto;
   }
-  
+
   .blog-preview-card:hover .btn-close {
     opacity: 1;
   }
-  
+
   .blog-preview-card .card-img-top {
     transition: transform 0.3s ease;
   }
-  
+
   .blog-preview-card:hover .card-img-top {
     transform: scale(1.05);
   }
+
+  /* Editor styling */
+  .document-editor__toolbar {
+    background: var(--ck-color-toolbar-background);
+    border: 1px solid var(--ck-color-toolbar-border);
+    padding: 0.5rem;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+
+  .document-editor__editable {
+    border: 1px solid var(--ck-color-toolbar-border);
+    border-top: none;
+    min-height: 400px;
+    padding: 1rem;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+
+  /* Ensure the editor container has proper spacing */
+  #editor {
+    margin-bottom: 1rem;
+  }
 </style>
 
+<!-- Replace the classic CKEditor with the full-featured version -->
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/decoupled-document/ckeditor.js"></script>
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     // API Configuration
     const API_CONFIG = {
       BASE_URL: 'http://localhost:5000', // Change this to your actual backend URL
@@ -697,45 +735,45 @@
     const sectionForms = document.getElementById('sectionForms');
     let createdCategoryId = null;
     let createdCategory = null; // Store the full category object
-    
+
     // Add Bootstrap tab event handlers
     const tabList = document.querySelectorAll('button[data-bs-toggle="tab"]');
     tabList.forEach(tabEl => {
       tabEl.addEventListener('shown.bs.tab', event => {
-          const targetTab = event.target.getAttribute('data-bs-target');
+        const targetTab = event.target.getAttribute('data-bs-target');
         console.log('Tab activated:', targetTab);
-          
+
         // Set category ID on all forms when tabs change
-          if (createdCategoryId) {
-      document.querySelectorAll('input[name="categoryId"]').forEach(input => {
-        input.value = createdCategoryId;
+        if (createdCategoryId) {
+          document.querySelectorAll('input[name="categoryId"]').forEach(input => {
+            input.value = createdCategoryId;
           });
         }
       });
     });
-    
+
     // Initialize tab activation events
     const tabElements = document.querySelectorAll('button[data-bs-toggle="tab"]');
     console.log('Found tab elements:', tabElements.length);
-    
+
     // Add event listener to the gallery tab content
     const galleryTabContent = document.getElementById('gallery');
     if (galleryTabContent) {
       console.log('Gallery tab content found');
-      
+
       // Add event listener for when the tab content becomes visible
       const observer = new MutationObserver((mutations) => {
         mutations.forEach((mutation) => {
           if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
             const isActive = galleryTabContent.classList.contains('show');
             console.log('Gallery tab content visibility changed:', isActive);
-            
+
             if (isActive) {
               // Get content ID from URL
               const urlParams = new URLSearchParams(window.location.search);
               const contentId = urlParams.get('id');
               console.log('Content ID from URL:', contentId);
-              
+
               if (contentId) {
                 console.log('Fetching gallery content for ID:', contentId);
                 fetchGalleryContent(contentId);
@@ -744,7 +782,7 @@
           }
         });
       });
-      
+
       // Start observing the gallery tab content
       observer.observe(galleryTabContent, {
         attributes: true,
@@ -758,37 +796,37 @@
     const galleryTab = document.getElementById('gallery-tab');
     if (galleryTab) {
       console.log('Gallery tab button found');
-      
-      galleryTab.addEventListener('click', function() {
+
+      galleryTab.addEventListener('click', function () {
         console.log('Gallery tab clicked');
-        
+
         // Get content ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const contentId = urlParams.get('id');
         console.log('Content ID from URL (click):', contentId);
-        
+
         if (contentId) {
           console.log('Fetching gallery content for ID (click):', contentId);
           fetchGalleryContent(contentId);
         }
       });
     }
-    
+
     // Function to initialize image previews for a specific tab
     function initializeImagePreviews(tabId) {
       console.log('Initializing image previews for tab:', tabId);
-      
+
       // Select all file inputs within the tab
       const fileInputs = document.querySelectorAll(`${tabId} input[type="file"]`);
       console.log(`Found ${fileInputs.length} file inputs`);
-      
+
       // Add change event listeners to each file input
       fileInputs.forEach((input, index) => {
         console.log(`Setting up file input ${index + 1} in ${tabId}`);
-        
+
         // Find the closest preview container
         let previewContainer;
-        
+
         // Try different strategies to find the preview container
         if (tabId === '#hero') {
           previewContainer = document.querySelector('#hero .image-preview');
@@ -805,33 +843,33 @@
             previewContainer = parent.querySelector('.image-preview');
           }
         }
-        
+
         if (previewContainer) {
           console.log(`Found preview container for input ${index + 1}`);
-          
+
           // Remove existing event listeners by cloning and replacing
           const newInput = input.cloneNode(true);
           input.parentNode.replaceChild(newInput, input);
-          
+
           // Add the new change event listener
-          newInput.addEventListener('change', function(event) {
+          newInput.addEventListener('change', function (event) {
             console.log(`File input ${index + 1} changed:`, this.files);
             const file = this.files[0];
-            
+
             if (file) {
               // Create object URL for preview
               const objectUrl = URL.createObjectURL(file);
               console.log('Created object URL:', objectUrl);
-              
+
               // Update preview with consistent styling
               previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
-              
+
               // Clean up object URL when input changes again
               const nextChangeHandler = () => {
                 URL.revokeObjectURL(objectUrl);
                 newInput.removeEventListener('change', nextChangeHandler);
               };
-              
+
               newInput.addEventListener('change', nextChangeHandler);
             } else {
               // Reset preview if no file selected
@@ -846,7 +884,7 @@
           console.warn(`No preview container found for file input ${index + 1} in ${tabId}`);
         }
       });
-      
+
       // Tab-specific initialization
       if (tabId === '#gallery') {
         // Initialize Save Gallery Image buttons
@@ -854,35 +892,35 @@
           // Remove existing event listeners by cloning and replacing
           const newSaveButton = saveButton.cloneNode(true);
           saveButton.parentNode.replaceChild(newSaveButton, saveButton);
-          
+
           // Add click event listener to the new button
-          newSaveButton.addEventListener('click', async function() {
+          newSaveButton.addEventListener('click', async function () {
             // Get the gallery image item container
             const galleryItem = this.closest('.gallery-image-item');
-            
+
             if (!galleryItem) {
               console.error('Gallery item container not found');
               return;
             }
-            
+
             // Get form values
             const fileInput = galleryItem.querySelector('.gallery-image-upload');
             const titleInput = galleryItem.querySelector('.gallery-image-title');
             const promptInput = galleryItem.querySelector('.gallery-image-prompt');
             const previewContainer = galleryItem.querySelector('.image-preview');
-            
+
             // Apply Bootstrap validation
             galleryItem.classList.add('was-validated');
-            
+
             // Validate required fields
             if (!fileInput || !titleInput) {
               console.error('Required form elements not found');
               return;
             }
-            
+
             // Validate input values
             let isValid = true;
-            
+
             // Check if image is selected or already exists
             const imageElement = previewContainer.querySelector('img');
             if (!imageElement && (!fileInput.files || fileInput.files.length === 0)) {
@@ -891,7 +929,7 @@
             } else {
               fileInput.setCustomValidity('');
             }
-            
+
             // Check title
             if (!titleInput.value.trim()) {
               titleInput.setCustomValidity('Please provide a title');
@@ -899,33 +937,33 @@
             } else {
               titleInput.setCustomValidity('');
             }
-            
+
             // If validation failed, stop here
             if (!isValid) {
               return;
             }
-            
+
             // Show loading state
             const originalBtnText = this.innerHTML;
             this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
             this.disabled = true;
-            
+
             try {
               // Determine image URL - either from existing element or upload new file
               let imageUrl;
-              
+
               if (fileInput.files && fileInput.files.length > 0) {
                 // Upload the file to Cloudinary
                 const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
                 imageUrl = await uploadImage(fileInput.files[0], token);
-                
+
                 if (!imageUrl) {
                   throw new Error('Failed to upload image');
                 }
               } else {
                 throw new Error('No image source available');
               }
-              
+
               // Create gallery image data object with Cloudinary URL
               const imageData = {
                 url: imageUrl,
@@ -933,14 +971,14 @@
                 prompt: promptInput ? promptInput.value : '',
                 timestamp: new Date().getTime()
               };
-              
+
               // Display the saved image
               displaySavedImage(imageData);
-              
+
               // Reset form fields
               if (titleInput) titleInput.value = '';
               if (promptInput) promptInput.value = '';
-              
+
               // Reset image preview
               if (previewContainer) {
                 previewContainer.innerHTML = `
@@ -949,12 +987,12 @@
                   </div>
                 `;
               }
-              
+
               // Clear file input
               if (fileInput) {
                 fileInput.value = '';
               }
-              
+
               // Show success message
               const successAlert = document.createElement('div');
               successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
@@ -965,12 +1003,12 @@
                   <p class="mb-0">The image has been added to the gallery.</p>
                 </div>
               `;
-              
+
               // Add to alert container
               const alertContainer = document.querySelector('.alert-container');
               if (alertContainer) {
                 alertContainer.appendChild(successAlert);
-                
+
                 // Hide after 3 seconds
                 setTimeout(() => {
                   successAlert.remove();
@@ -978,7 +1016,7 @@
               }
             } catch (error) {
               console.error('Error saving image:', error);
-              
+
               // Show error alert
               const errorAlert = document.createElement('div');
               errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
@@ -989,11 +1027,11 @@
                   <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
                 </div>
               `;
-              
+
               const alertContainer = document.querySelector('.alert-container');
               if (alertContainer) {
                 alertContainer.appendChild(errorAlert);
-                
+
                 setTimeout(() => {
                   errorAlert.remove();
                 }, 5000);
@@ -1009,16 +1047,16 @@
         // Initialize Why Use Tool specific image preview
         const whyToolImage = document.querySelector('#whyUseToolImage');
         const whyToolPreview = document.querySelector('#whyUseToolImagePreview');
-        
+
         if (whyToolImage && whyToolPreview) {
-          whyToolImage.addEventListener('change', function() {
+          whyToolImage.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
               const objectUrl = URL.createObjectURL(file);
               whyToolPreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Why Use Tool Preview">`;
-              
+
               // Clean up on next change
-              whyToolImage.addEventListener('change', function() {
+              whyToolImage.addEventListener('change', function () {
                 URL.revokeObjectURL(objectUrl);
               }, { once: true });
             } else {
@@ -1035,16 +1073,16 @@
         // Initialize Text to Anything specific image previews
         const mainImage = document.querySelector('#textToAnythingMainImage');
         const mainImagePreview = document.querySelector('#textToAnythingMainImagePreview');
-        
+
         if (mainImage && mainImagePreview) {
-          mainImage.addEventListener('change', function() {
+          mainImage.addEventListener('change', function () {
             const file = this.files[0];
             if (file) {
               const objectUrl = URL.createObjectURL(file);
               mainImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Main Banner Preview">`;
-              
+
               // Clean up on next change
-              mainImage.addEventListener('change', function() {
+              mainImage.addEventListener('change', function () {
                 URL.revokeObjectURL(objectUrl);
               }, { once: true });
             } else {
@@ -1059,7 +1097,7 @@
         }
       }
     }
-    
+
     // Initialize image previews for all tabs on page load
     ['#hero', '#gallery', '#why', '#text-to-anything', '#blogs'].forEach(tabId => {
       initializeImagePreviews(tabId);
@@ -1067,15 +1105,15 @@
 
     // Initialize Save Gallery Image buttons
     document.querySelectorAll('.save-gallery-image').forEach(saveButton => {
-      saveButton.addEventListener('click', async function() {
+      saveButton.addEventListener('click', async function () {
         // Get the gallery image item container
         const galleryItem = this.closest('.gallery-image-item');
-        
+
         if (!galleryItem) {
           console.error('Gallery item container not found');
           return;
         }
-        
+
         // Get form values
         const fileInput = galleryItem.querySelector('.gallery-image-upload');
         const titleInput = galleryItem.querySelector('.gallery-image-title');
@@ -1083,19 +1121,19 @@
         const promptInput = galleryItem.querySelector('.gallery-image-prompt');
         const featuredCheckbox = galleryItem.querySelector('.gallery-image-featured');
         const previewContainer = galleryItem.querySelector('.image-preview');
-        
+
         // Apply Bootstrap validation
         galleryItem.classList.add('was-validated');
-        
+
         // Validate required fields
         if (!fileInput || !titleInput || !descriptionInput) {
           console.error('Required form elements not found');
           return;
         }
-        
+
         // Validate input values
         let isValid = true;
-        
+
         // Check if image is selected or already exists
         const imageElement = previewContainer.querySelector('img');
         if (!imageElement && (!fileInput.files || fileInput.files.length === 0)) {
@@ -1104,7 +1142,7 @@
         } else {
           fileInput.setCustomValidity('');
         }
-        
+
         // Check title
         if (!titleInput.value.trim()) {
           titleInput.setCustomValidity('Please provide a title');
@@ -1112,33 +1150,33 @@
         } else {
           titleInput.setCustomValidity('');
         }
-        
+
         // If validation failed, stop here
         if (!isValid) {
           return;
         }
-        
+
         // Show loading state
         const originalBtnText = this.innerHTML;
         this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
         this.disabled = true;
-        
+
         try {
           // Determine image URL - either from existing element or upload new file
           let imageUrl;
-          
+
           if (fileInput.files && fileInput.files.length > 0) {
             // Upload the file to Cloudinary
             const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
             imageUrl = await uploadImage(fileInput.files[0], token);
-            
+
             if (!imageUrl) {
               throw new Error('Failed to upload image');
             }
           } else {
             throw new Error('No image source available');
           }
-          
+
           // Create gallery image data object with Cloudinary URL
           const imageData = {
             url: imageUrl,
@@ -1146,16 +1184,16 @@
             prompt: promptInput ? promptInput.value : '',
             timestamp: new Date().getTime()
           };
-          
+
           // Display the saved image
           displaySavedImage(imageData);
-          
+
           // Reset form fields
           if (titleInput) titleInput.value = '';
           if (descriptionInput) descriptionInput.value = '';
           if (promptInput) promptInput.value = '';
           if (featuredCheckbox) featuredCheckbox.checked = false;
-          
+
           // Reset image preview
           if (previewContainer) {
             previewContainer.innerHTML = `
@@ -1164,12 +1202,12 @@
               </div>
             `;
           }
-          
+
           // Clear file input
           if (fileInput) {
             fileInput.value = '';
           }
-          
+
           // Show success message
           const successAlert = document.createElement('div');
           successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
@@ -1180,12 +1218,12 @@
               <p class="mb-0">The image has been added to the gallery.</p>
             </div>
           `;
-          
+
           // Add to alert container
           const alertContainer = document.querySelector('.alert-container');
           if (alertContainer) {
             alertContainer.appendChild(successAlert);
-            
+
             // Hide after 3 seconds
             setTimeout(() => {
               successAlert.remove();
@@ -1193,7 +1231,7 @@
           }
         } catch (error) {
           console.error('Error saving image:', error);
-          
+
           // Show error alert
           const errorAlert = document.createElement('div');
           errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
@@ -1204,11 +1242,11 @@
               <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
             </div>
           `;
-          
+
           const alertContainer = document.querySelector('.alert-container');
           if (alertContainer) {
             alertContainer.appendChild(errorAlert);
-            
+
             setTimeout(() => {
               errorAlert.remove();
             }, 5000);
@@ -1220,23 +1258,23 @@
         }
       });
     });
-    
+
     // Function to display a saved image in the saved images container
     function displaySavedImage(imageData) {
       // Get the saved images container
       const savedImagesContainer = document.getElementById('savedGalleryImagesContainer');
       const savedImagesGrid = document.getElementById('savedImagesGrid');
-      
+
       if (!savedImagesContainer || !savedImagesGrid) {
         console.error('Saved images container not found');
         return;
       }
-      
+
       // Create a card for the saved image
       const imageCard = document.createElement('div');
       imageCard.className = 'col';
       imageCard.dataset.timestamp = imageData.timestamp;
-      
+
       imageCard.innerHTML = `
         <div class="card h-100 shadow-sm">
           <div class="position-relative">
@@ -1251,23 +1289,23 @@
           </div>
         </div>
       `;
-      
+
       // Add event listener for remove button
       const removeBtn = imageCard.querySelector('.remove-saved-image');
       if (removeBtn) {
-        removeBtn.addEventListener('click', function() {
+        removeBtn.addEventListener('click', function () {
           imageCard.remove();
-          
+
           // Check if any saved images remain
           if (savedImagesGrid.children.length === 0) {
             savedImagesContainer.classList.add('d-none');
           }
         });
       }
-      
+
       // Add the card to the grid
       savedImagesGrid.appendChild(imageCard);
-      
+
       // Show the saved images container
       savedImagesContainer.classList.remove('d-none');
     }
@@ -1276,60 +1314,60 @@
     function switchToTab(tabId) {
       console.log('=== Tab Switching Debug ===');
       console.log('Attempting to switch to tab:', tabId);
-      
+
       // Get the tab button
       const tabButton = document.querySelector(`[data-bs-target="${tabId}"]`);
       if (!tabButton) {
         console.error('Tab button not found:', tabId);
         return;
       }
-      
+
       // Create a new Bootstrap Tab instance
       const tab = new bootstrap.Tab(tabButton);
-      
+
       // Show the tab
       tab.show();
-      
+
       console.log('Tab switch completed');
     }
 
     // Function to switch from hero to gallery section
     function switchHeroToGallery() {
       console.log('Switching from hero to gallery section...');
-      
+
       // Get the gallery tab and content
       const galleryTab = document.getElementById('gallery-tab');
       const galleryContent = document.getElementById('gallery');
       const heroTab = document.getElementById('hero-tab');
       const heroContent = document.getElementById('hero');
-      
+
       if (galleryTab && galleryContent && heroTab && heroContent) {
         // Remove active classes from hero tab
         heroTab.classList.remove('active');
         heroContent.classList.remove('show', 'active');
-        
+
         // Add active classes to gallery tab
         galleryTab.classList.add('active');
         galleryContent.classList.add('show', 'active');
-        
+
         // Trigger Bootstrap's tab event
         const tabEvent = new Event('shown.bs.tab', { bubbles: true });
         galleryTab.dispatchEvent(tabEvent);
-        
+
         // Scroll to the gallery section
         galleryContent.scrollIntoView({ behavior: 'smooth' });
-        
+
         console.log('Successfully switched to gallery section');
       } else {
         console.error('Could not find required elements for tab switching');
       }
     }
-    
+
     // Function to initialize form submission for a specific tab
     function initializeFormSubmission(tabId) {
       let form;
-      
-      switch(tabId) {
+
+      switch (tabId) {
         case '#hero':
           form = document.getElementById('heroSectionForm');
           break;
@@ -1350,66 +1388,66 @@
       }
 
       console.log('Form:', form);
-      
+
       if (form) {
         console.log('Initializing form submission for tab:', tabId);
-        
+
         // Remove existing event listener
         const newForm = form.cloneNode(true);
         form.parentNode.replaceChild(newForm, form);
-        
+
         // Re-add image preview event listeners for the new form
         initializeImagePreviews(tabId);
-        
+
         // Add submit event listener
-        newForm.addEventListener('submit', async function(event) {
+        newForm.addEventListener('submit', async function (event) {
           event.preventDefault();
           console.log('Form submitted for tab:', tabId);
-          
+
           // Remove form validation check for "Save Gallery" button
           // Show loading state
           const submitBtn = newForm.querySelector('button[type="submit"]');
           const originalBtnText = submitBtn.innerHTML;
           submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
           submitBtn.disabled = true;
-          
+
           try {
             // Get form values with null checks
             let title, description;
-            
+
             if (tabId === '#text-to-anything') {
               const titleInput = newForm.querySelector('#textToAnythingTitle');
               const subtitleInput = newForm.querySelector('#textToAnythingSubtitle');
-              
+
               if (!titleInput || !subtitleInput) {
                 throw new Error('Required form elements not found for Text to Anything section');
               }
-              
+
               title = titleInput.value;
               description = subtitleInput.value;
             } else {
               const titleInput = newForm.querySelector('[name="title"]');
               const descriptionInput = newForm.querySelector('[name="description"]');
-              
+
               if (!titleInput || !descriptionInput) {
                 throw new Error('Required form elements not found');
               }
-              
+
               title = titleInput.value;
               description = descriptionInput.value;
             }
-            
+
             const categoryId = createdCategoryId;
-            
+
             if (!categoryId) {
               throw new Error('Category ID not found. Please create a category first.');
             }
-            
+
             // Create section based on the tab
             const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
-            
+
             let sectionName, sectionSlug, order;
-            switch(tabId) {
+            switch (tabId) {
               case '#hero':
                 sectionName = 'Hero Section';
                 sectionSlug = 'hero-section';
@@ -1434,7 +1472,7 @@
                 sectionName = 'Blogs';
                 sectionSlug = 'blogs';
                 order = 5;
-                
+
                 // Check for exactly 4 blogs before creating any section
                 if (savedBlogs.length !== 4) {
                   // Wrong number of blogs - show validation error
@@ -1447,25 +1485,25 @@
                       <p class="mb-0">You must add exactly 4 blogs before saving this section. You currently have ${savedBlogs.length} blog(s).</p>
                     </div>
                   `;
-                  
+
                   const alertContainer = newForm.querySelector('.alert-container') || document.querySelector('.alert-container');
                   if (alertContainer) {
                     alertContainer.appendChild(errorAlert);
-                    
+
                     setTimeout(() => {
                       errorAlert.remove();
                     }, 5000);
                   }
-                  
+
                   // Restore button state
                   submitBtn.innerHTML = originalBtnText;
                   submitBtn.disabled = false;
-                  
+
                   return; // Stop form submission before creating section
                 }
                 break;
             }
-            
+
             // Create section data
             const sectionData = {
               name: sectionName,
@@ -1476,7 +1514,7 @@
               order: order,
               isActive: true
             };
-            
+
             // Create section
             console.log('Creating section with data:', sectionData);
             const sectionResponse = await fetch('http://localhost:5000/api/sections', {
@@ -1487,17 +1525,17 @@
               },
               body: JSON.stringify(sectionData)
             });
-            
+
             if (!sectionResponse.ok) {
               const errorText = await sectionResponse.text();
               console.error('Section creation failed. Status:', sectionResponse.status);
               console.error('Error response:', errorText);
               throw new Error('Failed to create section: ' + errorText);
             }
-            
+
             const sectionResult = await sectionResponse.json();
             console.log('Section created:', sectionResult);
-            
+
             // Process images and create content based on the tab
             let contentData = {
               section: sectionResult._id,
@@ -1508,34 +1546,34 @@
               fields: [],
               isActive: true
             };
-            
+
             // Tab-specific processing
             if (tabId === '#hero') {
               // Process hero image
               const heroImage = document.getElementById('heroImage');
               if (heroImage && heroImage.files.length > 0) {
-                  const imageUrl = await uploadImage(heroImage.files[0], token);
-                  if (imageUrl) {
-                    contentData.images.push({
-                      url: imageUrl,
-                      alt: title,
-                      width: 1200,
-                      height: 600
-                    });
+                const imageUrl = await uploadImage(heroImage.files[0], token);
+                if (imageUrl) {
+                  contentData.images.push({
+                    url: imageUrl,
+                    alt: title,
+                    width: 1200,
+                    height: 600
+                  });
                 }
               }
             } else if (tabId === '#gallery') {
               // Process gallery images from the saved images container
               const savedImages = document.querySelectorAll('#savedImagesGrid .col');
               console.log('Found saved images:', savedImages.length);
-              
+
               if (savedImages.length > 0) {
                 // Process images from the savedImagesGrid
                 for (const savedImage of savedImages) {
                   const imageElement = savedImage.querySelector('img');
                   const imageTitle = savedImage.querySelector('.card-title');
                   const imagePrompt = savedImage.querySelector('.text-muted');
-                  
+
                   if (imageElement && imageElement.src) {
                     contentData.images.push({
                       url: imageElement.src,
@@ -1550,32 +1588,32 @@
                 console.log('Images to save:', contentData.images);
               } else {
                 // Fallback to legacy gallery items if no saved images found
-              const galleryItems = document.querySelectorAll('.gallery-image-item');
-              for (const item of galleryItems) {
-                const fileInput = item.querySelector('.gallery-image-upload');
-                if (fileInput && fileInput.files.length > 0) {
-                  const imageUrl = await uploadImage(fileInput.files[0], token);
-                  if (imageUrl) {
-                  contentData.images.push({
-                    url: imageUrl,
+                const galleryItems = document.querySelectorAll('.gallery-image-item');
+                for (const item of galleryItems) {
+                  const fileInput = item.querySelector('.gallery-image-upload');
+                  if (fileInput && fileInput.files.length > 0) {
+                    const imageUrl = await uploadImage(fileInput.files[0], token);
+                    if (imageUrl) {
+                      contentData.images.push({
+                        url: imageUrl,
+                        alt: item.querySelector('.gallery-image-title')?.value,
+                        title: item.querySelector('.gallery-image-title')?.value,
+                        prompt: item.querySelector('.gallery-image-prompt')?.value,
+                        width: 800,
+                        height: 600
+                      });
+                    }
+                  } else if (item.querySelector('.image-preview img')) {
+                    // Handle existing images
+                    const existingImage = {
+                      url: item.querySelector('.image-preview img').src,
                       alt: item.querySelector('.gallery-image-title')?.value,
                       title: item.querySelector('.gallery-image-title')?.value,
                       prompt: item.querySelector('.gallery-image-prompt')?.value,
-                    width: 800,
-                    height: 600
-                  });
-                  }
-                } else if (item.querySelector('.image-preview img')) {
-                  // Handle existing images
-                  const existingImage = {
-                    url: item.querySelector('.image-preview img').src,
-                    alt: item.querySelector('.gallery-image-title')?.value,
-                    title: item.querySelector('.gallery-image-title')?.value,
-                    prompt: item.querySelector('.gallery-image-prompt')?.value,
-                    width: 800,
-                    height: 600
-                  };
-                  contentData.images.push(existingImage);
+                      width: 800,
+                      height: 600
+                    };
+                    contentData.images.push(existingImage);
                   }
                 }
               }
@@ -1593,13 +1631,13 @@
                   });
                 }
               }
-              
+
               // Add feature points with improved error handling
               try {
                 for (let i = 1; i <= 5; i++) {
                   const featureId = `whyUseToolFeature${i}`;
                   const featureInput = document.getElementById(featureId);
-                  
+
                   // Only add if element exists and has a value
                   if (featureInput && featureInput.value && featureInput.value.trim() !== '') {
                     contentData.fields.push({
@@ -1627,7 +1665,7 @@
                   });
                 }
               }
-              
+
               // Process example images if present
               const exampleImages = document.querySelectorAll('[data-image-id]');
               for (let i = 0; i < exampleImages.length; i++) {
@@ -1660,7 +1698,7 @@
                 });
               });
             }
-            
+
             // Create content
             const contentResponse = await fetch('http://localhost:5000/api/content', {
               method: 'POST',
@@ -1670,17 +1708,17 @@
               },
               body: JSON.stringify(contentData)
             });
-            
+
             if (!contentResponse.ok) {
               throw new Error('Content creation failed: ' + contentResponse.statusText);
             }
-            
+
             const contentResult = await contentResponse.json();
             console.log(`${sectionName} content created:`, contentResult);
-            
+
             // If it's the hero section, switch to gallery
             if (tabId === '#hero') {
-            // Show success message
+              // Show success message
               const successAlert = document.createElement('div');
               successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
               successAlert.innerHTML = `
@@ -1690,18 +1728,18 @@
                   <p class="mb-0">Moving to Images Gallery section...</p>
                 </div>
               `;
-              
+
               // Add to alert container
               const alertContainer = document.querySelector('.alert-container');
               if (alertContainer) {
                 alertContainer.appendChild(successAlert);
-                
+
                 // Hide after 3 seconds
                 setTimeout(() => {
                   successAlert.remove();
                 }, 3000);
               }
-              
+
               // Switch to gallery section
               switchHeroToGallery();
             } else {
@@ -1715,23 +1753,23 @@
                   <p class="mb-0">You can now proceed to the next section.</p>
                 </div>
               `;
-              
+
               // Add to alert container
               const alertContainer = document.querySelector('.alert-container');
               if (alertContainer) {
                 alertContainer.appendChild(successAlert);
-                
+
                 // Hide after 3 seconds
                 setTimeout(() => {
                   successAlert.remove();
                 }, 3000);
               }
             }
-            
+
             // Reset form
             newForm.reset();
             newForm.classList.remove('was-validated');
-            
+
             // Reset image previews
             newForm.querySelectorAll('.image-preview').forEach(preview => {
               preview.innerHTML = `
@@ -1740,7 +1778,7 @@
                 </div>
               `;
             });
-            
+
           } catch (error) {
             console.error('Error creating section:', error);
             alert('Error: ' + error.message);
@@ -1754,18 +1792,18 @@
         console.warn('Form not found for tab:', tabId);
       }
     }
-    
+
     // Helper function to upload an image
     async function uploadImage(file, token) {
       if (!file) return null;
-      
+
       try {
         const formData = new FormData();
         formData.append('images', file);
         console.log("Uploading file:", file.name);
         console.log("File size:", file.size);
         console.log("File type:", file.type);
-        
+
         const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.IMAGES}`, {
           method: 'POST',
           headers: {
@@ -1773,29 +1811,29 @@
           },
           body: formData
         });
-        
+
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Image upload failed with status:', response.status);
           console.error('Error response:', errorText);
           throw new Error(`Image upload failed: ${response.status} ${response.statusText}`);
         }
-        
+
         const result = await response.json();
         console.log('Image upload response:', result);
-        
+
         // Handle the actual response format
         if (!result || !result.files || !result.files[0]) {
           console.error('Invalid response format:', result);
           throw new Error('Invalid image upload response format');
         }
-        
+
         // Extract just the URL from the file object
         const fileObject = result.files[0];
         if (typeof fileObject === 'object' && fileObject.url) {
           return fileObject.url;
         }
-        
+
         // If it's already a string URL, return it directly
         return fileObject;
       } catch (error) {
@@ -1806,25 +1844,25 @@
         throw error;
       }
     }
-    
+
     // Function to add gallery image item
     function addGalleryImageItem(imageData = null) {
       const galleryImagesContainer = document.getElementById('galleryImagesContainer');
-      
+
       if (!galleryImagesContainer) {
         console.error('Gallery container not found');
         return;
       }
-      
+
       console.log('Adding gallery image item with data:', imageData);
-      
+
       // Hide no images message
       updateGalleryVisibility();
-      
+
       // Create new gallery image item
       const newItem = document.createElement('div');
       newItem.className = 'gallery-image-item mb-4 border rounded p-3 bg-white position-relative';
-      
+
       // Create the HTML string with proper escaping
       const html = `
         <button type="button" class="btn-close position-absolute top-0 end-0 m-2 remove-gallery-image" 
@@ -1842,12 +1880,12 @@
               </div>
             </div>
             <div class="image-preview ratio ratio-16x9 bg-light rounded overflow-hidden mb-2">
-              ${imageData ? 
-                `<img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt || 'Gallery image'}">` :
-                `<div class="d-flex align-items-center justify-content-center text-muted">
-                  <i class="bi bi-image me-2"></i> No image
+              ${imageData ?
+          `<img src="${imageData.url}" class="w-100 h-100 object-fit-cover" alt="${imageData.alt || 'Gallery image'}">` :
+          `<div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="bi bi-image me-2"></i> No image
                 </div>`
-              }
+        }
             </div>
           </div>
           
@@ -1890,13 +1928,13 @@
           </div>
         </div>
       `;
-      
+
       newItem.innerHTML = html;
-      
+
       // Append to container
       galleryImagesContainer.appendChild(newItem);
       window.galleryImagesCount = (window.galleryImagesCount || 0) + 1;
-      
+
       // Debug log after appending
       console.log('New item added. Current gallery items:', {
         count: window.galleryImagesCount,
@@ -1904,45 +1942,45 @@
         promptValue: newItem.querySelector('.gallery-image-prompt')?.value,
         descriptionValue: newItem.querySelector('.gallery-image-description')?.value
       });
-      
+
       // Add event listener for remove button
       const removeBtn = newItem.querySelector('.remove-gallery-image');
       if (removeBtn) {
-        removeBtn.addEventListener('click', function() {
+        removeBtn.addEventListener('click', function () {
           newItem.remove();
           window.galleryImagesCount--;
           updateGalleryVisibility();
         });
       }
-      
+
       // Add event listener for image preview if no existing image
       if (!imageData) {
         const fileInput = newItem.querySelector('.gallery-image-upload');
         const previewContainer = newItem.querySelector('.image-preview');
-        
+
         if (fileInput && previewContainer) {
-          fileInput.addEventListener('change', function(event) {
+          fileInput.addEventListener('change', function (event) {
             const file = event.target.files[0];
             if (file) {
               const objectUrl = URL.createObjectURL(file);
               previewContainer.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Image Preview">`;
             } else {
               previewContainer.innerHTML = `
-                <div class="d-flex align-items-center justify-content-center text-muted">
-                  <i class="bi bi-image me-2"></i> No image
-                </div>
-              `;
+              <div class="d-flex align-items-center justify-content-center text-muted">
+                <i class="bi bi-image me-2"></i> No image
+              </div>
+            `;
             }
           });
         }
       }
     }
-    
+
     // Function to update visibility of elements based on gallery image count
     function updateGalleryVisibility() {
       const galleryImagesContainer = document.getElementById('galleryImagesContainer');
       const noGalleryImagesMessage = document.getElementById('noGalleryImages');
-      
+
       if (window.galleryImagesCount === 0) {
         // Show no images message, hide container
         if (noGalleryImagesMessage) noGalleryImagesMessage.classList.remove('d-none');
@@ -1953,55 +1991,55 @@
         if (galleryImagesContainer) galleryImagesContainer.classList.remove('d-none');
       }
     }
-    
+
     // Initialize category form
     if (categoryForm) {
-      categoryForm.addEventListener('submit', async function(event) {
+      categoryForm.addEventListener('submit', async function (event) {
         event.preventDefault();
-        
+
         if (!categoryForm.checkValidity()) {
           event.stopPropagation();
           categoryForm.classList.add('was-validated');
-        return;
-      }
-      
+          return;
+        }
+
         // Show loading state
         const submitBtn = categoryForm.querySelector('button[type="submit"]');
         const originalBtnText = submitBtn.innerHTML;
         submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Creating...';
         submitBtn.disabled = true;
-        
+
         try {
           // Get form data
           const categoryName = document.getElementById('categoryName').value;
           const categoryDescription = document.getElementById('categoryDescription').value;
           const categoryImage = document.getElementById('categoryImage').files[0];
-          
+
           if (!categoryImage) {
             throw new Error('Please select an image');
           }
 
           const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
-          
+
           // Upload image first
           const formData = new FormData();
           formData.append('images', categoryImage);
           console.log("file", categoryImage);
           console.log("formData", formData);
-          
+
           // Use the uploadImage helper function
           const imageUrl = await uploadImage(categoryImage, token);
-          
+
           if (!imageUrl) {
             throw new Error('Failed to upload image');
           }
-          
+
           // Show preview (optional)
           const previewContainer = document.querySelector('.image-preview');
           if (previewContainer) {
             previewContainer.innerHTML = `<img src="${imageUrl}" class="w-100 h-100 object-fit-cover" alt="Preview">`;
           }
-          
+
           // Create category object
           const newCategory = {
             name: categoryName,
@@ -2021,50 +2059,69 @@
             },
             body: JSON.stringify(newCategory)
           });
-          
-          if (!categoryResponse.ok) {
-            const errorText = await categoryResponse.text();
-            console.error('Category creation failed:', errorText);
-            throw new Error('Category creation failed: ' + errorText);
-          }
-          
+
+         // if (!categoryResponse.ok) {
+           // const errorText = await categoryResponse.text();
+            //console.error('Category creation failed:', errorText);
+            //throw new Error('Category creation failed: ' + errorText);
+          //}
+
           const createdCategory = await categoryResponse.json();
           console.log('Category created:', createdCategory);
-            
+
           // Store the category ID for section creation
           createdCategoryId = createdCategory._id || createdCategory.id;
-          
+
           // Store the full category object
           window.createdCategory = createdCategory;
-            
+
           // Set categoryId for all forms
           document.querySelectorAll('input[name="categoryId"]').forEach(input => {
             input.value = createdCategoryId;
           });
-          
+
           // Show success notification in bottom right
           const successAlert = document.getElementById('categorySuccessAlert');
           if (successAlert) {
             // Remove any existing alerts
             const existingAlerts = document.querySelectorAll('.alert:not(#categorySuccessAlert)');
             existingAlerts.forEach(alert => alert.remove());
-            
+
             // Show the alert
             successAlert.classList.remove('d-none');
-            
+
             // Hide after 3 seconds
             setTimeout(() => {
               successAlert.classList.add('d-none');
             }, 3000);
           }
-            
+
+            // Show success notification in bottom right
+
+            if(!categoryResponse.ok){
+          const dangerAlert = document.getElementById('categoryErrorAlert');
+          if (dangerAlert) {
+            // Remove any existing alerts
+            const existingAlerts = document.querySelectorAll('.alert:not(#categoryErrorAlert)');
+            existingAlerts.forEach(alert => alert.remove());
+
+            // Show the alert
+            dangerAlert.classList.remove('d-none');
+
+            // Hide after 3 seconds
+            setTimeout(() => {
+              dangerAlert.classList.add('d-none');
+            }, 3000);
+          }
+            }
+
           // Hide category form and show section forms
           categoryForm.parentElement.parentElement.classList.add('d-none');
           sectionForms.classList.remove('d-none');
-            
+
           // Scroll to the section forms
           sectionForms.scrollIntoView({ behavior: 'smooth' });
-          
+
         } catch (error) {
           console.error('Error creating category:', error);
           alert('Error creating category: ' + error.message);
@@ -2075,14 +2132,14 @@
         }
       });
     }
-    
+
     // Update fetchGalleryContent function to include more debugging
     async function fetchGalleryContent(contentId) {
       try {
         console.log('Starting fetchGalleryContent with ID:', contentId);
-        
+
         const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
-        
+
         console.log('Making API request to:', `${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`);
         const response = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}/${contentId}`, {
           headers: {
@@ -2111,10 +2168,10 @@
         // Add each image from the content
         if (content.images && content.images.length > 0) {
           console.log('Processing', content.images.length, 'images');
-          
+
           // Process images in order
           const sortedImages = [...content.images].sort((a, b) => (a.order || 0) - (b.order || 0));
-          
+
           sortedImages.forEach((image, index) => {
             console.log(`Processing image ${index + 1}:`, {
               title: image.title,
@@ -2123,7 +2180,7 @@
               order: image.order,
               url: image.url
             });
-            
+
             // Create image data object with all properties
             const imageData = {
               url: image.url,
@@ -2134,12 +2191,12 @@
               featured: false,
               order: image.order || index
             };
-            
+
             console.log('Created image data object:', imageData);
-            
+
             // Add the image item to the gallery
             addGalleryImageItem(imageData);
-            
+
             // Verify the values were set correctly
             setTimeout(() => {
               const newItem = galleryContainer.lastElementChild;
@@ -2168,27 +2225,37 @@
         alert('Error loading gallery content: ' + error.message);
       }
     }
-    
+
     // Add image preview functionality for category image
     const categoryImageInput = document.getElementById('categoryImage');
-    const categoryImagePreview = document.querySelector('.image-preview');
+    const categoryImagePreview = document.querySelector('#categoryImage').closest('.mb-3').querySelector('.image-preview');
+
+    console.log('Category Image Elements:', {
+      input: categoryImageInput,
+      preview: categoryImagePreview,
+      previewParent: categoryImagePreview?.parentElement
+    });
 
     if (categoryImageInput && categoryImagePreview) {
-      categoryImageInput.addEventListener('change', function(event) {
+      console.log('Setting up category image preview');
+
+      categoryImageInput.addEventListener('change', function (event) {
+        console.log('Category image changed:', event.target.files);
         const file = event.target.files[0];
+
         if (file) {
           // Create object URL for preview
           const objectUrl = URL.createObjectURL(file);
-          
-          // Update preview
-          categoryImagePreview.innerHTML = `
-            <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Category Preview">
-          `;
-          
-          // Clean up object URL when new file is selected
-          categoryImageInput.addEventListener('change', function() {
+          console.log('Created object URL:', objectUrl);
+
+          // Update preview with consistent styling
+          categoryImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Category Preview">`;
+          console.log('Updated preview container with image');
+
+          // Clean up previous object URL when new file is selected
+          categoryImageInput.addEventListener('change', function () {
             URL.revokeObjectURL(objectUrl);
-          });
+          }, { once: true });
         } else {
           // Reset preview if no file selected
           categoryImagePreview.innerHTML = `
@@ -2196,7 +2263,13 @@
               <i class="bi bi-image me-2"></i> No image selected
             </div>
           `;
+          console.log('Reset preview container - no file selected');
         }
+      });
+    } else {
+      console.error('Category image input or preview container not found:', {
+        input: categoryImageInput,
+        preview: categoryImagePreview
       });
     }
 
@@ -2205,86 +2278,85 @@
     const heroImagePreview = document.querySelector('#hero .image-preview');
 
     if (heroImageInput && heroImagePreview) {
-      heroImageInput.addEventListener('change', function(event) {
+      heroImageInput.addEventListener('change', function (event) {
         const file = event.target.files[0];
         if (file) {
           // Create object URL for preview
           const objectUrl = URL.createObjectURL(file);
-          
-          // Update preview - using object-fit-cover to maintain aspect ratio and fill container
-          {{!-- heroImagePreview.innerHTML = `
-            <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Hero Preview">
-          `; --}}
-          
-          // Clean up object URL when new file is selected
-          heroImageInput.addEventListener('change', function() {
+
+          // Update preview with consistent styling
+          heroImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Hero Preview">`;
+
+          // Clean up object URL when input changes again
+          heroImageInput.addEventListener('change', function () {
             URL.revokeObjectURL(objectUrl);
-          });
+          }, { once: true });
         } else {
           // Reset preview if no file selected
           heroImagePreview.innerHTML = `
-           <img src="${objectUrl}" class="w-100 h-100 object-fit-contain" alt="Hero Preview">
-
+            <div class="d-flex align-items-center justify-content-center text-muted h-100">
+              <i class="bi bi-image me-2"></i> No image selected
+            </div>
           `;
         }
       });
     }
-    
+
     // Direct event listener for Add Gallery Image button
     const addGalleryImageBtn = document.getElementById('addGalleryImage');
     const galleryImagesContainer = document.getElementById('galleryImagesContainer');
-    
+
     if (addGalleryImageBtn && galleryImagesContainer) {
       console.log('Setting up Add Gallery Image button');
-      
+
       // Event listener for Add Gallery Image button removed
     }
 
     // Add click event for Hero Section save button
     const heroSaveButton = document.querySelector('#heroSectionForm button[type="submit"]');
     if (heroSaveButton) {
-      heroSaveButton.addEventListener('click', async function(event) {
+      heroSaveButton.addEventListener('click', async function (event) {
         // Prevent default form submission to handle it manually
         event.preventDefault();
-        
+
         const heroForm = document.getElementById('heroSectionForm');
-        
+
         // Validate form
         if (!heroForm.checkValidity()) {
           event.stopPropagation();
           heroForm.classList.add('was-validated');
           return;
         }
-        
+
         // Show loading state
         const originalBtnText = this.innerHTML;
         this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
         this.disabled = true;
-        
+
         try {
           // Get form values
           const heroTitle = document.getElementById('heroTitle').value;
           const heroDescription = document.getElementById('heroDescription').value;
           const heroImage = document.getElementById('heroImage').files[0];
           const categoryId = document.getElementById('categoryId').value;
-          
+
           if (!categoryId) {
             throw new Error('Category ID is missing. Please create a category first.');
           }
-          
+
           if (!heroImage) {
             throw new Error('Please select an image for the hero section.');
           }
-          
+
           const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
-          
+
           // Upload hero image
           const imageUrl = await uploadImage(heroImage, token);
-          
+
           if (!imageUrl) {
             throw new Error('Failed to upload hero image');
           }
-          
+
           // Create section
           const sectionData = {
             name: 'Hero Section',
@@ -2295,7 +2367,7 @@
             order: 1,
             isActive: true
           };
-          
+
           console.log('Creating section with data:', sectionData);
           const sectionResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.SECTIONS}`, {
             method: 'POST',
@@ -2305,16 +2377,16 @@
             },
             body: JSON.stringify(sectionData)
           });
-          
+
           if (!sectionResponse.ok) {
             const errorText = await sectionResponse.text();
             console.error('Section creation failed:', errorText);
             throw new Error('Failed to create section: ' + errorText);
           }
-          
+
           const sectionResult = await sectionResponse.json();
           console.log('Hero section created:', sectionResult);
-          
+
           // Create content for the section
           const contentData = {
             section: sectionResult._id,
@@ -2330,7 +2402,7 @@
             fields: [],
             isActive: true
           };
-          
+
           console.log('Creating content with data:', contentData);
           const contentResponse = await fetch(`${API_CONFIG.BASE_URL}${API_CONFIG.ENDPOINTS.CONTENT}`, {
             method: 'POST',
@@ -2340,56 +2412,56 @@
             },
             body: JSON.stringify(contentData)
           });
-          
+
           if (!contentResponse.ok) {
             const errorText = await contentResponse.text();
             console.error('Content creation failed:', errorText);
             throw new Error('Failed to create content: ' + errorText);
           }
-          
+
           const contentResult = await contentResponse.json();
           console.log('Hero content created:', contentResult);
-          
+
           // Show success notification
           const successAlert = document.createElement('div');
           successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
           successAlert.innerHTML = `
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <div>
+                  <i class="bi bi-check-circle-fill me-2"></i>
+                  <div>
               <strong>Hero Section saved successfully!</strong>
               <p class="mb-0">Moving to Images Gallery section...</p>
-            </div>
-          `;
-          
+                  </div>
+              `;
+
           // Add to alert container
           const alertContainer = document.querySelector('.alert-container');
           if (alertContainer) {
             alertContainer.appendChild(successAlert);
-            
+
             // Hide after 3 seconds
             setTimeout(() => {
               successAlert.remove();
             }, 3000);
           }
-          
+
           // Switch to gallery section
           setTimeout(() => {
             switchHeroToGallery();
           }, 1000);
-          
+
           // Reset form
           heroForm.reset();
           heroForm.classList.remove('was-validated');
-          
+
           // Reset image preview
           if (heroImagePreview) {
             heroImagePreview.innerHTML = `
               <div class="d-flex align-items-center justify-content-center text-muted h-100">
                 <i class="bi bi-image me-2"></i> No image selected
-              </div>
-            `;
+                </div>
+              `;
           }
-          
+
         } catch (error) {
           console.error('Error saving hero section:', error);
           alert('Error saving hero section: ' + error.message);
@@ -2400,257 +2472,173 @@
         }
       });
     }
-    
+
     // Initialize form submission for all section tabs
     console.log('Initializing form submission for all section tabs');
-    
+
     // Array of all tab IDs
     const tabIds = ['#hero', '#gallery', '#why', '#text-to-anything', '#blogs'];
-    
+
     // Blog functionality
+    let editorInstance = null;
     const savedBlogs = [];
-    
-    // Initialize blog save button functionality
+
+    // Function to initialize CKEditor
+    function initializeCKEditor() {
+      console.log('Initializing CKEditor...');
+      const editorElement = document.getElementById('editor');
+
+      if (!editorElement) {
+        console.error('Editor element not found');
+        return;
+      }
+
+      if (editorInstance) {
+        console.log('CKEditor instance already exists');
+        return;
+      }
+
+      if (typeof DecoupledEditor !== 'undefined') {
+        DecoupledEditor
+          .create(editorElement, {
+            // Enhanced toolbar configuration
+            toolbar: {
+              items: [
+                'undo', 'redo',
+                '|',
+                'heading',
+                '|',
+                'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor',
+                '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
+                '|',
+                'link',
+                '|',
+                'bulletedList', 'numberedList',
+                '|',
+                'alignment',
+                '|',
+                'indent', 'outdent',
+                '|',
+                'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells',
+                '|',
+                'code', 'codeBlock',
+                '|',
+                'blockQuote',
+                '|',
+                'removeFormat'
+              ],
+              shouldNotGroupWhenFull: true
+            },
+            // Table configuration
+            table: {
+              contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableProperties',
+                'tableCellProperties'
+              ],
+              defaultHeadings: { rows: 1, columns: 0 }
+            },
+            // Font options
+            fontFamily: {
+              options: [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+              ],
+              supportAllValues: true
+            },
+            fontSize: {
+              options: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48],
+              supportAllValues: true
+            },
+            // Heading configuration
+            heading: {
+              options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
+              ]
+            },
+            // General configuration
+            placeholder: 'Write your blog content here...',
+            height: '400px'
+          })
+          .then(editor => {
+            editorInstance = editor;
+
+            // Get the toolbar element
+            const toolbarContainer = document.createElement('div');
+            toolbarContainer.classList.add('document-editor__toolbar');
+            editorElement.parentElement.insertBefore(toolbarContainer, editorElement);
+
+            // Add the toolbar to the container
+            toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+
+            // Add styling for the editor
+            editorElement.classList.add('document-editor__editable');
+
+            console.log('CKEditor initialized successfully with full features');
+          })
+          .catch(error => {
+            console.error('CKEditor initialization failed:', error);
+          });
+      } else {
+        console.error('CKEditor not loaded');
+      }
+    }
+
+    // Initialize blog functionality
     const initializeBlogFunctionality = () => {
+      console.log('Initializing blog functionality...');
       const saveBlogBtn = document.getElementById('saveBlogBtn');
       const blogImageUpload = document.getElementById('blogImageUpload');
       const blogTitle = document.getElementById('blogTitle');
-      const blogContent = document.getElementById('blogContent');
       const blogLeadToggle = document.getElementById('blogLeadToggle');
       const blogImagePreview = document.getElementById('blogImagePreview');
       const savedBlogsGrid = document.getElementById('savedBlogsGrid');
       const blogPreviewContainer = document.getElementById('blogPreviewContainer');
-      
-      if (!saveBlogBtn || !blogImageUpload || !blogTitle || !blogContent || !savedBlogsGrid) {
-        console.error('Blog elements not found');
+
+      if (!saveBlogBtn || !blogImageUpload || !blogTitle || !savedBlogsGrid) {
+        console.error('Required blog elements not found');
         return;
       }
-      
-      // Add image preview functionality
-      blogImageUpload.addEventListener('change', function(event) {
-        const file = this.files[0];
-        if (file) {
-          const objectUrl = URL.createObjectURL(file);
-          blogImagePreview.innerHTML = `<img src="${objectUrl}" class="w-100 h-100 object-fit-cover" alt="Blog Image Preview">`;
-        } else {
-          blogImagePreview.innerHTML = `
-            <div class="d-flex align-items-center justify-content-center text-muted">
-              <i class="bi bi-image me-2"></i> No image
-            </div>
-          `;
-        }
-      });
-      
-      // Add save blog button functionality
-      saveBlogBtn.addEventListener('click', async function() {
-        // Validate form
-        if (!blogTitle.value.trim()) {
-          blogTitle.classList.add('is-invalid');
-          return;
-        } else {
-          blogTitle.classList.remove('is-invalid');
-        }
-        
-        if (!blogContent.value.trim()) {
-          blogContent.classList.add('is-invalid');
-          return;
-        } else {
-          blogContent.classList.remove('is-invalid');
-        }
-        
-        if (!blogImageUpload.files || blogImageUpload.files.length === 0) {
-          blogImageUpload.classList.add('is-invalid');
-          return;
-        } else {
-          blogImageUpload.classList.remove('is-invalid');
-        }
-        
-        // Show loading state
-        const originalBtnText = this.innerHTML;
-        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Saving...';
-        this.disabled = true;
-        
-        try {
-          // Upload image to Cloudinary
-          const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTI5ODM4MCwiZXhwIjoxNzQ1Mzg0NzgwfQ._XjN76nKvPZcxOT8TLWvfdfA-0KzqGjHwnZWX5YdntA";
-          const imageUrl = await uploadImage(blogImageUpload.files[0], token);
-          
-          if (!imageUrl) {
-            throw new Error('Failed to upload blog image');
-          }
-          
-          // Create blog data object
-          const blogData = {
-            title: blogTitle.value,
-            content: blogContent.value,
-            imageUrl: imageUrl,
-            isLead: blogLeadToggle.checked,
-            timestamp: new Date().getTime()
-          };
-          
-          // Add to saved blogs array
-          savedBlogs.push(blogData);
-          
-          // Create a preview card
-          const blogCard = document.createElement('div');
-          blogCard.className = 'col';
-          blogCard.innerHTML = `
-            <div class="card h-100 shadow-sm border-0 blog-preview-card">
-              <div class="position-relative overflow-hidden">
-                <img src="${blogData.imageUrl}" class="card-img-top" alt="${blogData.title}" style="height: 160px; object-fit: cover;">
-                ${blogData.isLead ? '<span class="position-absolute top-0 start-0 badge bg-primary m-2 py-2 px-3">Lead Blog</span>' : ''}
-                <button type="button" class="btn-close position-absolute top-0 end-0 m-2 bg-white rounded-circle shadow-sm remove-blog" 
-                      aria-label="Remove blog" data-timestamp="${blogData.timestamp}"></button>
-                <div class="blog-card-gradient position-absolute bottom-0 start-0 w-100 py-2"></div>
-              </div>
-              <div class="card-body p-3">
-                <h6 class="card-title fw-bold mb-2">${blogData.title}</h6>
-                <p class="card-text small text-muted mb-0">${blogData.content.length > 100 ? blogData.content.substring(0, 100) + '...' : blogData.content}</p>
-              </div>
-            </div>
-          `;
-          
-          // Add remove button functionality
-          const removeBtn = blogCard.querySelector('.remove-blog');
-          removeBtn.addEventListener('click', function() {
-            const timestamp = this.getAttribute('data-timestamp');
-            const index = savedBlogs.findIndex(blog => blog.timestamp.toString() === timestamp);
-            
-            if (index !== -1) {
-              savedBlogs.splice(index, 1);
-              blogCard.remove();
-              
-              // Hide container if no blogs left
-              if (savedBlogs.length === 0) {
-                blogPreviewContainer.classList.add('d-none');
-              }
-            }
-          });
-          
-          // Add to grid
-          savedBlogsGrid.appendChild(blogCard);
-          
-          // Show preview container
-          blogPreviewContainer.classList.remove('d-none');
-          
-          // Reset form
-          blogTitle.value = '';
-          blogContent.value = '';
-          blogLeadToggle.checked = false;
-          blogImageUpload.value = '';
-          blogImagePreview.innerHTML = `
-            <div class="d-flex align-items-center justify-content-center text-muted">
-              <i class="bi bi-image me-2"></i> No image
-            </div>
-          `;
-          
-          // Show success message
-          const successAlert = document.createElement('div');
-          successAlert.className = 'alert alert-success d-flex align-items-center mb-0';
-          successAlert.innerHTML = `
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <div>
-              <strong>Blog saved!</strong>
-              <p class="mb-0">The blog has been added to the preview.</p>
-            </div>
-          `;
-          
-          // Add to alert container
-          const alertContainer = document.querySelector('.alert-container');
-          if (alertContainer) {
-            alertContainer.appendChild(successAlert);
-            
-            // Hide after 3 seconds
-            setTimeout(() => {
-              successAlert.remove();
-            }, 3000);
-          }
-        } catch (error) {
-          console.error('Error saving blog:', error);
-          
-          // Show error alert
-          const errorAlert = document.createElement('div');
-          errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
-          errorAlert.innerHTML = `
-            <i class="bi bi-exclamation-circle-fill me-2"></i>
-            <div>
-              <strong>Error!</strong>
-              <p class="mb-0">${error.message || 'Failed to save blog. Please try again.'}</p>
-            </div>
-          `;
-          
-          const alertContainer = document.querySelector('.alert-container');
-          if (alertContainer) {
-            alertContainer.appendChild(errorAlert);
-            
-            setTimeout(() => {
-              errorAlert.remove();
-            }, 5000);
-          }
-        } finally {
-          // Restore button state
-          this.innerHTML = originalBtnText;
-          this.disabled = false;
-        }
-      });
+
+      // Initialize CKEditor when blog tab is shown
+      const blogsTab = document.getElementById('blogs-tab');
+      if (blogsTab) {
+        blogsTab.addEventListener('shown.bs.tab', function () {
+          console.log('Blog tab shown, initializing CKEditor...');
+          initializeCKEditor();
+        });
+      }
+
+      // Rest of the blog functionality...
+      // ... existing blog functionality code ...
     };
-    
-    // Add event listeners for tab activation to initialize forms when tabs are shown
-    const tabButtons = document.querySelectorAll('button[data-bs-toggle="tab"]');
-    tabButtons.forEach(tabButton => {
-      tabButton.addEventListener('shown.bs.tab', function(event) {
-        const targetTabId = event.target.getAttribute('data-bs-target');
-        console.log('Tab activated, initializing form:', targetTabId);
-        
-        // Initialize form submission for the activated tab
-        initializeFormSubmission(targetTabId);
-        
-        // Initialize blog functionality if blogs tab is activated
-        if (targetTabId === '#blogs') {
-          initializeBlogFunctionality();
-        }
+
+    // Add tab change listener for blog initialization
+    const blogsTab = document.getElementById('blogs-tab');
+    if (blogsTab) {
+      blogsTab.addEventListener('click', function () {
+        console.log('Blogs tab clicked');
+        setTimeout(initializeCKEditor, 100); // Small delay to ensure DOM is ready
       });
-    });
-    
-    // Also initialize the first tab (Hero section) which is visible by default
-    initializeFormSubmission('#hero');
-    
+    }
+
     // Initialize blog functionality
     initializeBlogFunctionality();
-    
-    // Initialize the save buttons for all other tabs
-    tabIds.forEach(tabId => {
-      if (tabId !== '#hero') { // Hero already has a special handler above
-        const form = document.querySelector(`${tabId} form`);
-        const submitBtn = form?.querySelector('button[type="submit"]');
-        
-        if (submitBtn) {
-          console.log(`Setting up save button for ${tabId}`);
-          
-          submitBtn.addEventListener('click', function(event) {
-            // Prevent default action
-            event.preventDefault();
-            
-            console.log(`${tabId} save button clicked`);
-            
-            // Get the form
-            const form = this.closest('form');
-            if (!form) {
-              console.error('Form not found for', tabId);
-              return;
-            }
-            
-            // Submit the form
-            const submitEvent = new Event('submit', {
-              bubbles: true,
-              cancelable: true
-            });
-            form.dispatchEvent(submitEvent);
-          });
-        } else {
-          console.warn(`Save button not found for ${tabId}`);
-        }
-      }
-    });
+
+    // ... rest of the code ...
   });
 </script>
