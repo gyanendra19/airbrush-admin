@@ -38,24 +38,24 @@
         </div>
       </div>
 
-      <!-- Image Gallery (Modern masonry grid + hover effects) -->
+      <!-- Media Gallery (Modern masonry grid + hover effects) -->
       <div class="mb-4">
-        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Gallery</label>
-        <div class="row g-3" id="image-preview-container">
-          <!-- Single Image Card with replace button -->
+        <label class="form-label small text-uppercase fw-semibold text-muted mb-2">Media</label>
+        <div class="row g-3" id="media-preview-container">
+          <!-- Single Media Card with replace button -->
           <div class="col-12">
             <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
               <div class="ratio ratio-4x3" style="width: 300px;">
-                <img src="https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg"
-                     class="object-fit-contain rounded"
-                     alt="Ghibli Image">
-                <button class="btn-replace-image btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1">
+                <div id="media-container" class="w-100 h-100 rounded">
+                  <!-- Media will be inserted here -->
+                </div>
+                <button class="btn-replace-media btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1">
                   <i class="fas fa-sync-alt"></i>
                 </button>
               </div>
               <div class="flex-grow-1">
-                <h6 class="mb-1">Current Image</h6>
-                <p class="small text-muted mb-0">Click the replace button to change the image</p>
+                <h6 class="mb-1">Current Media</h6>
+                <p class="small text-muted mb-0">Click the replace button to change the media</p>
               </div>
             </div>
           </div>
@@ -81,6 +81,12 @@
     <i class="bi bi-check-circle-fill me-2"></i>
     <div>
       <strong>Success!</strong> Your changes have been saved.
+    </div>
+  </div>
+  <div id="heroErrorAlert" class="alert alert-danger d-flex align-items-center mb-0 d-none">
+    <i class="bi bi-exclamation-circle-fill me-2"></i>
+    <div>
+      <strong>Error!</strong> <span id="errorMessage">Something went wrong.</span>
     </div>
   </div>
 </div>
@@ -111,7 +117,7 @@
   }
 
   /* Override Bootstrap's ratio positioning for buttons */
-  .ratio .btn-replace-image {
+  .ratio .btn-replace-media {
     position: absolute;
     left: auto !important; 
     top: 0;
@@ -128,22 +134,22 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   }
 
-  .ratio .btn-replace-image:hover {
+  .ratio .btn-replace-media:hover {
     background: white;
     transform: rotate(180deg);
     box-shadow: 0 4px 8px rgba(0,0,0,0.2);
   }
 
-  .ratio .btn-replace-image i {
+  .ratio .btn-replace-media i {
     font-size: 1.1rem;
     color: #0d6efd;
   }
 
-  .ratio .btn-replace-image:hover i {
+  .ratio .btn-replace-media:hover i {
     color: #0a58ca;
   }
 
-  /* Ensure the image container has proper padding */
+  /* Ensure the media container has proper padding */
   .ratio.ratio-4x3 {
     padding: 10px;
     background: white;
@@ -151,11 +157,19 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
   }
 
-  /* Make sure the image fits properly */
+  /* Make sure the media fits properly */
   .object-fit-contain {
     object-fit: contain !important;
     max-width: 100%;
     max-height: 100%;
+  }
+
+  /* Video controls styling */
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    background: #000;
   }
 
   /* Alert container styles */
@@ -224,8 +238,8 @@
       // Current media content holder
       let currentMedia = null;
       
-      // Handle image replace functionality
-      const replaceButton = document.querySelector('.btn-replace-image');
+      // Handle media replace functionality
+      const replaceButton = document.querySelector('.btn-replace-media');
       const mediaUpload = document.createElement('input');
       mediaUpload.type = 'file';
       mediaUpload.accept = 'image/*,video/*';
@@ -324,10 +338,36 @@
     }
   });
   
+  // Function to show alert message
+  function showAlert(type, message) {
+    const successAlert = document.getElementById('heroSuccessAlert');
+    const errorAlert = document.getElementById('heroErrorAlert');
+    const errorMessage = document.getElementById('errorMessage');
+    
+    // Hide both alerts first
+    successAlert.classList.add('d-none');
+    errorAlert.classList.add('d-none');
+    
+    // Show the appropriate alert
+    if (type === 'success') {
+      successAlert.classList.remove('d-none');
+      setTimeout(() => {
+        successAlert.classList.add('d-none');
+      }, 3000);
+    } else {
+      errorMessage.textContent = message || 'Something went wrong.';
+      errorAlert.classList.remove('d-none');
+      setTimeout(() => {
+        errorAlert.classList.add('d-none');
+      }, 3000);
+    }
+  }
+
   // Function to update content via API
   function updateContent(contentId, media) {
     if (!contentId) {
       console.error('No content ID available for update');
+      showAlert('error', 'No content ID available for update');
       return;
     }
     
@@ -382,40 +422,11 @@
     })
     .then(data => {
       console.log('Update successful:', data);
-      
-      // Show success message in bottom right
-      const successAlert = document.getElementById('heroSuccessAlert');
-      if (successAlert) {
-        successAlert.classList.remove('d-none');
-        
-        // Hide after 3 seconds
-        setTimeout(() => {
-          successAlert.classList.add('d-none');
-        }, 3000);
-      }
+      showAlert('success', 'Your changes have been saved');
     })
     .catch(error => {
       console.error('Error updating content:', error);
-      
-      // Show error message in bottom right
-      const successAlert = document.getElementById('heroSuccessAlert');
-      if (successAlert) {
-        successAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
-        successAlert.classList.remove('d-none');
-        
-        // Hide after 3 seconds
-        setTimeout(() => {
-          successAlert.classList.add('d-none');
-          // Reset to success alert for next time
-          successAlert.className = 'alert alert-success d-flex align-items-center mb-0 d-none';
-          successAlert.innerHTML = `
-            <i class="bi bi-check-circle-fill me-2"></i>
-            <div>
-              <strong>Success!</strong> Your changes have been saved.
-            </div>
-          `;
-        }, 3000);
-      }
+      showAlert('error', 'Failed to save changes. Please try again.');
     })
     .finally(() => {
       // Restore button state
@@ -424,23 +435,28 @@
     });
   }
 
-  // Function to update the gallery with images from API
+  // Function to update the gallery with media from API
   function updateGallery(content) {
-    const galleryContainer = document.getElementById('image-preview-container');
+    const galleryContainer = document.getElementById('media-preview-container');
     if (!galleryContainer) return;
     
     // Get the container where we'll put the media
-    const mediaContainer = galleryContainer.querySelector('.ratio.ratio-4x3');
+    const mediaContainer = document.getElementById('media-container');
     if (!mediaContainer || !content) return;
     
     // Clear existing content
     mediaContainer.innerHTML = '';
     
+    // Determine media type based on URL or content type
+    const mediaUrl = content.url || content;
+    const isVideo = mediaUrl.toLowerCase().endsWith('.mp4') || 
+                   (content.type && content.type.toLowerCase() === 'video');
+    
     // Create the appropriate element based on media type
-    if (content.type === 'video') {
+    if (isVideo) {
       // Create video element
       const videoElement = document.createElement('video');
-      videoElement.src = content.url || content;
+      videoElement.src = mediaUrl;
       videoElement.controls = true;
       videoElement.autoplay = false;
       videoElement.muted = true;
@@ -449,20 +465,11 @@
     } else {
       // Create image element (default)
       const imageElement = document.createElement('img');
-      imageElement.src = content.url || content;
-      imageElement.className = 'object-fit-contain rounded';
+      imageElement.src = mediaUrl;
+      imageElement.className = 'object-fit-contain rounded w-100 h-100';
       imageElement.alt = "Ghibli Media";
       mediaContainer.appendChild(imageElement);
     }
-    
-    // Add replace button
-    const replaceButton = document.createElement('button');
-    replaceButton.className = 'btn-replace-image btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1';
-    replaceButton.innerHTML = '<i class="fas fa-sync-alt"></i>';
-    replaceButton.addEventListener('click', function() {
-      document.querySelector('input[type="file"]').click();
-    });
-    mediaContainer.appendChild(replaceButton);
   }
 
   // Function to upload media to server
@@ -512,18 +519,22 @@
       
       // Return the Cloudinary URL
       if (data && data.files) {
-        // Get media type
-        const isVideo = file.type.startsWith('video/');
+        // Get media type based on file extension
+        const fileUrl = data.files[0].url;
+        const isVideo = fileUrl.toLowerCase().endsWith('.mp4');
         
         // Update the media container
         updateGallery({
           type: isVideo ? 'video' : 'image',
-          url: data.files[0].url
+          url: fileUrl
         });
+        
+        // Show success message
+        showAlert('success', 'Media uploaded successfully');
         
         // Return the media data
         return {
-          url: data.files[0].url,
+          url: fileUrl,
           alt: "Uploaded media",
           width: 1200,
           height: 800,
@@ -542,8 +553,8 @@
         loadingIndicator.remove();
       }
       
-      // Show error alert
-      alert('Failed to upload media. Please try again.');
+      // Show error message
+      showAlert('error', 'Failed to upload media. Please try again.');
       return null;
     }
   }
