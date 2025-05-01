@@ -2,14 +2,14 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
 <div class="section-content">
-  <h2 class="h4 mb-3">Ghibli Hero Configuration</h2>
+  <h2 class="h4 mb-3">Hero Configuration</h2>
 
   <div class="card border-0 shadow-lg overflow-hidden">
   <div class="card-body p-4">
     <!-- Header with subtle accent -->
     <div class="mb-4 pb-2 border-bottom">
       <h5 class="fw-semibold mb-0 text-primary">Banner Editor</h5>
-      <p class="small text-muted mb-0">Customize your Studio Ghibli showcase</p>
+      <p class="small text-muted mb-0">Customize your Hero Section</p>
     </div>
 
     <form class="needs-validation" novalidate>
@@ -20,7 +20,6 @@
             <input type="text" 
                    class="form-control" 
                    id="banner-title" 
-                   value="Studio Ghibli Showcase"
                    placeholder="Title"
                    required>
             <label for="banner-title" class="text-muted">Title</label>
@@ -31,7 +30,6 @@
             <input type="text" 
                    class="form-control" 
                    id="banner-subtitle" 
-                   value="Explore the magical world"
                    placeholder="Subtitle">
             <label for="banner-subtitle" class="text-muted">Subtitle</label>
           </div>
@@ -46,7 +44,7 @@
           <div class="col-12">
             <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
               <div class="ratio ratio-4x3" style="width: 300px;">
-                <img src="https://res.cloudinary.com/dlzk6nqyg/image/upload/v1744960427/uploads/v3hohxrnlxwqttyiq5bm.jpg"
+                <img src="https://res.cloudinary.com/dlzk6nqyg/image/upload/v1745907984/airbrush-media/njmpgswg4pdlaso3sgca.png"
                      class="object-fit-contain rounded"
                      alt="Ghibli Image">
                 <button class="btn-replace-image btn btn-sm btn-outline-primary position-absolute top-0 end-0 m-1">
@@ -214,12 +212,29 @@
         
         return null;
       };
+
+         const showAlert = (message, type = 'success') => {
+        const alertDiv = document.createElement('div');
+        alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+        alertDiv.innerHTML = `
+          <strong>${type === 'success' ? 'Success!' : type === 'danger' ? 'Error!' : 'Note:'}</strong> ${message}
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        `;
+        
+        // Add alert to the top of the card body
+        document.querySelector('.card-body').prepend(alertDiv);
+        
+        // Remove alert after 4 seconds
+        setTimeout(() => {
+          alertDiv.remove();
+        }, 4000);
+      };
       
       const contentId = getContentId();
-      const category = urlParams.get('category');
+      const categoryId = urlParams.get('categoryId');
       
       console.log('Content ID:', contentId);
-      console.log('Category:', category);
+      console.log('Category ID:', categoryId);
       
       // Current media content holder
       let currentMedia = null;
@@ -274,7 +289,7 @@
       
       // Only attempt to fetch if we have a content ID
       if (contentId) {
-        fetch(`http://localhost:5000/api/content/id/${contentId}`, {
+        fetch(`https://airbrush-admin-backend.onrender.com/api/content/id/${contentId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -309,6 +324,73 @@
         console.log('No content ID available for fetch request');
       }
       
+      // Create new section and content
+      const createNewHeroSection = async () => {
+        if (!categoryId) return;
+
+        try {
+          // First create a new section
+          const sectionResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/sections', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              name: 'Hero Section',
+              slug: 'hero-section',
+              description: 'Hero section for Studio Ghibli showcase',
+              category: categoryId,
+              isFolder: false,
+              order: 0,
+              isActive: true
+            })
+          });
+
+          if (!sectionResponse.ok) {
+            throw new Error('Failed to create section');
+          }
+
+          const sectionResult = await sectionResponse.json();
+          console.log('Created new section:', sectionResult);
+
+          // Then create new content for the section
+          const contentData = {
+            section: sectionResult._id,
+            slug: 'hero-section',
+            title: document.getElementById('banner-title').value.trim(),
+            subtitle: document.getElementById('banner-subtitle').value.trim(),
+            fields: [
+              { value: document.getElementById('banner-title').value.trim() },
+              { value: document.getElementById('banner-subtitle').value.trim() }
+            ],
+            images: currentMedia ? [currentMedia] : [],
+            isActive: true
+          };
+
+          const contentResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/content', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(contentData)
+          });
+
+          if (!contentResponse.ok) {
+            throw new Error('Failed to create content');
+          }
+
+          const contentResult = await contentResponse.json();
+          console.log('Created new content:', contentResult);
+          
+          // Update the contentId and reload the page
+          window.location.href = `/hero-section?id=${contentResult._id}&categoryId=${categoryId}`;
+          
+        } catch (error) {
+          console.error('Error creating new hero section:', error);
+          showAlert('Failed to create new section. Please try again.', 'danger');
+        }
+      };
+
       // Add event listener to Save Changes button
       const saveButton = document.querySelector('button[type="submit"]');
       if (saveButton) {
@@ -318,7 +400,15 @@
         });
         
         saveButton.addEventListener('click', function() {
-          updateContent(contentId, currentMedia);
+          if (contentId) {
+            // If we have a contentId, update the existing content
+            updateContent(contentId, currentMedia);
+          } else if (categoryId) {
+            // If we have a categoryId but no contentId, create new section and content
+            createNewHeroSection();
+          } else {
+            showAlert('Cannot save: Missing content ID or category ID.', 'danger');
+          }
         });
       }
     }
@@ -366,7 +456,7 @@
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
     
     // Send update request
-    fetch(`http://localhost:5000/api/content/${contentId}`, {
+    fetch(`https://airbrush-admin-backend.onrender.com/api/content/${contentId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -437,7 +527,7 @@
     mediaContainer.innerHTML = '';
     
     // Create the appropriate element based on media type
-    if (content.type === 'video') {
+    if (content.type === 'video' || (content.url && content.url.toLowerCase().endsWith('.mp4'))) {
       // Create video element
       const videoElement = document.createElement('video');
       videoElement.src = content.url || content;
@@ -491,7 +581,7 @@
       }
       
       // Upload the media to Cloudinary via your endpoint
-      const response = await fetch('http://localhost:5000/api/images', {
+      const response = await fetch('https://airbrush-admin-backend.onrender.com/api/images', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

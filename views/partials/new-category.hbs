@@ -15,6 +15,18 @@
       </div>
 
       <div class="mb-3">
+        <label for="categorySlug" class="form-label">Category Slug</label>
+        <input type="text" class="form-control" id="categorySlug" name="categorySlug" 
+               placeholder="Enter category slug (e.g., my-category)" required>
+        <div class="form-text">
+          The slug will be used in the URL. Use lowercase letters, numbers, and hyphens only.
+        </div>
+        <div class="invalid-feedback">
+          Please provide a valid category slug.
+        </div>
+      </div>
+
+      <div class="mb-3">
         <label for="categoryDescription" class="form-label">Description</label>
         <textarea class="form-control" id="categoryDescription" name="categoryDescription" 
                   rows="3" placeholder="Enter category description" required></textarea>
@@ -50,14 +62,14 @@
 </div>
 
 <!-- Section Forms - Initially Hidden -->
-<div id="sectionForms">
+<div id="sectionForms" class="d-none">
   <!-- Tabs for Different Section Types -->
   <ul class="nav nav-tabs mb-4" id="sectionTabs" role="tablist">
-    <li class="nav-item" role="presentation">
+    {{!-- <li class="nav-item" role="presentation">
       <button class="nav-link active" id="hero-tab" data-bs-toggle="tab" data-bs-target="#hero" type="button" role="tab">
         Hero Section
       </button>
-    </li>
+    </li> --}}
     <li class="nav-item" role="presentation">
       <button class="nav-link" id="gallery-tab" data-bs-toggle="tab" data-bs-target="#gallery" type="button" role="tab">
         Images Gallery
@@ -83,7 +95,7 @@
   <!-- Tab Content -->
   <div class="tab-content" id="sectionTabsContent">
     <!-- Hero Section Tab -->
-    <div class="tab-pane fade show active" id="hero" role="tabpanel" aria-labelledby="hero-tab">
+    <div class="tab-pane fade show active d-none" id="hero" role="tabpanel" aria-labelledby="hero-tab">
       <div class="card shadow-sm border-0 mb-4">
         <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
           <h5 class="card-title mb-0 fw-semibold">Hero Section</h5>
@@ -456,7 +468,7 @@
               </div>
               
               <!-- Example Images -->
-              <div>
+              {{!-- <div>
                 <label class="form-label small text-uppercase fw-semibold text-primary mb-2">Example Images (Optional)</label>
                 <div class="row g-3 mb-3" id="textToAnythingExampleImages">
                   <div class="col-6 col-md-3">
@@ -474,7 +486,7 @@
                 <div class="form-text mt-1">
                   You can add up to 8 example images to showcase the capabilities.
                 </div>
-              </div>
+              </div> --}}
             </div>
             
             <div class="d-grid gap-2">
@@ -565,8 +577,7 @@
                         
                         <div class="mb-3">
                           <label class="form-label small">Blog Content</label>
-                          <textarea class="form-control form-control-sm" id="blogContent" 
-                                 rows="3" placeholder="Enter blog content" required></textarea>
+                          <div id="editor"></div>
                           <div class="invalid-feedback">
                             Please provide blog content.
                           </div>
@@ -680,11 +691,12 @@
   }
 </style>
 
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/decoupled-document/ckeditor.js"></script>
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     // API Configuration
     const API_CONFIG = {
-      BASE_URL: 'http://localhost:5000', // Change this to your actual backend URL
+      BASE_URL: 'https://airbrush-admin-backend.onrender.com', // Change this to your actual backend URL
       ENDPOINTS: {
         IMAGES: '/api/images',
         CATEGORIES: '/api/categories',
@@ -692,6 +704,70 @@
         CONTENT: '/api/content'
       }
     };
+
+    // Reusable error alert function
+    function showErrorAlert(error, duration = 5000) {
+      const errorAlert = document.createElement('div');
+      errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
+      errorAlert.innerHTML = `
+        <i class="bi bi-exclamation-circle-fill me-2"></i>
+        <div>
+          <strong>Error!</strong>
+          <p class="mb-0">${error.message || error || 'An unexpected error occurred.'}</p>
+        </div>
+      `;
+      
+      const alertContainer = document.querySelector('.alert-container');
+      if (alertContainer) {
+        alertContainer.appendChild(errorAlert);
+        
+        // Add animation class
+        errorAlert.classList.add('slide-in');
+        
+        // Remove after duration
+        setTimeout(() => {
+          errorAlert.classList.add('slide-out');
+          setTimeout(() => {
+            errorAlert.remove();
+          }, 300); // Match the animation duration
+        }, duration);
+      }
+    }
+
+    // Add styles for error alerts
+    const style = document.createElement('style');
+    style.textContent = `
+      .slide-in {
+        animation: slideIn 0.3s ease-out;
+      }
+      
+      .slide-out {
+        animation: slideOut 0.3s ease-out;
+      }
+      
+      @keyframes slideIn {
+        from {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+        to {
+          transform: translateX(0);
+          opacity: 1;
+        }
+      }
+      
+      @keyframes slideOut {
+        from {
+          transform: translateX(0);
+          opacity: 1;
+        }
+        to {
+          transform: translateX(100%);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
 
     const categoryForm = document.getElementById('newCategoryForm');
     const sectionForms = document.getElementById('sectionForms');
@@ -978,26 +1054,7 @@
               }
             } catch (error) {
               console.error('Error saving image:', error);
-              
-              // Show error alert
-              const errorAlert = document.createElement('div');
-              errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
-              errorAlert.innerHTML = `
-                <i class="bi bi-exclamation-circle-fill me-2"></i>
-                <div>
-                  <strong>Error!</strong>
-                  <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
-                </div>
-              `;
-              
-              const alertContainer = document.querySelector('.alert-container');
-              if (alertContainer) {
-                alertContainer.appendChild(errorAlert);
-                
-                setTimeout(() => {
-                  errorAlert.remove();
-                }, 5000);
-              }
+              showErrorAlert(error);
             } finally {
               // Restore button state
               this.innerHTML = originalBtnText;
@@ -1193,26 +1250,7 @@
           }
         } catch (error) {
           console.error('Error saving image:', error);
-          
-          // Show error alert
-          const errorAlert = document.createElement('div');
-          errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
-          errorAlert.innerHTML = `
-            <i class="bi bi-exclamation-circle-fill me-2"></i>
-            <div>
-              <strong>Error!</strong>
-              <p class="mb-0">${error.message || 'Failed to save image. Please try again.'}</p>
-            </div>
-          `;
-          
-          const alertContainer = document.querySelector('.alert-container');
-          if (alertContainer) {
-            alertContainer.appendChild(errorAlert);
-            
-            setTimeout(() => {
-              errorAlert.remove();
-            }, 5000);
-          }
+          showErrorAlert(error);
         } finally {
           // Restore button state
           this.innerHTML = originalBtnText;
@@ -1291,38 +1329,6 @@
       tab.show();
       
       console.log('Tab switch completed');
-    }
-
-    // Function to switch from hero to gallery section
-    function switchHeroToGallery() {
-      console.log('Switching from hero to gallery section...');
-      
-      // Get the gallery tab and content
-      const galleryTab = document.getElementById('gallery-tab');
-      const galleryContent = document.getElementById('gallery');
-      const heroTab = document.getElementById('hero-tab');
-      const heroContent = document.getElementById('hero');
-      
-      if (galleryTab && galleryContent && heroTab && heroContent) {
-        // Remove active classes from hero tab
-        heroTab.classList.remove('active');
-        heroContent.classList.remove('show', 'active');
-        
-        // Add active classes to gallery tab
-        galleryTab.classList.add('active');
-        galleryContent.classList.add('show', 'active');
-        
-        // Trigger Bootstrap's tab event
-        const tabEvent = new Event('shown.bs.tab', { bubbles: true });
-        galleryTab.dispatchEvent(tabEvent);
-        
-        // Scroll to the gallery section
-        galleryContent.scrollIntoView({ behavior: 'smooth' });
-        
-        console.log('Successfully switched to gallery section');
-      } else {
-        console.error('Could not find required elements for tab switching');
-      }
     }
     
     // Function to initialize form submission for a specific tab
@@ -1479,7 +1485,7 @@
             
             // Create section
             console.log('Creating section with data:', sectionData);
-            const sectionResponse = await fetch('http://localhost:5000/api/sections', {
+            const sectionResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/sections', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1501,7 +1507,7 @@
             // Process images and create content based on the tab
             let contentData = {
               section: sectionResult._id,
-              slug: `${window.createdCategory?.slug || 'category'}-${sectionSlug}`,
+              slug: `${sectionSlug}`,
               title: title,
               subtitle: description,
               images: [],
@@ -1662,7 +1668,7 @@
             }
             
             // Create content
-            const contentResponse = await fetch('http://localhost:5000/api/content', {
+            const contentResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/content', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
@@ -1703,7 +1709,7 @@
               }
               
               // Switch to gallery section
-              switchHeroToGallery();
+              switchSection('hero', 'gallery');
             } else {
               // Show regular success message for other sections
               const successAlert = document.createElement('div');
@@ -1726,6 +1732,17 @@
                   successAlert.remove();
                 }, 3000);
               }
+
+              // Switch to next section based on current tab
+              if (tabId === '#hero') {
+                switchSection('hero', 'gallery');
+              } else if (tabId === '#gallery') {
+                switchSection('gallery', 'why');
+              } else if (tabId === '#why') {
+                switchSection('why', 'text-to-anything');
+              } else if (tabId === '#text-to-anything') {
+                switchSection('text-to-anything', 'blogs');
+              }
             }
             
             // Reset form
@@ -1743,7 +1760,7 @@
             
           } catch (error) {
             console.error('Error creating section:', error);
-            alert('Error: ' + error.message);
+            showErrorAlert(error);
           } finally {
             // Restore button state
             submitBtn.innerHTML = originalBtnText;
@@ -1801,7 +1818,9 @@
       } catch (error) {
         console.error('Error in uploadImage:', error);
         if (error.message.includes('Failed to fetch')) {
-          throw new Error(`Could not connect to the server at ${API_CONFIG.BASE_URL}. Please make sure the backend server is running.`);
+          showErrorAlert(`Could not connect to the server at ${API_CONFIG.BASE_URL}. Please make sure the backend server is running.`);
+        } else {
+          showErrorAlert(error);
         }
         throw error;
       }
@@ -1974,6 +1993,7 @@
         try {
           // Get form data
           const categoryName = document.getElementById('categoryName').value;
+          const categorySlug = document.getElementById('categorySlug').value;
           const categoryDescription = document.getElementById('categoryDescription').value;
           const categoryImage = document.getElementById('categoryImage').files[0];
           
@@ -2005,7 +2025,7 @@
           // Create category object
           const newCategory = {
             name: categoryName,
-            slug: categoryName.toLowerCase().replace(/\s+/g, '-'),
+            slug: categorySlug,
             description: categoryDescription,
             image: imageUrl,
             isFolder: true,
@@ -2033,6 +2053,63 @@
             
           // Store the category ID for section creation
           createdCategoryId = createdCategory._id || createdCategory.id;
+
+           // Create section first
+            const sectionData = {
+              name: 'Hero Section',
+              slug: 'hero-section',
+              description: 'Hero section for the category',
+              category: createdCategoryId,
+              isFolder: false,
+              order: 1,
+              isActive: true
+            };
+            
+            const sectionResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/sections', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(sectionData)
+            });
+            
+            if (!sectionResponse.ok) {
+              throw new Error('Section creation failed: ' + sectionResponse.statusText);
+            }
+            
+            const sectionResult = await sectionResponse.json();
+            console.log('Section created:', sectionResult);
+            
+            // Add GET request to fetch content with static values
+            const getContentResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/content', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                section: sectionResult._id,
+                title: 'Placeholder title for hero section, Change this later',
+                slug: 'hero-section',
+                subtitle: 'Placeholder subtitle for hero section, Change this later',
+                images: [
+                  {
+                    url: 'new image url',
+                    alt: 'Hero Image',
+                    width: 1920,
+                    height: 1080
+                  }
+                ],
+                fields: [],
+                isActive: true
+              })
+            });
+            
+            if (!getContentResponse.ok) {
+              throw new Error('Content fetch failed: ' + getContentResponse.statusText);
+            }
+            
+            const getContentResult = await getContentResponse.json();
+            console.log('Fetched content with static values:', getContentResult);
           
           // Store the full category object
           window.createdCategory = createdCategory;
@@ -2062,12 +2139,34 @@
           categoryForm.parentElement.parentElement.classList.add('d-none');
           sectionForms.classList.remove('d-none');
             
-          // Scroll to the section forms
-          sectionForms.scrollIntoView({ behavior: 'smooth' });
-          
+            // Switch to gallery section
+            const galleryTab = document.getElementById('gallery-tab');
+            const galleryContent = document.getElementById('gallery');
+            
+            if (galleryTab && galleryContent) {
+              // Remove active class from hero tab
+              const heroTab = document.getElementById('hero-tab');
+              const heroContent = document.getElementById('hero');
+              if (heroTab && heroContent) {
+                heroTab.classList.remove('active');
+                heroContent.classList.remove('show', 'active');
+              }
+              
+              // Add active class to gallery tab
+              galleryTab.classList.add('active');
+              galleryContent.classList.add('show', 'active');
+              
+              // Trigger Bootstrap's tab event
+              const tabEvent = new Event('shown.bs.tab', { bubbles: true });
+              galleryTab.dispatchEvent(tabEvent);
+            }
+            
+            // Scroll to the section forms
+            sectionForms.scrollIntoView({ behavior: 'smooth' });
+            
         } catch (error) {
           console.error('Error creating category:', error);
-          alert('Error creating category: ' + error.message);
+          showErrorAlert(error);
         } finally {
           // Restore button state
           submitBtn.innerHTML = originalBtnText;
@@ -2165,7 +2264,7 @@
 
       } catch (error) {
         console.error('Error in fetchGalleryContent:', error);
-        alert('Error loading gallery content: ' + error.message);
+        showErrorAlert(error);
       }
     }
     
@@ -2318,7 +2417,7 @@
           // Create content for the section
           const contentData = {
             section: sectionResult._id,
-            slug: `${title.toLowerCase().replace(/\s+/g, '-')}-${sectionSlug}`,
+            slug: `${sectionSlug}`,
             title: heroTitle,
             subtitle: heroDescription,
             images: [{
@@ -2372,10 +2471,6 @@
             }, 3000);
           }
           
-          // Switch to gallery section
-          setTimeout(() => {
-            switchHeroToGallery();
-          }, 1000);
           
           // Reset form
           heroForm.reset();
@@ -2392,7 +2487,7 @@
           
         } catch (error) {
           console.error('Error saving hero section:', error);
-          alert('Error saving hero section: ' + error.message);
+          showErrorAlert(error);
         } finally {
           // Restore button state
           this.innerHTML = originalBtnText;
@@ -2408,22 +2503,146 @@
     const tabIds = ['#hero', '#gallery', '#why', '#text-to-anything', '#blogs'];
     
     // Blog functionality
+    let editorInstance = null
     const savedBlogs = [];
+
+     function initializeCKEditor() {
+      console.log('Initializing CKEditor...');
+      const editorElement = document.getElementById('editor');
+
+      if (!editorElement) {
+        console.error('Editor element not found');
+        return;
+      }
+
+      if (editorInstance) {
+        console.log('CKEditor instance already exists');
+        return;
+      }
+
+      if (typeof DecoupledEditor !== 'undefined') {
+        DecoupledEditor
+          .create(editorElement, {
+            // Enhanced toolbar configuration
+            toolbar: {
+              items: [
+                'undo', 'redo',
+                '|',
+                'heading',
+                '|',
+                'fontFamily', 'fontSize', 'fontColor', 'fontBackgroundColor',
+                '|',
+                'bold', 'italic', 'underline', 'strikethrough', 'subscript', 'superscript',
+                '|',
+                'link',
+                '|',
+                'bulletedList', 'numberedList',
+                '|',
+                'alignment',
+                '|',
+                'indent', 'outdent',
+                '|',
+                'insertTable', 'tableColumn', 'tableRow', 'mergeTableCells',
+                '|',
+                'code', 'codeBlock',
+                '|',
+                'blockQuote',
+                '|',
+                'removeFormat'
+              ],
+              shouldNotGroupWhenFull: true
+            },
+            // Table configuration
+            table: {
+              contentToolbar: [
+                'tableColumn',
+                'tableRow',
+                'mergeTableCells',
+                'tableProperties',
+                'tableCellProperties'
+              ],
+              defaultHeadings: { rows: 1, columns: 0 }
+            },
+            // Font options
+            fontFamily: {
+              options: [
+                'default',
+                'Arial, Helvetica, sans-serif',
+                'Courier New, Courier, monospace',
+                'Georgia, serif',
+                'Lucida Sans Unicode, Lucida Grande, sans-serif',
+                'Tahoma, Geneva, sans-serif',
+                'Times New Roman, Times, serif',
+                'Trebuchet MS, Helvetica, sans-serif',
+                'Verdana, Geneva, sans-serif'
+              ],
+              supportAllValues: true
+            },
+            fontSize: {
+              options: [10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36, 48],
+              supportAllValues: true
+            },
+            // Heading configuration
+            heading: {
+              options: [
+                { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' }
+              ]
+            },
+            // General configuration
+            placeholder: 'Write your blog content here...',
+            height: '400px'
+          })
+          .then(editor => {
+            editorInstance = editor;
+
+            // Get the toolbar element
+            const toolbarContainer = document.createElement('div');
+            toolbarContainer.classList.add('document-editor__toolbar');
+            editorElement.parentElement.insertBefore(toolbarContainer, editorElement);
+
+            // Add the toolbar to the container
+            toolbarContainer.appendChild(editor.ui.view.toolbar.element);
+
+            // Add styling for the editor
+            editorElement.classList.add('document-editor__editable');
+
+            console.log('CKEditor initialized successfully with full features');
+          })
+          .catch(error => {
+            console.error('CKEditor initialization failed:', error);
+          });
+      } else {
+        console.error('CKEditor not loaded');
+      }
+    }
+
     
     // Initialize blog save button functionality
     const initializeBlogFunctionality = () => {
       const saveBlogBtn = document.getElementById('saveBlogBtn');
       const blogImageUpload = document.getElementById('blogImageUpload');
       const blogTitle = document.getElementById('blogTitle');
-      const blogContent = document.getElementById('blogContent');
       const blogLeadToggle = document.getElementById('blogLeadToggle');
       const blogImagePreview = document.getElementById('blogImagePreview');
       const savedBlogsGrid = document.getElementById('savedBlogsGrid');
       const blogPreviewContainer = document.getElementById('blogPreviewContainer');
       
-      if (!saveBlogBtn || !blogImageUpload || !blogTitle || !blogContent || !savedBlogsGrid) {
+      if (!saveBlogBtn || !blogImageUpload || !blogTitle || !savedBlogsGrid) {
         console.error('Blog elements not found');
         return;
+      }
+
+      // Initialize CKEditor when blog tab is shown
+      const blogsTab = document.getElementById('blogs-tab');
+      if (blogsTab) {
+        blogsTab.addEventListener('shown.bs.tab', function () {
+          console.log('Blog tab shown, initializing CKEditor...');
+          initializeCKEditor();
+        });
       }
       
       // Add image preview functionality
@@ -2451,11 +2670,26 @@
           blogTitle.classList.remove('is-invalid');
         }
         
-        if (!blogContent.value.trim()) {
-          blogContent.classList.add('is-invalid');
-          return;
+        // Get CKEditor content
+        let editorContent = '';
+        if (editorInstance) {
+          editorContent = editorInstance.getData();
+          if (!editorContent.trim()) {
+            // Show error for empty content
+            const editorElement = document.getElementById('editor');
+            if (editorElement) {
+              editorElement.classList.add('is-invalid');
+            }
+            return;
+          } else {
+            const editorElement = document.getElementById('editor');
+            if (editorElement) {
+              editorElement.classList.remove('is-invalid');
+            }
+          }
         } else {
-          blogContent.classList.remove('is-invalid');
+          console.error('CKEditor instance not found');
+          return;
         }
         
         if (!blogImageUpload.files || blogImageUpload.files.length === 0) {
@@ -2482,7 +2716,7 @@
           // Create blog data object
           const blogData = {
             title: blogTitle.value,
-            content: blogContent.value,
+            content: editorContent,
             imageUrl: imageUrl,
             isLead: blogLeadToggle.checked,
             timestamp: new Date().getTime()
@@ -2535,7 +2769,7 @@
           
           // Reset form
           blogTitle.value = '';
-          blogContent.value = '';
+          editorInstance.setData(''); // Clear CKEditor content
           blogLeadToggle.checked = false;
           blogImageUpload.value = '';
           blogImagePreview.innerHTML = `
@@ -2567,26 +2801,7 @@
           }
         } catch (error) {
           console.error('Error saving blog:', error);
-          
-          // Show error alert
-          const errorAlert = document.createElement('div');
-          errorAlert.className = 'alert alert-danger d-flex align-items-center mb-0';
-          errorAlert.innerHTML = `
-            <i class="bi bi-exclamation-circle-fill me-2"></i>
-            <div>
-              <strong>Error!</strong>
-              <p class="mb-0">${error.message || 'Failed to save blog. Please try again.'}</p>
-            </div>
-          `;
-          
-          const alertContainer = document.querySelector('.alert-container');
-          if (alertContainer) {
-            alertContainer.appendChild(errorAlert);
-            
-            setTimeout(() => {
-              errorAlert.remove();
-            }, 5000);
-          }
+          showErrorAlert(error);
         } finally {
           // Restore button state
           this.innerHTML = originalBtnText;
@@ -2652,5 +2867,36 @@
         }
       }
     });
+
+    function switchSection(fromSection, toSection) {
+      console.log(`Switching from ${fromSection} to ${toSection}`);
+      
+      const fromTab = document.getElementById(`${fromSection}-tab`);
+      const fromContent = document.getElementById(fromSection);
+      const toTab = document.getElementById(`${toSection}-tab`);
+      const toContent = document.getElementById(toSection);
+      
+      if (fromTab && fromContent && toTab && toContent) {
+        // Remove active classes from source section
+        fromTab.classList.remove('active');
+        fromContent.classList.remove('show', 'active');
+        
+        // Add active classes to target section
+        toTab.classList.add('active');
+        toContent.classList.add('show', 'active');
+        
+        // Trigger Bootstrap's tab event
+        const tabEvent = new Event('shown.bs.tab', { bubbles: true });
+        toTab.dispatchEvent(tabEvent);
+        
+        // Scroll to the target section and to the top of the page
+        toContent.scrollIntoView({ behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        console.log(`Successfully switched to ${toSection} section`);
+      } else {
+        console.error('Could not find required elements for tab switching');
+      }
+    }
   });
 </script>

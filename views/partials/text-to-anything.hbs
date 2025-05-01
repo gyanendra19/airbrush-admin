@@ -126,49 +126,92 @@
     const imageUpload = document.getElementById('image-upload');
     
     // Data storage
-    let contentId = null;
+    let contentId = new URLSearchParams(window.location.search).get('id');
+    let categoryId = new URLSearchParams(window.location.search).get('categoryId');
     let generatedImages = [];
-    
-    // Get content ID from the sidebar link
-    const getContentId = () => {
-      // Try to get from URL parameters first
-      const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.has('id')) {
-        return urlParams.get('id');
-      }
-      
-      // Check for referrer with URL parameters
-      if (document.referrer.includes('/text-to-anything')) {
-        const referrerUrl = new URL(document.referrer);
-        const referrerParams = new URLSearchParams(referrerUrl.search);
-        if (referrerParams.has('id')) {
-          return referrerParams.get('id');
-        }
-      }
-      
-      // Then check for the sidebar link
-      const sidebarLink = document.querySelector('a[href="/text-to-anything"]');
-      if (sidebarLink && sidebarLink.getAttribute('data-content-id')) {
-        return sidebarLink.getAttribute('data-content-id');
-      }
-      
-      return null;
-    };
     
     // JWT Token for authorization
     const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4MDQ5MWRmMzljZmYwNTljMDY1NWZkMSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc0NTIyNTEyMSwiZXhwIjoxNzQ1MzExNTIxfQ.O1xfunWURBxt7tqcgXH_yWEyq-7VOA61LX6qrmEHXoA';
+
+    // Create new section and content
+    const createNewTextToImageSection = async () => {
+      if (!categoryId) return;
+
+      try {
+        // First create a new section
+        const sectionResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/sections', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            name: 'Text to Image',
+            slug: 'text-to-anything',
+            description: 'Text to Image section',
+            category: categoryId,
+            isFolder: false,
+            order: 0,
+            isActive: true
+          })
+        });
+
+        if (!sectionResponse.ok) {
+          throw new Error('Failed to create section');
+        }
+
+        const sectionResult = await sectionResponse.json();
+        console.log('Created new section:', sectionResult);
+
+        // Then create new content for the section
+        const contentData = {
+          section: sectionResult._id,
+          slug: 'text-to-anything',
+          title: titleInput.value.trim(),
+          subtitle: subtitleInput.value.trim(),
+          images: generatedImages,
+          fields: [
+            { value: titleInput.value.trim() },
+            { value: subtitleInput.value.trim() }
+          ],
+          isActive: true
+        };
+
+        const contentResponse = await fetch('https://airbrush-admin-backend.onrender.com/api/content', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify(contentData)
+        });
+
+        if (!contentResponse.ok) {
+          throw new Error('Failed to create content');
+        }
+
+        const contentResult = await contentResponse.json();
+        console.log('Created new content:', contentResult);
+        
+        // Update the contentId and reload the page
+        contentId = contentResult._id;
+        window.location.href = `/text-to-anything?id=${contentId}&categoryId=${categoryId}`;
+        
+      } catch (error) {
+        console.error('Error creating new text to image section:', error);
+        alert('Failed to create new section. Please try again.');
+      }
+    };
     
     // Fetch content from API
     const fetchContent = async () => {
-      contentId = getContentId();
-      
       if (!contentId) {
         console.error('No content ID found');
         return;
       }
       
       try {
-        const response = await fetch(`http://localhost:5000/api/content/id/${contentId}`, {
+        const response = await fetch(`https://airbrush-admin-backend.onrender.com/api/content/id/${contentId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -290,7 +333,7 @@
         console.log('Uploading image to server...');
         
         // Upload to server
-        const response = await fetch('http://localhost:5000/api/images', {
+        const response = await fetch('https://airbrush-admin-backend.onrender.com/api/images', {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
@@ -356,7 +399,6 @@
       const updateData = {
         title,
         subtitle,
-        // Add fields array in the correct format
         fields: [
           { value: title },
           { value: subtitle }
@@ -372,7 +414,7 @@
       
       try {
         // Send update request
-        const response = await fetch(`http://localhost:5000/api/content/${contentId}`, {
+        const response = await fetch(`https://airbrush-admin-backend.onrender.com/api/content/${contentId}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -382,7 +424,6 @@
         });
         
         if (!response.ok) {
-          // Try to get the error details
           const errorText = await response.text();
           console.error('Server response:', errorText);
           throw new Error('Failed to save changes: ' + response.statusText);
@@ -404,7 +445,19 @@
     };
     
     // Event Listeners
-    saveBtn.addEventListener('click', saveChanges);
+    saveBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+      
+      if (contentId) {
+        // If we have a contentId, update the existing content
+        saveChanges();
+      } else if (categoryId) {
+        // If we have a categoryId but no contentId, create new section and content
+        createNewTextToImageSection();
+      } else {
+        alert('Cannot save: Missing content ID or category ID.');
+      }
+    });
     
     // Image upload
     addImageBtn.addEventListener('click', () => imageUpload.click());
@@ -427,7 +480,9 @@
       e.target.value = '';
     });
     
-    // Load data on page load
-    fetchContent();
+    // Load data on page load if we have a contentId
+    if (contentId) {
+      fetchContent();
+    }
   });
 </script>

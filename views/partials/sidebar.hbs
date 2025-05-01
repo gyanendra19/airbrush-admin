@@ -136,7 +136,7 @@
     // Fetch categories and their sections from the backend
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/content', {
+        const response = await fetch('https://airbrush-admin-backend.onrender.com/api/content', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -152,19 +152,26 @@
         
         // Group content by category
         const categories = {};
+        console.log(data, 'data');
         data.forEach(item => {
           // Skip items without required properties
           if (!item || !item.section || !item.section.category) {
             console.warn('Skipping item with missing properties:', item);
             return;
           }
+
+          if(item.section.length > 0){
+            console.log('item.section:', item.section);
+            
+          }
           
           const categoryName = item.section.category.name;
           const categorySlug = item.section.category.slug;
+          const categoryId = item.section.category._id;
           
           if (!categories[categoryName]) {
             categories[categoryName] = {
-              id: `category_${categorySlug}`, // Add prefix to make it a valid CSS selector
+              id: categoryId, // Add prefix to make it a valid CSS selector
               name: categoryName,
               sections: []
             };
@@ -244,16 +251,14 @@
             </a>
             <div class="collapse ps-4" id="${category.id}">
               <ul class="list-unstyled mt-2">
-                ${category.sections.map(section => {
+                ${category.sections.map((section, index) => {
                   // Map section names to the correct slug
-                  let sectionSlug = section.href.replace('/', '');
-                  
-                  // Override with specific slugs for certain sections
-                  if (section.name.includes('Images Gallery') || section.name.includes('image gallery')) {
+                  let sectionSlug = section.href.replace('/', '');                  // Override with specific slugs for certain sections
+                  if (section.name.includes('Images Gallery')) {
                     sectionSlug = 'images-gallery';
                   } else if (section.name.includes('Text to')) {
                     sectionSlug = 'text-to-anything';
-                  } else if (section.name.includes('Why Use') || (section.name.includes('Why-use'))) {
+                  } else if (section.name.includes('Why use') || (section.name.includes('Why-use'))) {
                     sectionSlug = 'why-use-tool';
                   } else if (section.name.includes('Blog')) {
                     sectionSlug = 'blogs';
@@ -264,6 +269,22 @@
                   
                   return `<li><a href="${href}" class="d-block px-3 py-1 rounded-3 text-decoration-none">${section.name}</a></li>`;
                 }).join('')}
+                ${!category.sections.some(section => section.name.includes('Hero Section')) ? 
+                  `<li><a href="/hero-section?categoryId=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Hero Section</a></li>` 
+                  : ''}
+                ${!category.sections.some(section => section.name.includes('Images Gallery')) ? 
+                  `<li><a href="/images-gallery?categoryId=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Images Gallery</a></li>` 
+                  : ''}
+                ${!category.sections.some(section => section.name.includes('Blog')) ? 
+                  `<li><a href="/blogs?categoryId=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Blogs</a></li>` 
+                  : ''}
+                ${!category.sections.some(section => section.name.includes('Text to')) ? 
+                  `<li><a href="/text-to-anything?categoryId=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Text to anything</a></li>` 
+                  : ''}
+                ${!category.sections.some(section => section.name.includes('Why Use')) ? 
+                  `<li><a href="/why-use-tool?categoryId=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Why use tool</a></li>` 
+                  : ''}
+                <li><a href="/edit-category?id=${category.id}" class="d-block px-3 py-1 rounded-3 text-decoration-none">Edit Category</a></li>
               </ul>
             </div>
           </div>
